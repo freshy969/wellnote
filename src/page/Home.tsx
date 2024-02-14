@@ -8,6 +8,7 @@ import {
   TextInput,
   Drawer,
   PasswordInput,
+  Card,
 } from "@mantine/core";
 import {
   IconPhoto,
@@ -17,6 +18,7 @@ import {
 import React from "react";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { useEffect, useState } from "react";
+import { readNotes } from "../query/notes";
 
 export default function Home() {
   const iconStyle = { width: rem(12), height: rem(12) };
@@ -26,6 +28,15 @@ export default function Home() {
   const [modalContent, setModalContent] = useState<any>("");
   const [modalTitle, setModalTitle] = useState<any>("");
   const [modalSize, setModalSize] = useState<any>("sm");
+  const [notes, setNotes] = useState<any>([]);
+
+  useEffect(() => {
+    async function fetchMyAPI() {
+      setNotes(await readNotes());
+    }
+
+    fetchMyAPI();
+  }, [opened]);
 
   useEffect(() => {
     const importLazyComponent = async () => {
@@ -35,6 +46,18 @@ export default function Home() {
 
     importLazyComponent();
   }, []);
+
+  const currentNotes = [];
+
+  notes?.forEach((doc) =>
+    currentNotes.push(
+      <Card mt={"xs"} p={0} pl={"xs"}>
+        <span dangerouslySetInnerHTML={{ __html:  doc.data().content  }} />
+      </Card>
+    )
+  );
+
+  console.log(currentNotes);
 
   const passwordContent = (
     <>
@@ -76,38 +99,57 @@ export default function Home() {
         defaultValue="passwords"
       >
         <Tabs.List>
-          <div
-            style={
-              isSmallScreen
-                ? {
-                    display: "inline-flex",
-                    justifyItems: "center",
-                    overflowY: "hidden",
-                    overflowX: "scroll",
-                    whiteSpace: "nowrap",
-                  }
-                : {}
-            }
-          >
-            <Tabs.Tab
-              value="passwords"
-              leftSection={<IconPhoto style={iconStyle} />}
+          {isSmallScreen ? (
+            <div
+              style={{
+                display: "inline-flex",
+                justifyItems: "center",
+                overflowY: "hidden",
+                overflowX: "scroll",
+                whiteSpace: "nowrap",
+              }}
             >
-              Passwords
-            </Tabs.Tab>
-            <Tabs.Tab
-              value="notes"
-              leftSection={<IconMessageCircle style={iconStyle} />}
-            >
-              Notes
-            </Tabs.Tab>
-            <Tabs.Tab
-              value="files"
-              leftSection={<IconSettings style={iconStyle} />}
-            >
-              Files
-            </Tabs.Tab>
-          </div>
+              <Tabs.Tab
+                value="passwords"
+                leftSection={<IconPhoto style={iconStyle} />}
+              >
+                Passwords
+              </Tabs.Tab>
+              <Tabs.Tab
+                value="notes"
+                leftSection={<IconMessageCircle style={iconStyle} />}
+              >
+                Notes
+              </Tabs.Tab>
+              <Tabs.Tab
+                value="files"
+                leftSection={<IconSettings style={iconStyle} />}
+              >
+                Files
+              </Tabs.Tab>
+            </div>
+          ) : (
+            <>
+              <Tabs.Tab
+                value="passwords"
+                leftSection={<IconPhoto style={iconStyle} />}
+              >
+                Passwords
+              </Tabs.Tab>
+              <Tabs.Tab
+                value="notes"
+                leftSection={<IconMessageCircle style={iconStyle} />}
+              >
+                Notes
+              </Tabs.Tab>
+              <Tabs.Tab
+                value="files"
+                leftSection={<IconSettings style={iconStyle} />}
+              >
+                Files
+              </Tabs.Tab>
+            </>
+          )}
         </Tabs.List>
 
         <Tabs.Panel
@@ -160,6 +202,7 @@ export default function Home() {
             Add new
           </Button>
           <Divider mt={"sm"} />
+          {currentNotes}
         </Tabs.Panel>
 
         <Tabs.Panel
