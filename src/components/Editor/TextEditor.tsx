@@ -6,6 +6,7 @@ import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
+import HardBreak from '@tiptap/extension-hard-break'
 
 export function TextEditor() {
   const editor = useEditor({
@@ -14,6 +15,7 @@ export function TextEditor() {
       Underline,
       Link,
       Superscript,
+      HardBreak,
       SubScript,
       Highlight,
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
@@ -67,7 +69,8 @@ export function TextEditor() {
         </RichTextEditor.ControlsGroup>
       </RichTextEditor.Toolbar>
 
-      <RichTextEditor.Content />
+      <RichTextEditor.Content >
+      </RichTextEditor.Content>
     </RichTextEditor>
   );
 }
