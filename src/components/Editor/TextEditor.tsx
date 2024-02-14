@@ -7,6 +7,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 import HardBreak from '@tiptap/extension-hard-break'
+import { Button } from "@mantine/core";
 
 export function TextEditor() {
   const editor = useEditor({
@@ -23,7 +24,8 @@ export function TextEditor() {
   });
 
   return (
-    <RichTextEditor mt={"sm"} editor={editor}>
+    <>
+    <RichTextEditor h={"300px"} editor={editor}>
       <RichTextEditor.Toolbar sticky stickyOffset={60}>
         <RichTextEditor.ControlsGroup>
           <RichTextEditor.Bold />
@@ -72,5 +74,11 @@ export function TextEditor() {
       <RichTextEditor.Content >
       </RichTextEditor.Content>
     </RichTextEditor>
+    <div>
+    <Button variant={"default"} mt={"sm"} radius={"md"}>
+      Submit
+    </Button>
+  </div>
+  </>
   );
 }
