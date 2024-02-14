@@ -7,7 +7,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import Superscript from '@tiptap/extension-superscript';
 import SubScript from '@tiptap/extension-subscript';
 
-export default function TextEditor() {
+export function TextEditor() {
   const editor = useEditor({
     extensions: [
       StarterKit,

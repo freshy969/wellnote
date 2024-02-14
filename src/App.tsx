@@ -21,33 +21,22 @@ export default function App() {
     });
   }, []);
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
-        />
-      </head>
-      <body>
-        <MantineProvider>
-          <Header user={user} />
-          <Container size="lg">
-            <Router>
-              <div>
-                <section>
-                  <Routes>
-                    {" "}
-                    <Route path="/" element={<Home />} />
-                    <Route path="/signup" element={<Signup />} />
-                    <Route path="/login" element={<Login />} />
-                  </Routes>
-                </section>
-              </div>
-            </Router>
-          </Container>
-        </MantineProvider>
-      </body>
-    </html>
+      <MantineProvider>
+        <Header user={user} />
+        <Container size="lg">
+          <Router>
+            <div>
+              <section>
+                <Routes>
+                  {" "}
+                  <Route path="/" element={<Home />} />
+                  <Route path="/signup" element={<Signup />} />
+                  <Route path="/login" element={<Login />} />
+                </Routes>
+              </section>
+            </div>
+          </Router>
+        </Container>
+      </MantineProvider>
   );
 }

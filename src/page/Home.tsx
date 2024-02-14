@@ -4,18 +4,19 @@ import {
   IconMessageCircle,
   IconSettings,
 } from "@tabler/icons-react";
+import React from "react";
 // import TextEditor from "../components/Editor/TextEditor";
 import { useEffect, useState } from "react";
 
 export default function Home() {
   const iconStyle = { width: rem(12), height: rem(12) };
 
-  const [lazyComponent, setLazyComponent] = useState<any>(null);
+  const [LazyComponent, setLazyComponent] = useState<any>(null);
 
   useEffect(() => {
     const importLazyComponent = async () => {
-      const module = await import("../components/Editor/TextEditor");
-      setLazyComponent(module.default);
+      const component = await import("../components/Editor/TextEditor");
+      setLazyComponent(React.createElement(component.TextEditor));
     };
 
     importLazyComponent();
@@ -56,7 +57,7 @@ export default function Home() {
 
       <Tabs.Panel pl={"lg"} value="notes">
         <Title>Notes</Title>
-        {lazyComponent}
+        {LazyComponent ? LazyComponent : null}
       </Tabs.Panel>
 
       <Tabs.Panel pl={"lg"} value="files">
