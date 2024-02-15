@@ -140,15 +140,15 @@ export default function Home({ user }: any) {
       <Table.Tr
         key={random()}
         onClick={() => {
-          setModalTitle("Password");
-          setModalSize("xl");
+          // setModalTitle("Password");
+          // setModalSize("xl");
           // setModalContent(
           //   <Text
           //   >
 
           //   </Text>
           // );
-          open();
+          // open();
         }}
       >
         <Table.Td pl={"sm"} style={{ cursor: "pointer" }}>

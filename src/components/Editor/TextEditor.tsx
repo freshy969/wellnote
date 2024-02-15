@@ -36,7 +36,7 @@ export function TextEditor({ close }:any) {
             <RichTextEditor.Italic />
             <RichTextEditor.Underline />
             <RichTextEditor.Strikethrough />
-            <RichTextEditor.ClearFormatting />
+            {/* <RichTextEditor.ClearFormatting /> */}
             <RichTextEditor.Highlight />
             <RichTextEditor.Code />
             <RichTextEditor.BulletList />
