@@ -21,7 +21,8 @@ function Join() {
   const onSubmit = async (e: any) => {
     e.preventDefault();
     await sendSignInLinkToEmail(auth, email, actionCodeSettings)
-      .then(() => {
+      .then((response) => {
+        console.log(response)
         window.localStorage.setItem("emailForSignIn", email);
       })
       .catch((error) => {
@@ -29,7 +30,6 @@ function Join() {
       });
   };
 
-  console.log(email);
 
   return (
     <Container size={420} my={40}>

@@ -2,7 +2,6 @@ import "@mantine/core/styles.css";
 import "@mantine/tiptap/styles.css";
 import { MantineProvider, Container } from "@mantine/core";
 import Home from "./page/Home";
-import Signup from "./page/Signup";
 import Login from "./page/Login";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
@@ -48,8 +47,7 @@ export default function App() {
           <Routes>
             {" "}
             <Route path="/" element={<Home user={user} />} />
-            <Route path="/signup" element={<Signup />} />
-            <Route path="/login" element={<Login />} />
+            <Route path="/join" element={<Login />} />
           </Routes>
         </Container>
       </Router>

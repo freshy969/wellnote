@@ -1,11 +1,11 @@
 import { Title, Container, Flex, Menu } from "@mantine/core";
-import classes from "./Header.module.css";
 import {
   IconSquareRounded,
   IconSquareRoundedFilled,
 } from "@tabler/icons-react";
 import { ColorSchemeToggle } from "../ColorSchemeToggle/ColorSchemeToggle";
 import { useNavigate } from "react-router-dom";
+import classes from "./Header.module.css";
 
 function Logo() {
   return (
@@ -52,13 +52,17 @@ function Header({ user }: any) {
                 )}
               </Menu.Target>
               <Menu.Dropdown>
-                <Menu.Item
-                  onClick={() => {
-                    navigate("/login");
-                  }}
-                >
-                  Login
-                </Menu.Item>
+                {!user ? (
+                  <Menu.Item
+                    onClick={() => {
+                      navigate("/join");
+                    }}
+                  >
+                    Join
+                  </Menu.Item>
+                ) : (
+                  <Menu.Item>Profile</Menu.Item>
+                )}
               </Menu.Dropdown>
             </Menu>
           </Flex>

@@ -48,11 +48,13 @@ export default function Home({ user }: any) {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      setNotes(await readNotes(user.uid));
-      setPasswords(await readPasswords(user.uid));
+      setNotes(await readNotes(user?.uid));
+      setPasswords(await readPasswords(user?.uid));
     }
 
-    fetchMyAPI();
+    if (user?.uid) {
+      fetchMyAPI();
+    }
   }, [user, opened]);
 
   useEffect(() => {
@@ -133,7 +135,6 @@ export default function Home({ user }: any) {
     )
   );
 
-
   passwords?.forEach((doc: any) =>
     currentPasswords.push(
       <Table.Tr
@@ -151,8 +152,9 @@ export default function Home({ user }: any) {
         }}
       >
         <Table.Td pl={"sm"} style={{ cursor: "pointer" }}>
-          <Text lineClamp={1}>
-            {doc.data().username}
+          <Text lineClamp={1}>{doc.data().username}</Text>
+          <Text size="xs" c={"dimmed"} lineClamp={1}>
+            {doc.data().website}
           </Text>
         </Table.Td>
 
@@ -203,7 +205,12 @@ export default function Home({ user }: any) {
 
   const passwordContent = (
     <>
-      <TextInput onChange={(e) => setWebsite(e.target.value)} placeholder="Website" type={"url"} radius={"md"} />
+      <TextInput
+        onChange={(e) => setWebsite(e.target.value)}
+        placeholder="Website"
+        type={"url"}
+        radius={"md"}
+      />
       <TextInput
         placeholder="Username/Email"
         type="text"
@@ -211,7 +218,12 @@ export default function Home({ user }: any) {
         onChange={(e) => setUsername(e.target.value)}
         radius={"md"}
       />
-      <PasswordInput onChange={(e) => setPassword(e.target.value)} mt={"sm"} radius={"md"} placeholder="Password" />
+      <PasswordInput
+        onChange={(e) => setPassword(e.target.value)}
+        mt={"sm"}
+        radius={"md"}
+        placeholder="Password"
+      />
       <div>
         <Button
           onClick={async () => {
@@ -293,13 +305,16 @@ export default function Home({ user }: any) {
               </Button>
             </div>
           </Flex>
-          <Card withBorder radius={"md"} mt={"sm"} p={0}>
-            <Table.ScrollContainer minWidth={"100%"}>
-              <Table verticalSpacing={"sm"}>
-                <Table.Tbody>{currentPasswords}</Table.Tbody>
-              </Table>
-            </Table.ScrollContainer>
-          </Card>
+
+          {currentPasswords?.length > 0 && (
+            <Card withBorder radius={"md"} mt={"sm"} p={0}>
+              <Table.ScrollContainer minWidth={"100%"}>
+                <Table verticalSpacing={"sm"}>
+                  <Table.Tbody>{currentPasswords}</Table.Tbody>
+                </Table>
+              </Table.ScrollContainer>
+            </Card>
+          )}
         </Tabs.Panel>
 
         <Tabs.Panel mt={"sm"} value="notes">
@@ -328,13 +343,15 @@ export default function Home({ user }: any) {
             </div>
           </Flex>
 
-          <Card withBorder radius={"md"} mt={"sm"} p={0}>
-            <Table.ScrollContainer minWidth={"100%"}>
-              <Table verticalSpacing={"sm"}>
-                <Table.Tbody>{currentNotes}</Table.Tbody>
-              </Table>
-            </Table.ScrollContainer>
-          </Card>
+          {currentNotes?.length > 0 && (
+            <Card withBorder radius={"md"} mt={"sm"} p={0}>
+              <Table.ScrollContainer minWidth={"100%"}>
+                <Table verticalSpacing={"sm"}>
+                  <Table.Tbody>{currentNotes}</Table.Tbody>
+                </Table>
+              </Table.ScrollContainer>
+            </Card>
+          )}
         </Tabs.Panel>
       </Tabs>
     </>
