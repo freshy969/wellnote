@@ -13,6 +13,8 @@ import { useBearStore } from "./utils/state";
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import { Hero } from "./components/Hero/Hero";
 
+import {Helmet} from "react-helmet";
+
 export default function App() {
   const user = useBearStore((state: any) => state.user);
   const setUser = useBearStore((state: any) => state.setUser);
@@ -38,6 +40,10 @@ export default function App() {
   }, [auth]);
 
   return (
+    <>
+    <Helmet>
+        <title>Dolph - Passwords & Notes</title>
+    </Helmet>
     <MantineProvider>
       <Router>
         <Header user={user} />
@@ -54,5 +60,6 @@ export default function App() {
         </Container>
       </Router>
     </MantineProvider>
+    </>
   );
 }
