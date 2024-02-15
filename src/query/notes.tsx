@@ -1,10 +1,13 @@
 import { collection, addDoc } from "firebase/firestore";
+import { query, where } from "firebase/firestore";
+import { getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase/config";
 
-export async function addNote(note: any) {
+export async function addNote(note: any, userId: string) {
   try {
     const docRef = await addDoc(collection(db, "notes"), {
       content: note,
+      userId: userId
     });
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
@@ -12,8 +15,9 @@ export async function addNote(note: any) {
   }
 }
 
-import { getDocs } from "firebase/firestore";
 
-export function readNotes() {
-  return getDocs(collection(db, "notes"));
+export function readNotes(userId: string) {
+  console.log(userId)
+  const q = query(collection(db, "notes"), where("userId", "==", userId));
+  return getDocs(q);
 }

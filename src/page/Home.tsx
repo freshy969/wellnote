@@ -3,24 +3,33 @@ import {
   Button,
   rem,
   Title,
+  Table,
   Divider,
   Text,
   TextInput,
   Drawer,
   PasswordInput,
   Card,
+  ActionIcon,
+  Group,
+  Menu,
+  Flex,
 } from "@mantine/core";
 import {
   IconPhoto,
   IconMessageCircle,
   IconSettings,
+  IconMessages,
+  IconDots,
+  IconArrowBack,
 } from "@tabler/icons-react";
 import React from "react";
 import { useDisclosure, useMediaQuery } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { readNotes } from "../query/notes";
+import { random } from "../utils/generic/helper";
 
-export default function Home() {
+export default function Home({ user }) {
   const iconStyle = { width: rem(12), height: rem(12) };
   const [opened, { open, close }] = useDisclosure(false);
   const [LazyComponent, setLazyComponent] = useState<any>(null);
@@ -32,11 +41,11 @@ export default function Home() {
 
   useEffect(() => {
     async function fetchMyAPI() {
-      setNotes(await readNotes());
+      setNotes(await readNotes(user.uid));
     }
 
     fetchMyAPI();
-  }, [opened]);
+  }, [user, opened]);
 
   useEffect(() => {
     const importLazyComponent = async () => {
@@ -51,13 +60,73 @@ export default function Home() {
 
   notes?.forEach((doc) =>
     currentNotes.push(
-      <Card mt={"xs"} p={0} pl={"xs"}>
-        <span dangerouslySetInnerHTML={{ __html:  doc.data().content  }} />
-      </Card>
+      <Table.Tr
+        key={random()}
+        onClick={() => {
+          setModalTitle("Note");
+          setModalSize("100%");
+          setModalContent(
+            <Text
+              p={"md"}
+              dangerouslySetInnerHTML={{ __html: doc.data().content }}
+            ></Text>
+          );
+          open();
+        }}
+      >
+        <Table.Td pl={"sm"} style={{ cursor: "pointer" }}>
+          <Text
+            lineClamp={1}
+            // dangerouslySetInnerHTML={{ __html: doc.data().content }}
+          >
+            {doc.data().content.replace(/<[^>]*>/g, " ")}
+          </Text>
+        </Table.Td>
+
+        <Table.Td>
+          <Group gap={0} justify="flex-end">
+            <Menu
+              transitionProps={{ transition: "pop" }}
+              withArrow
+              position="bottom-end"
+              withinPortal
+            >
+              <Menu.Target>
+                <ActionIcon variant="subtle" color="gray">
+                  <IconDots
+                    style={{ width: rem(16), height: rem(16) }}
+                    stroke={1.5}
+                  />
+                </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item
+                  leftSection={
+                    <IconMessages
+                      style={{ width: rem(16), height: rem(16) }}
+                      stroke={1.5}
+                    />
+                  }
+                >
+                  Send message
+                </Menu.Item>
+                <Menu.Item
+                  leftSection={
+                    <IconArrowBack
+                      style={{ width: rem(16), height: rem(16) }}
+                      stroke={1.5}
+                    />
+                  }
+                >
+                  Reschedule
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Group>
+        </Table.Td>
+      </Table.Tr>
     )
   );
-
-  console.log(currentNotes);
 
   const passwordContent = (
     <>
@@ -183,26 +252,39 @@ export default function Home() {
           pl={isSmallScreen ? 0 : "lg"}
           value="notes"
         >
-          <Title>Notes</Title>
-          <Text size={"xs"} c={"dimmed"}>
-            Easy notes
-          </Text>
-          <Button
-            onClick={() => {
-              setModalTitle("Add note");
-              setModalSize("100%");
-              setModalContent(noteContent);
-              open();
-            }}
-            variant={"default"}
-            mt={"sm"}
-            radius={"md"}
-            size="xs"
-          >
-            Add new
-          </Button>
-          <Divider mt={"sm"} />
-          {currentNotes}
+          <Flex justify={"space-between"} align={"center"}>
+            <div>
+              <Title>Notes</Title>
+              <Text c={"dimmed"} size={"xs"}>
+                Add more notes
+              </Text>
+            </div>
+            <div>
+              <Button
+                onClick={() => {
+                  setModalTitle("Add note");
+                  setModalSize("100%");
+                  setModalContent(noteContent);
+                  open();
+                }}
+                variant={"default"}
+                // mt={"sm"}
+                radius={"md"}
+                size="xs"
+              >
+                Add new
+              </Button>
+            </div>
+          </Flex>
+
+          {/* <Divider mt={"sm"} /> */}
+          <Card withBorder radius={"md"} mt={"sm"} p={0}>
+            <Table.ScrollContainer minWidth={"100%"}>
+              <Table verticalSpacing={"sm"}>
+                <Table.Tbody>{currentNotes}</Table.Tbody>
+              </Table>
+            </Table.ScrollContainer>
+          </Card>
         </Tabs.Panel>
 
         <Tabs.Panel

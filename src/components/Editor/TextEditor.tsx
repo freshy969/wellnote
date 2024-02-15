@@ -9,9 +9,11 @@ import SubScript from "@tiptap/extension-subscript";
 import HardBreak from "@tiptap/extension-hard-break";
 import { Button } from "@mantine/core";
 import { addNote } from "../../query/notes";
+import { useBearStore } from "../../utils/state";
 
 
 export function TextEditor() {
+  const user = useBearStore((state) => state.user)
 
   const editor = useEditor({
     extensions: [
@@ -29,7 +31,7 @@ export function TextEditor() {
 
   return (
     <>
-      <RichTextEditor h={"300px"} editor={editor}>
+      <RichTextEditor editor={editor}>
         <RichTextEditor.Toolbar sticky stickyOffset={60}>
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.Bold />
@@ -80,7 +82,7 @@ export function TextEditor() {
       <div>
         <Button
           onClick={async () => {
-            await addNote(editor?.getHTML());
+            await addNote(editor?.getHTML(), user.uid);
           }}
           variant={"default"}
           mt={"sm"}
