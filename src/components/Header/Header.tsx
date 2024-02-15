@@ -5,21 +5,20 @@ import {
   IconSquareRoundedFilled,
 } from "@tabler/icons-react";
 import { ColorSchemeToggle } from "../ColorSchemeToggle/ColorSchemeToggle";
+import { useNavigate } from "react-router-dom";
 
 function Logo() {
   return (
     <>
-      <Title
-        style={{ cursor: "pointer" }}
-        className={classes.title}
-      >
+      <Title style={{ cursor: "pointer" }} className={classes.title}>
         dolph
       </Title>
     </>
   );
 }
 
-function Header({ user }:any) {
+function Header({ user }: any) {
+  const navigate = useNavigate();
   return (
     <>
       <header
@@ -52,7 +51,15 @@ function Header({ user }:any) {
                   <IconSquareRounded style={{ cursor: "pointer" }} />
                 )}
               </Menu.Target>
-              <Menu.Dropdown></Menu.Dropdown>
+              <Menu.Dropdown>
+                <Menu.Item
+                  onClick={() => {
+                    navigate("/login");
+                  }}
+                >
+                  Login
+                </Menu.Item>
+              </Menu.Dropdown>
             </Menu>
           </Flex>
         </Container>

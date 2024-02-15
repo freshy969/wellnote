@@ -26,21 +26,17 @@ export default function App() {
 
   return (
     <MantineProvider>
-      <Header user={user} />
-      <Container size="lg">
-        <Router>
-          <div>
-            <section>
-              <Routes>
-                {" "}
-                <Route path="/" element={<Home user={user} />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
-              </Routes>
-            </section>
-          </div>
-        </Router>
-      </Container>
+      <Router>
+        <Header user={user} />
+        <Container size="lg">
+          <Routes>
+            {" "}
+            <Route path="/" element={<Home user={user} />} />
+            <Route path="/signup" element={<Signup />} />
+            <Route path="/login" element={<Login />} />
+          </Routes>
+        </Container>
+      </Router>
     </MantineProvider>
   );
 }

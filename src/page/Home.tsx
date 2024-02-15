@@ -75,9 +75,7 @@ export default function Home({ user }: any) {
         }}
       >
         <Table.Td pl={"sm"} style={{ cursor: "pointer" }}>
-          <Text
-            lineClamp={1}
-          >
+          <Text lineClamp={1}>
             {doc.data().content.replace(/<[^>]*>/g, " ")}
           </Text>
         </Table.Td>
@@ -276,7 +274,6 @@ export default function Home({ user }: any) {
             </div>
           </Flex>
 
-          {/* <Divider mt={"sm"} /> */}
           <Card withBorder radius={"md"} mt={"sm"} p={0}>
             <Table.ScrollContainer minWidth={"100%"}>
               <Table verticalSpacing={"sm"}>
@@ -284,21 +281,6 @@ export default function Home({ user }: any) {
               </Table>
             </Table.ScrollContainer>
           </Card>
-        </Tabs.Panel>
-
-        <Tabs.Panel
-          mt={isSmallScreen ? "sm" : 0}
-          pl={isSmallScreen ? 0 : "lg"}
-          value="files"
-        >
-          <Title>Files</Title>
-          <Text size={"xs"} c={"dimmed"}>
-            Secure file storage
-          </Text>
-          <Button variant={"default"} mt={"sm"} radius={"md"} size="xs">
-            Upload new
-          </Button>
-          <Divider mt={"sm"} />
         </Tabs.Panel>
       </Tabs>
     </>
