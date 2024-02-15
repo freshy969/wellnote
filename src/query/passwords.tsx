@@ -3,10 +3,17 @@ import { query, where } from "firebase/firestore";
 import { getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase/config";
 
-export async function addNote(note: any, userId: string) {
+export async function addPassword(
+  website: any,
+  username: any,
+  password: any,
+  userId: string
+) {
   try {
-    const docRef = await addDoc(collection(db, "notes"), {
-      content: note,
+    const docRef = await addDoc(collection(db, "passwords"), {
+      website: website,
+      username: username,
+      password: password,
       userId: userId,
     });
     console.log("Document written with ID: ", docRef.id);
@@ -15,7 +22,7 @@ export async function addNote(note: any, userId: string) {
   }
 }
 
-export function readNotes(userId: string) {
-  const q = query(collection(db, "notes"), where("userId", "==", userId));
+export function readPasswords(userId: string) {
+  const q = query(collection(db, "passwords"), where("userId", "==", userId));
   return getDocs(q);
 }

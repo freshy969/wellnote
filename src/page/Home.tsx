@@ -27,6 +27,7 @@ import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { readNotes } from "../query/notes";
 import { random } from "../utils/generic/helper";
+import { addPassword, readPasswords } from "../query/passwords";
 
 export default function Home({ user }: any) {
   const iconStyle = { width: rem(12), height: rem(12) };
@@ -36,10 +37,20 @@ export default function Home({ user }: any) {
   const [modalTitle, setModalTitle] = useState<any>("");
   const [modalSize, setModalSize] = useState<any>("sm");
   const [notes, setNotes] = useState<any>([]);
+  const [passwords, setPasswords] = useState<any>([]);
+
+  const [password, setPassword] = useState<any>("");
+  const [website, setWebsite] = useState<any>("");
+  const [username, setUsername] = useState<any>("");
+
+  useEffect(() => {
+    setModalContent(passwordContent);
+  }, [password, website, username]);
 
   useEffect(() => {
     async function fetchMyAPI() {
       setNotes(await readNotes(user.uid));
+      setPasswords(await readPasswords(user.uid));
     }
 
     fetchMyAPI();
@@ -55,6 +66,7 @@ export default function Home({ user }: any) {
   }, []);
 
   const currentNotes: any = [];
+  const currentPasswords: any = [];
 
   notes?.forEach((doc: any) =>
     currentNotes.push(
@@ -62,10 +74,9 @@ export default function Home({ user }: any) {
         key={random()}
         onClick={() => {
           setModalTitle("Note");
-          setModalSize("100%");
+          setModalSize("xl");
           setModalContent(
             <Text
-              p={"md"}
               dangerouslySetInnerHTML={{ __html: doc.data().content }}
             ></Text>
           );
@@ -123,18 +134,94 @@ export default function Home({ user }: any) {
     )
   );
 
+
+  passwords?.forEach((doc: any) =>
+    currentPasswords.push(
+      <Table.Tr
+        key={random()}
+        onClick={() => {
+          setModalTitle("Password");
+          setModalSize("xl");
+          // setModalContent(
+          //   <Text
+          //   >
+
+          //   </Text>
+          // );
+          open();
+        }}
+      >
+        <Table.Td pl={"sm"} style={{ cursor: "pointer" }}>
+          <Text lineClamp={1}>
+            {doc.data().username}
+          </Text>
+        </Table.Td>
+
+        <Table.Td>
+          <Group gap={0} justify="flex-end">
+            <Menu
+              transitionProps={{ transition: "pop" }}
+              withArrow
+              position="bottom-end"
+              withinPortal
+            >
+              <Menu.Target>
+                <ActionIcon variant="subtle" color="gray">
+                  <IconDots
+                    style={{ width: rem(16), height: rem(16) }}
+                    stroke={1.5}
+                  />
+                </ActionIcon>
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item
+                  leftSection={
+                    <IconMessages
+                      style={{ width: rem(16), height: rem(16) }}
+                      stroke={1.5}
+                    />
+                  }
+                >
+                  Send message
+                </Menu.Item>
+                <Menu.Item
+                  leftSection={
+                    <IconArrowBack
+                      style={{ width: rem(16), height: rem(16) }}
+                      stroke={1.5}
+                    />
+                  }
+                >
+                  Reschedule
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Group>
+        </Table.Td>
+      </Table.Tr>
+    )
+  );
+
   const passwordContent = (
     <>
-      <TextInput placeholder="Website" type={"url"} radius={"md"} />
+      <TextInput onChange={(e) => setWebsite(e.target.value)} placeholder="Website" type={"url"} radius={"md"} />
       <TextInput
         placeholder="Username/Email"
         type="text"
         mt={"sm"}
+        onChange={(e) => setUsername(e.target.value)}
         radius={"md"}
       />
-      <PasswordInput mt={"sm"} radius={"md"} placeholder="Password" />
+      <PasswordInput onChange={(e) => setPassword(e.target.value)} mt={"sm"} radius={"md"} placeholder="Password" />
       <div>
-        <Button variant={"default"} mt={"sm"} radius={"md"}>
+        <Button
+          onClick={async () => {
+            await addPassword(website, username, password, user.uid);
+          }}
+          variant={"default"}
+          mt={"sm"}
+          radius={"md"}
+        >
           Submit
         </Button>
       </div>
@@ -183,25 +270,37 @@ export default function Home({ user }: any) {
         </Tabs.List>
 
         <Tabs.Panel mt={"sm"} value="passwords">
-          <Title>Passwords</Title>
-          <Text size={"xs"} c={"dimmed"}>
-            Simple password management
-          </Text>
-          <Button
-            onClick={() => {
-              setModalTitle("Add password");
-              setModalSize("sm");
-              setModalContent(passwordContent);
-              open();
-            }}
-            variant={"default"}
-            mt={"sm"}
-            radius={"md"}
-            size="xs"
-          >
-            Add new
-          </Button>
-          <Divider mt={"sm"} />
+          <Flex justify={"space-between"} align={"center"}>
+            <div>
+              <Title>Passwords</Title>
+              <Text c={"dimmed"} size={"xs"}>
+                Password management
+              </Text>
+            </div>
+            <div>
+              <Button
+                onClick={() => {
+                  setModalTitle("Add password");
+                  setModalSize("sm");
+                  setModalContent(passwordContent);
+                  open();
+                }}
+                variant={"default"}
+                // mt={"sm"}
+                radius={"md"}
+                size="xs"
+              >
+                Add new
+              </Button>
+            </div>
+          </Flex>
+          <Card withBorder radius={"md"} mt={"sm"} p={0}>
+            <Table.ScrollContainer minWidth={"100%"}>
+              <Table verticalSpacing={"sm"}>
+                <Table.Tbody>{currentPasswords}</Table.Tbody>
+              </Table>
+            </Table.ScrollContainer>
+          </Card>
         </Tabs.Panel>
 
         <Tabs.Panel mt={"sm"} value="notes">
@@ -216,7 +315,7 @@ export default function Home({ user }: any) {
               <Button
                 onClick={() => {
                   setModalTitle("Add note");
-                  setModalSize("100%");
+                  setModalSize("xl");
                   setModalContent(noteContent);
                   open();
                 }}

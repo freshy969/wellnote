@@ -14,13 +14,16 @@ function Join() {
 
   const actionCodeSettings = {
     url: "https://dolph-69334.web.app/",
+    // url: "http://localhost:5173",
     handleCodeInApp: true,
   };
 
   const onSubmit = async (e: any) => {
     e.preventDefault();
     await sendSignInLinkToEmail(auth, email, actionCodeSettings)
-      .then()
+      .then((response) => {
+        window.localStorage.setItem("emailForSignIn", email);
+      })
       .catch((error) => {
         console.log(error);
       });

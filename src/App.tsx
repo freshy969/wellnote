@@ -11,18 +11,34 @@ import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./utils/firebase/config";
 import { Header } from "./components/Header/Header";
 import { useBearStore } from "./utils/state";
+import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 
 export default function App() {
   const user = useBearStore((state: any) => state.user);
   const setUser = useBearStore((state: any) => state.setUser);
 
   useEffect(() => {
+
+    if (isSignInWithEmailLink(auth, window.location.href)) {
+      let email = window.localStorage.getItem("emailForSignIn");
+      if (!email) {
+        email = window.prompt("Please provide your email for confirmation");
+      }
+      signInWithEmailLink(auth, email, window.location.href)
+        .then((result) => {
+          window.localStorage.removeItem("emailForSignIn");
+        })
+        .catch((error) => {});
+    }
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
       }
     });
-  }, []);
+
+    
+  }, [auth]);
 
   return (
     <MantineProvider>
