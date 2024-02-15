@@ -4,7 +4,13 @@ const store = {
   user: null,
 };
 
-export const useBearStore = create((set) => ({
+type BearStore = {
+  user: any;
+  setUser: any;
+  reset: () => void;
+};
+
+export const useBearStore = create<BearStore>((set) => ({
   ...store,
   setUser: (newUser: any) => set(() => ({ user: newUser })),
   reset: () => set(store),

@@ -14,7 +14,13 @@ function Logo() {
   const navigate = useNavigate();
   return (
     <>
-      <Title onClick={()=>{navigate("/")}} style={{ cursor: "pointer" }} className={classes.title}>
+      <Title
+        onClick={() => {
+          navigate("/");
+        }}
+        style={{ cursor: "pointer" }}
+        className={classes.title}
+      >
         dolph
       </Title>
     </>
@@ -23,7 +29,7 @@ function Logo() {
 
 function Header({ user }: any) {
   const navigate = useNavigate();
-  const {reset} = useBearStore();
+  const { reset } = useBearStore();
   return (
     <>
       <header
@@ -67,11 +73,13 @@ function Header({ user }: any) {
                   </Menu.Item>
                 ) : (
                   <Menu.Item
-                  onClick={() => {
-                    signOut(auth)
-                    reset()
-                  }}
-                  >Sign out</Menu.Item>
+                    onClick={() => {
+                      signOut(auth);
+                      reset();
+                    }}
+                  >
+                    Sign out
+                  </Menu.Item>
                 )}
               </Menu.Dropdown>
             </Menu>
