@@ -6,15 +6,15 @@ import Signup from "./page/Signup";
 import Login from "./page/Login";
 import { BrowserRouter as Router } from "react-router-dom";
 import { Routes, Route } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { onAuthStateChanged } from "firebase/auth";
 import { auth } from "./utils/firebase/config";
 import { Header } from "./components/Header/Header";
 import { useBearStore } from "./utils/state";
 
 export default function App() {
-  const user = useBearStore((state) => state.user)
-  const setUser = useBearStore((state) => state.setUser)
+  const user = useBearStore((state: any) => state.user);
+  const setUser = useBearStore((state: any) => state.setUser);
 
   useEffect(() => {
     onAuthStateChanged(auth, (user) => {

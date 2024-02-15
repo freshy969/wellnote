@@ -2,5 +2,5 @@ import { create } from "zustand";
 
 export const useBearStore = create((set) => ({
   user: null,
-  setUser: (newUser) => set((state) => ({ user: newUser })),
+  setUser: (newUser:any) => set(() => ({ user: newUser })),
 }));

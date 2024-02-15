@@ -11,9 +11,8 @@ import { Button } from "@mantine/core";
 import { addNote } from "../../query/notes";
 import { useBearStore } from "../../utils/state";
 
-
 export function TextEditor() {
-  const user = useBearStore((state) => state.user)
+  const user = useBearStore((state: any) => state.user);
 
   const editor = useEditor({
     extensions: [
@@ -27,7 +26,6 @@ export function TextEditor() {
       TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
   });
-
 
   return (
     <>

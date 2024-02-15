@@ -29,7 +29,7 @@ import { useEffect, useState } from "react";
 import { readNotes } from "../query/notes";
 import { random } from "../utils/generic/helper";
 
-export default function Home({ user }) {
+export default function Home({ user }: any) {
   const iconStyle = { width: rem(12), height: rem(12) };
   const [opened, { open, close }] = useDisclosure(false);
   const [LazyComponent, setLazyComponent] = useState<any>(null);
@@ -56,9 +56,9 @@ export default function Home({ user }) {
     importLazyComponent();
   }, []);
 
-  const currentNotes = [];
+  const currentNotes: any = [];
 
-  notes?.forEach((doc) =>
+  notes?.forEach((doc: any) =>
     currentNotes.push(
       <Table.Tr
         key={random()}
@@ -77,7 +77,6 @@ export default function Home({ user }) {
         <Table.Td pl={"sm"} style={{ cursor: "pointer" }}>
           <Text
             lineClamp={1}
-            // dangerouslySetInnerHTML={{ __html: doc.data().content }}
           >
             {doc.data().content.replace(/<[^>]*>/g, " ")}
           </Text>
