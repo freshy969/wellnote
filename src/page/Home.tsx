@@ -60,7 +60,7 @@ export default function Home({ user }: any) {
   useEffect(() => {
     const importLazyComponent = async () => {
       const component = await import("../components/Editor/TextEditor");
-      setLazyComponent(React.createElement(component.TextEditor));
+      setLazyComponent(React.createElement(component.TextEditor, { close }));
     };
 
     importLazyComponent();
@@ -228,12 +228,25 @@ export default function Home({ user }: any) {
         <Button
           onClick={async () => {
             await addPassword(website, username, password, user.uid);
+            close()
           }}
           variant={"default"}
           mt={"sm"}
+          size="xs"
           radius={"md"}
         >
           Submit
+        </Button>
+
+        <Button
+          variant={"default"}
+          mt={"sm"}
+          ml={"xs"}
+          onClick={close}
+          size="xs"
+          radius={"md"}
+        >
+          Close
         </Button>
       </div>
     </>

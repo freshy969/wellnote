@@ -11,7 +11,7 @@ import { Button } from "@mantine/core";
 import { addNote } from "../../query/notes";
 import { useBearStore } from "../../utils/state";
 
-export function TextEditor() {
+export function TextEditor({ close }:any) {
   const user = useBearStore((state: any) => state.user);
 
   const editor = useEditor({
@@ -39,8 +39,10 @@ export function TextEditor() {
             <RichTextEditor.ClearFormatting />
             <RichTextEditor.Highlight />
             <RichTextEditor.Code />
+            <RichTextEditor.BulletList />
+            <RichTextEditor.OrderedList />
           </RichTextEditor.ControlsGroup>
-
+{/* 
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.H1 />
             <RichTextEditor.H2 />
@@ -72,7 +74,7 @@ export function TextEditor() {
           <RichTextEditor.ControlsGroup>
             <RichTextEditor.Undo />
             <RichTextEditor.Redo />
-          </RichTextEditor.ControlsGroup>
+          </RichTextEditor.ControlsGroup> */}
         </RichTextEditor.Toolbar>
 
         <RichTextEditor.Content></RichTextEditor.Content>
@@ -81,12 +83,24 @@ export function TextEditor() {
         <Button
           onClick={async () => {
             await addNote(editor?.getHTML(), user.uid);
+            close()
           }}
           variant={"default"}
           mt={"sm"}
+          size="xs"
           radius={"md"}
         >
           Submit
+        </Button>
+        <Button
+          variant={"default"}
+          mt={"sm"}
+          ml={"xs"}
+          onClick={close}
+          size="xs"
+          radius={"md"}
+        >
+          Close
         </Button>
       </div>
     </>
