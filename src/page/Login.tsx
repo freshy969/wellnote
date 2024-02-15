@@ -21,7 +21,7 @@ function Join() {
   const onSubmit = async (e: any) => {
     e.preventDefault();
     await sendSignInLinkToEmail(auth, email, actionCodeSettings)
-      .then((response) => {
+      .then(() => {
         window.localStorage.setItem("emailForSignIn", email);
       })
       .catch((error) => {

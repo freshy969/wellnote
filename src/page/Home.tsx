@@ -4,7 +4,6 @@ import {
   rem,
   Title,
   Table,
-  Divider,
   Text,
   TextInput,
   Drawer,

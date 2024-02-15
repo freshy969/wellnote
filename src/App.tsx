@@ -22,13 +22,13 @@ export default function App() {
     if (isSignInWithEmailLink(auth, window.location.href)) {
       let email = window.localStorage.getItem("emailForSignIn");
       if (!email) {
-        email = window.prompt("Please provide your email for confirmation");
+        throw Error("Please provide your email for confirmation")
       }
       signInWithEmailLink(auth, email, window.location.href)
-        .then((result) => {
+        .then(() => {
           window.localStorage.removeItem("emailForSignIn");
         })
-        .catch((error) => {});
+        .catch(() => {});
     }
 
     onAuthStateChanged(auth, (user) => {
