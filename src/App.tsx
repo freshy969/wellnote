@@ -11,17 +11,17 @@ import { auth } from "./utils/firebase/config";
 import { Header } from "./components/Header/Header";
 import { useBearStore } from "./utils/state";
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
+import { Hero } from "./components/Hero/Hero";
 
 export default function App() {
   const user = useBearStore((state: any) => state.user);
   const setUser = useBearStore((state: any) => state.setUser);
 
   useEffect(() => {
-
     if (isSignInWithEmailLink(auth, window.location.href)) {
       let email = window.localStorage.getItem("emailForSignIn");
       if (!email) {
-        throw Error("Please provide your email for confirmation")
+        throw Error("Please provide your email for confirmation");
       }
       signInWithEmailLink(auth, email, window.location.href)
         .then(() => {
@@ -35,8 +35,6 @@ export default function App() {
         setUser(user);
       }
     });
-
-    
   }, [auth]);
 
   return (
@@ -46,7 +44,11 @@ export default function App() {
         <Container size="lg">
           <Routes>
             {" "}
-            <Route path="/" element={<Home user={user} />} />
+            {user ? (
+              <Route path="/" element={<Home user={user} />} />
+            ) : (
+              <Route path="/" element={<Hero />} />
+            )}
             <Route path="/join" element={<Login />} />
           </Routes>
         </Container>

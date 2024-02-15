@@ -6,11 +6,14 @@ import {
 import { ColorSchemeToggle } from "../ColorSchemeToggle/ColorSchemeToggle";
 import { useNavigate } from "react-router-dom";
 import classes from "./Header.module.css";
+import { signOut } from "firebase/auth";
+import { auth } from "../../utils/firebase/config";
 
 function Logo() {
+  const navigate = useNavigate();
   return (
     <>
-      <Title style={{ cursor: "pointer" }} className={classes.title}>
+      <Title onClick={()=>{navigate("/")}} style={{ cursor: "pointer" }} className={classes.title}>
         dolph
       </Title>
     </>
@@ -61,7 +64,11 @@ function Header({ user }: any) {
                     Join
                   </Menu.Item>
                 ) : (
-                  <Menu.Item>Profile</Menu.Item>
+                  <Menu.Item
+                  onClick={() => {
+                    signOut(auth)
+                  }}
+                  >Signout</Menu.Item>
                 )}
               </Menu.Dropdown>
             </Menu>

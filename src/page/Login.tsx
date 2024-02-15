@@ -8,7 +8,6 @@ import { IconCircleCheck } from "@tabler/icons-react";
 import { useBearStore } from "../utils/state";
 import { sendSignInLinkToEmail } from "firebase/auth";
 import { auth } from "../utils/firebase/config";
-// import { Loader } from "@mantine/core";
 
 function Success() {
   return (
@@ -35,29 +34,6 @@ function Success() {
   );
 }
 
-// function Pending() {
-//   return (
-//     <Container size={420} my={40}>
-//       <Title ta="center" className={classes.title}>
-//         Verifying!
-//       </Title>
-//       <Text c="dimmed" size="sm" ta="center" mt={5}>
-//         If there's no account, a new one gets created.
-//       </Text>
-
-//       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
-//         <Flex justify={"center"}>
-//           <Loader color="orange" size={30} />
-//         </Flex>
-//         <Group justify="center" mt="lg">
-//           <Text size="xs" ta={"center"}>
-//             Verifying the request
-//           </Text>
-//         </Group>
-//       </Paper>
-//     </Container>
-//   );
-// }
 
 function Join() {
   const [email, setEmail] = useState("");
@@ -70,10 +46,10 @@ function Join() {
   };
 
   const onSubmit = async (e: any) => {
+    sendEmail(true);
     e.preventDefault();
     await sendSignInLinkToEmail(auth, email, actionCodeSettings)
       .then(() => {
-        sendEmail(true);
         window.localStorage.setItem("emailForSignIn", email);
       })
       .catch((error) => {
