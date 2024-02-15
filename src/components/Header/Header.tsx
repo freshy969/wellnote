@@ -8,6 +8,7 @@ import { useNavigate } from "react-router-dom";
 import classes from "./Header.module.css";
 import { signOut } from "firebase/auth";
 import { auth } from "../../utils/firebase/config";
+import { useBearStore } from "../../utils/state";
 
 function Logo() {
   const navigate = useNavigate();
@@ -22,6 +23,7 @@ function Logo() {
 
 function Header({ user }: any) {
   const navigate = useNavigate();
+  const {reset} = useBearStore();
   return (
     <>
       <header
@@ -67,8 +69,9 @@ function Header({ user }: any) {
                   <Menu.Item
                   onClick={() => {
                     signOut(auth)
+                    reset()
                   }}
-                  >Signout</Menu.Item>
+                  >Sign out</Menu.Item>
                 )}
               </Menu.Dropdown>
             </Menu>

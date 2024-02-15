@@ -1,6 +1,11 @@
 import { create } from "zustand";
 
-export const useBearStore = create((set) => ({
+const store = {
   user: null,
-  setUser: (newUser:any) => set(() => ({ user: newUser })),
+};
+
+export const useBearStore = create((set) => ({
+  ...store,
+  setUser: (newUser: any) => set(() => ({ user: newUser })),
+  reset: () => set(store),
 }));

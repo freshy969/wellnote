@@ -17,7 +17,7 @@ export function Hero() {
       <div className={classes.content}>
         <Title className={classes.title}>
           A <span className={classes.highlight}>minimal,</span> simple <br />{" "}
-          password and notes manager
+          password and notes <br />{" "}manager
         </Title>
         <Text c="dimmed" mt="md">
           Safely store passwords and notes with ease. Simple interface, strong
