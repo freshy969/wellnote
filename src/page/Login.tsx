@@ -8,9 +8,60 @@ import { IconCircleCheck } from "@tabler/icons-react";
 import { useBearStore } from "../utils/state";
 import { sendSignInLinkToEmail } from "firebase/auth";
 import { auth } from "../utils/firebase/config";
+// import { Loader } from "@mantine/core";
+
+function Success() {
+  return (
+    <Container size={420} my={40}>
+      <Title ta="center" className={classes.title}>
+        Welcome back!
+      </Title>
+      <Text c="dimmed" size="sm" ta="center" mt={5}>
+        If there's no account, a new one gets created.
+      </Text>
+
+      <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+        <Flex justify={"center"}>
+          <IconCircleCheck size={30} color={"green"} />
+        </Flex>
+        <Group justify="center" mt="lg">
+          <Text size="xs" ta={"center"}>
+            We have dispatched a login link to your email. Please click on it to
+            access your account.
+          </Text>
+        </Group>
+      </Paper>
+    </Container>
+  );
+}
+
+// function Pending() {
+//   return (
+//     <Container size={420} my={40}>
+//       <Title ta="center" className={classes.title}>
+//         Verifying!
+//       </Title>
+//       <Text c="dimmed" size="sm" ta="center" mt={5}>
+//         If there's no account, a new one gets created.
+//       </Text>
+
+//       <Paper withBorder shadow="md" p={30} mt={30} radius="md">
+//         <Flex justify={"center"}>
+//           <Loader color="orange" size={30} />
+//         </Flex>
+//         <Group justify="center" mt="lg">
+//           <Text size="xs" ta={"center"}>
+//             Verifying the request
+//           </Text>
+//         </Group>
+//       </Paper>
+//     </Container>
+//   );
+// }
 
 function Join() {
   const [email, setEmail] = useState("");
+  const [emailSent, sendEmail] = useState(false);
 
   const actionCodeSettings = {
     url: "https://dolph-69334.web.app/",
@@ -21,8 +72,8 @@ function Join() {
   const onSubmit = async (e: any) => {
     e.preventDefault();
     await sendSignInLinkToEmail(auth, email, actionCodeSettings)
-      .then((response) => {
-        console.log(response)
+      .then(() => {
+        sendEmail(true);
         window.localStorage.setItem("emailForSignIn", email);
       })
       .catch((error) => {
@@ -30,8 +81,7 @@ function Join() {
       });
   };
 
-
-  return (
+  return !emailSent ? (
     <Container size={420} my={40}>
       <Title ta="center" className={classes.title}>
         Welcome back!
@@ -70,6 +120,8 @@ function Join() {
         </form>
       </Paper>
     </Container>
+  ) : (
+    <Success />
   );
 }
 
