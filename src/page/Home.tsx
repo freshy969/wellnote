@@ -18,13 +18,12 @@ import {
 import {
   IconPhoto,
   IconMessageCircle,
-  IconSettings,
   IconMessages,
   IconDots,
   IconArrowBack,
 } from "@tabler/icons-react";
 import React from "react";
-import { useDisclosure, useMediaQuery } from "@mantine/hooks";
+import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { readNotes } from "../query/notes";
 import { random } from "../utils/generic/helper";
@@ -33,7 +32,6 @@ export default function Home({ user }: any) {
   const iconStyle = { width: rem(12), height: rem(12) };
   const [opened, { open, close }] = useDisclosure(false);
   const [LazyComponent, setLazyComponent] = useState<any>(null);
-  const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const [modalContent, setModalContent] = useState<any>("");
   const [modalTitle, setModalTitle] = useState<any>("");
   const [modalSize, setModalSize] = useState<any>("sm");
@@ -157,72 +155,34 @@ export default function Home({ user }: any) {
       >
         {modalContent}
       </Drawer>
-      <Tabs
-        mt={"lg"}
-        variant={isSmallScreen ? "outline" : "pills"}
-        radius="md"
-        orientation={isSmallScreen ? "horizontal" : "vertical"}
-        defaultValue="passwords"
-      >
+      <Tabs mt={"lg"} variant={"pills"} radius="md" defaultValue="passwords">
         <Tabs.List>
-          {isSmallScreen ? (
-            <div
-              style={{
-                display: "inline-flex",
-                justifyItems: "center",
-                overflowY: "hidden",
-                overflowX: "scroll",
-                whiteSpace: "nowrap",
-              }}
+          <div
+            style={{
+              display: "inline-flex",
+              justifyItems: "center",
+              overflowY: "hidden",
+              overflowX: "scroll",
+              whiteSpace: "nowrap",
+            }}
+          >
+            <Tabs.Tab
+              value="passwords"
+              leftSection={<IconPhoto style={iconStyle} />}
             >
-              <Tabs.Tab
-                value="passwords"
-                leftSection={<IconPhoto style={iconStyle} />}
-              >
-                Passwords
-              </Tabs.Tab>
-              <Tabs.Tab
-                value="notes"
-                leftSection={<IconMessageCircle style={iconStyle} />}
-              >
-                Notes
-              </Tabs.Tab>
-              <Tabs.Tab
-                value="files"
-                leftSection={<IconSettings style={iconStyle} />}
-              >
-                Files
-              </Tabs.Tab>
-            </div>
-          ) : (
-            <>
-              <Tabs.Tab
-                value="passwords"
-                leftSection={<IconPhoto style={iconStyle} />}
-              >
-                Passwords
-              </Tabs.Tab>
-              <Tabs.Tab
-                value="notes"
-                leftSection={<IconMessageCircle style={iconStyle} />}
-              >
-                Notes
-              </Tabs.Tab>
-              <Tabs.Tab
-                value="files"
-                leftSection={<IconSettings style={iconStyle} />}
-              >
-                Files
-              </Tabs.Tab>
-            </>
-          )}
+              Passwords
+            </Tabs.Tab>
+            <Tabs.Tab
+              value="notes"
+              ml={"xs"}
+              leftSection={<IconMessageCircle style={iconStyle} />}
+            >
+              Notes
+            </Tabs.Tab>
+          </div>
         </Tabs.List>
 
-        <Tabs.Panel
-          mt={isSmallScreen ? "sm" : 0}
-          pl={isSmallScreen ? 0 : "lg"}
-          value="passwords"
-        >
+        <Tabs.Panel mt={"sm"} value="passwords">
           <Title>Passwords</Title>
           <Text size={"xs"} c={"dimmed"}>
             Simple password management
@@ -244,11 +204,7 @@ export default function Home({ user }: any) {
           <Divider mt={"sm"} />
         </Tabs.Panel>
 
-        <Tabs.Panel
-          mt={isSmallScreen ? "sm" : 0}
-          pl={isSmallScreen ? 0 : "lg"}
-          value="notes"
-        >
+        <Tabs.Panel mt={"sm"} value="notes">
           <Flex justify={"space-between"} align={"center"}>
             <div>
               <Title>Notes</Title>
