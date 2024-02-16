@@ -3,7 +3,6 @@ import {
   Button,
   rem,
   Title,
-  Table,
   Text,
   Drawer,
   Card,
