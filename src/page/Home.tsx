@@ -12,7 +12,6 @@ import {
   Menu,
   Flex,
   ScrollArea,
-  Divider,
 } from "@mantine/core";
 import {
   IconPhoto,
@@ -20,7 +19,6 @@ import {
   IconMessages,
   IconDots,
   IconArrowBack,
-  IconEye,
 } from "@tabler/icons-react";
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
@@ -28,6 +26,7 @@ import { useEffect, useState } from "react";
 import { readNotes } from "../query/notes";
 import { random } from "../utils/generic/helper";
 import { readPasswords } from "../query/passwords";
+import { Password } from "../components/Password";
 
 export default function Home({ user }: any) {
   const iconStyle = { width: rem(12), height: rem(12) };
@@ -56,7 +55,7 @@ export default function Home({ user }: any) {
       const note = await import("../components/Editor/TextEditor");
       const password = await import("../components/Password");
       setLazyNote(React.createElement(note.TextEditor, { close }));
-      setLazyPassword(React.createElement(password.Password, { close }));
+      setLazyPassword(React.createElement(password.NewPassword, { close }));
     };
 
     importLazyComponent();
@@ -133,85 +132,7 @@ export default function Home({ user }: any) {
 
   passwords?.forEach((doc: any) =>
     currentPasswords.push(
-      <Card mt={"xs"} radius={"md"} key={random()} onClick={() => {}}>
-        <Flex justify={"space-between"} align={"center"}>
-          <div style={{ cursor: "pointer", width: "100%" }}>
-            <Flex direction={"column"}>
-              <Group>
-                <Text size={"xs"} lineClamp={1}>
-                  {doc.data().username}
-                </Text>
-                {/* <Text size={"xs"} c={"lime"}>
-                Copied
-              </Text> */}
-              </Group>
-              <Divider my={"xs"} />
-              <Group align={"center"} mt={rem(5)}>
-                <Text size={"xs"} lineClamp={1}>
-                  ********************
-                  {/* {doc.data().website} */}
-                </Text>
-                <ActionIcon variant={"subtle"} mt={-5}>
-                <IconEye
-                  style={{ width: rem(16), height: rem(16) }}
-                  stroke={1.5}
-                />
-                </ActionIcon>
-              </Group>
-            </Flex>
-          </div>
-
-          <div>
-            <Flex align={"center"}>
-              <Button variant={"default"} size={"compact-sm"} color="gray">
-                <Text size={"xs"}>Open</Text>
-              </Button>
-              <Menu
-                transitionProps={{ transition: "pop" }}
-                withArrow
-                position="bottom-end"
-                withinPortal
-              >
-                <Menu.Target>
-                  <Button
-                    ml={"xs"}
-                    variant={"default"}
-                    size={"compact-sm"}
-                    color="gray"
-                  >
-                    <IconDots
-                      style={{ width: rem(16), height: rem(16) }}
-                      stroke={1.5}
-                    />
-                  </Button>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item
-                    leftSection={
-                      <IconMessages
-                        style={{ width: rem(16), height: rem(16) }}
-                        stroke={1.5}
-                      />
-                    }
-                  >
-                    Send message
-                  </Menu.Item>
-                  <Menu.Item
-                    leftSection={
-                      <IconArrowBack
-                        style={{ width: rem(16), height: rem(16) }}
-                        stroke={1.5}
-                      />
-                    }
-                  >
-                    Reschedule
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </Flex>
-          </div>
-        </Flex>
-      </Card>
+      <Password item={doc.data()} />
     )
   );
 

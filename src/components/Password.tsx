@@ -1,9 +1,112 @@
-import { Button, PasswordInput, TextInput } from "@mantine/core";
+import {
+  Button,
+  Card,
+  Flex,
+  Menu,
+  Text,
+  PasswordInput,
+  TextInput,
+  rem,
+} from "@mantine/core";
 import { useState } from "react";
 import { addPassword } from "../query/passwords";
 import { useBearStore } from "../utils/state";
+import {
+  IconArrowBack,
+  IconCopy,
+  IconDots,
+  IconMessages,
+} from "@tabler/icons-react";
+import { random } from "../utils/generic/helper";
 
-export function Password({ close }:any) {
+export function Password({ item }:any) {
+  return (
+    <>
+      <Card mt={"xs"} radius={"md"} key={random()} onClick={() => {}}>
+        <Flex justify={"space-between"} align={"center"}>
+          <div style={{ cursor: "pointer", width: "100%" }}>
+            <Flex direction={"column"}>
+              <Text size={"xs"} lineClamp={1}>
+                {item.username}
+              </Text>
+              <Text size={"xs"} lineClamp={1}>
+                {item.website}
+              </Text>
+            </Flex>
+          </div>
+
+          <div>
+            <Flex align={"center"}>
+              <Button
+                ml={"xs"}
+                variant={"default"}
+                size={"compact-sm"}
+                color="gray"
+              >
+                <IconCopy
+                  style={{ width: rem(16), height: rem(16) }}
+                  stroke={1.5}
+                />
+              </Button>
+              <Button
+                ml={"xs"}
+                variant={"default"}
+                size={"compact-sm"}
+                color="gray"
+              >
+                <Text size={"xs"}>Open</Text>
+              </Button>
+              <Menu
+                transitionProps={{ transition: "pop" }}
+                withArrow
+                position="bottom-end"
+                withinPortal
+              >
+                <Menu.Target>
+                  <Button
+                    ml={"xs"}
+                    variant={"default"}
+                    size={"compact-sm"}
+                    color="gray"
+                  >
+                    <IconDots
+                      style={{ width: rem(16), height: rem(16) }}
+                      stroke={1.5}
+                    />
+                  </Button>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    leftSection={
+                      <IconMessages
+                        style={{ width: rem(16), height: rem(16) }}
+                        stroke={1.5}
+                      />
+                    }
+                  >
+                    Send message
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={
+                      <IconArrowBack
+                        style={{ width: rem(16), height: rem(16) }}
+                        stroke={1.5}
+                      />
+                    }
+                  >
+                    Reschedule
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Flex>
+          </div>
+        </Flex>
+      </Card>
+    </>
+  );
+}
+
+export function NewPassword({ close }: any) {
   const user = useBearStore((state: any) => state.user);
   const [password, setPassword] = useState<any>("");
   const [website, setWebsite] = useState<any>("");
