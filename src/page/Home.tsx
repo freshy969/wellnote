@@ -66,74 +66,76 @@ export default function Home({ user }: any) {
 
   notes?.forEach((doc: any) =>
     currentNotes.push(
-      <Table.Tr
-        key={random()}
-        onClick={() => {
-          setModalTitle("Note");
-          setModalSize("xl");
-          setModalContent(
-            <Text
-              dangerouslySetInnerHTML={{ __html: doc.data().content }}
-            ></Text>
-          );
-          open();
-        }}
-      >
-        <Table.Td pl={"sm"} style={{ cursor: "pointer" }}>
-          <Text lineClamp={1}>
-            {doc.data().content.replace(/<[^>]*>/g, " ")}
-          </Text>
-        </Table.Td>
+      <>
+      <Card withBorder mt={"xs"} radius={"md"} key={random()}>
+        <Flex justify={"space-between"} align={"center"}>
+          <div
+            onClick={() => {
+              setModalTitle("Note");
+              setModalSize("xl");
+              setModalContent(
+                <Text
+                  dangerouslySetInnerHTML={{ __html: doc.data().content }}
+                ></Text>
+              );
+              open();
+            }}
+            style={{ cursor: "pointer", width:"100%" }}
+          >
+            <Text lineClamp={1}>
+              {doc.data().content.replace(/<[^>]*>/g, " ")}
+            </Text>
+          </div>
 
-        <Table.Td>
-          <Group gap={0} justify="flex-end">
-            <Menu
-              transitionProps={{ transition: "pop" }}
-              withArrow
-              position="bottom-end"
-              withinPortal
-            >
-              <Menu.Target>
-                <ActionIcon variant="subtle" color="gray">
-                  <IconDots
-                    style={{ width: rem(16), height: rem(16) }}
-                    stroke={1.5}
-                  />
-                </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item
-                  leftSection={
-                    <IconMessages
+          <div>
+            <Group gap={0} justify="flex-end">
+              <Menu
+                transitionProps={{ transition: "pop" }}
+                withArrow
+                position="bottom-end"
+                withinPortal
+              >
+                <Menu.Target>
+                  <ActionIcon variant="subtle" color="gray">
+                    <IconDots
                       style={{ width: rem(16), height: rem(16) }}
                       stroke={1.5}
                     />
-                  }
-                >
-                  Send message
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={
-                    <IconArrowBack
-                      style={{ width: rem(16), height: rem(16) }}
-                      stroke={1.5}
-                    />
-                  }
-                >
-                  Reschedule
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Group>
-        </Table.Td>
-      </Table.Tr>
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    leftSection={
+                      <IconMessages
+                        style={{ width: rem(16), height: rem(16) }}
+                        stroke={1.5}
+                      />
+                    }
+                  >
+                    Send message
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={
+                      <IconArrowBack
+                        style={{ width: rem(16), height: rem(16) }}
+                        stroke={1.5}
+                      />
+                    }
+                  >
+                    Reschedule
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Group>
+          </div>
+        </Flex>
+      </Card>
+      </>
     )
   );
 
   passwords?.forEach((doc: any) =>
-    currentPasswords.push(
-      <Password item={doc.data()} />
-    )
+    currentPasswords.push(<Password item={doc.data()} />)
   );
 
   const noteContent = <>{lazyNote ? lazyNote : null}</>;
@@ -236,13 +238,7 @@ export default function Home({ user }: any) {
           </Flex>
 
           {currentNotes?.length > 0 && (
-            <Card withBorder radius={"md"} mt={"sm"} p={0}>
-              <Table.ScrollContainer minWidth={"100%"}>
-                <Table verticalSpacing={"sm"}>
-                  <Table.Tbody>{currentNotes}</Table.Tbody>
-                </Table>
-              </Table.ScrollContainer>
-            </Card>
+            <ScrollArea h={"100%"}>{currentNotes}</ScrollArea>
           )}
         </Tabs.Panel>
       </Tabs>

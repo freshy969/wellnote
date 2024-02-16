@@ -22,7 +22,7 @@ import { random } from "../utils/generic/helper";
 export function Password({ item }:any) {
   return (
     <>
-      <Card mt={"xs"} radius={"md"} key={random()} onClick={() => {}}>
+      <Card withBorder mt={"xs"} radius={"md"} key={random()} onClick={() => {}}>
         <Flex justify={"space-between"} align={"center"}>
           <div style={{ cursor: "pointer", width: "100%" }}>
             <Flex direction={"column"}>
