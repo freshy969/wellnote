@@ -11,6 +11,8 @@ import {
   Group,
   Menu,
   Flex,
+  ScrollArea,
+  Divider,
 } from "@mantine/core";
 import {
   IconPhoto,
@@ -18,6 +20,7 @@ import {
   IconMessages,
   IconDots,
   IconArrowBack,
+  IconEye,
 } from "@tabler/icons-react";
 import React from "react";
 import { useDisclosure } from "@mantine/hooks";
@@ -130,60 +133,85 @@ export default function Home({ user }: any) {
 
   passwords?.forEach((doc: any) =>
     currentPasswords.push(
-      <Table.Tr
-        key={random()}
-        onClick={() => {
-        }}
-      >
-        <Table.Td pl={"sm"} style={{ cursor: "pointer" }}>
-          <Text lineClamp={1}>{doc.data().username}</Text>
-          <Text size="xs" c={"dimmed"} lineClamp={1}>
-            {doc.data().website}
-          </Text>
-        </Table.Td>
-
-        <Table.Td>
-          <Group gap={0} justify="flex-end">
-            <Menu
-              transitionProps={{ transition: "pop" }}
-              withArrow
-              position="bottom-end"
-              withinPortal
-            >
-              <Menu.Target>
-                <ActionIcon variant="subtle" color="gray">
-                  <IconDots
-                    style={{ width: rem(16), height: rem(16) }}
-                    stroke={1.5}
-                  />
+      <Card mt={"xs"} radius={"md"} key={random()} onClick={() => {}}>
+        <Flex justify={"space-between"} align={"center"}>
+          <div style={{ cursor: "pointer", width: "100%" }}>
+            <Flex direction={"column"}>
+              <Group>
+                <Text size={"xs"} lineClamp={1}>
+                  {doc.data().username}
+                </Text>
+                {/* <Text size={"xs"} c={"lime"}>
+                Copied
+              </Text> */}
+              </Group>
+              <Divider my={"xs"} />
+              <Group align={"center"} mt={rem(5)}>
+                <Text size={"xs"} lineClamp={1}>
+                  ********************
+                  {/* {doc.data().website} */}
+                </Text>
+                <ActionIcon variant={"subtle"} mt={-5}>
+                <IconEye
+                  style={{ width: rem(16), height: rem(16) }}
+                  stroke={1.5}
+                />
                 </ActionIcon>
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item
-                  leftSection={
-                    <IconMessages
+              </Group>
+            </Flex>
+          </div>
+
+          <div>
+            <Flex align={"center"}>
+              <Button variant={"default"} size={"compact-sm"} color="gray">
+                <Text size={"xs"}>Open</Text>
+              </Button>
+              <Menu
+                transitionProps={{ transition: "pop" }}
+                withArrow
+                position="bottom-end"
+                withinPortal
+              >
+                <Menu.Target>
+                  <Button
+                    ml={"xs"}
+                    variant={"default"}
+                    size={"compact-sm"}
+                    color="gray"
+                  >
+                    <IconDots
                       style={{ width: rem(16), height: rem(16) }}
                       stroke={1.5}
                     />
-                  }
-                >
-                  Send message
-                </Menu.Item>
-                <Menu.Item
-                  leftSection={
-                    <IconArrowBack
-                      style={{ width: rem(16), height: rem(16) }}
-                      stroke={1.5}
-                    />
-                  }
-                >
-                  Reschedule
-                </Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Group>
-        </Table.Td>
-      </Table.Tr>
+                  </Button>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    leftSection={
+                      <IconMessages
+                        style={{ width: rem(16), height: rem(16) }}
+                        stroke={1.5}
+                      />
+                    }
+                  >
+                    Send message
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={
+                      <IconArrowBack
+                        style={{ width: rem(16), height: rem(16) }}
+                        stroke={1.5}
+                      />
+                    }
+                  >
+                    Reschedule
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Flex>
+          </div>
+        </Flex>
+      </Card>
     )
   );
 
@@ -234,7 +262,7 @@ export default function Home({ user }: any) {
             <div>
               <Title>Passwords</Title>
               <Text c={"dimmed"} size={"xs"}>
-                Password management
+                Click to copy
               </Text>
             </div>
             <div>
@@ -256,13 +284,7 @@ export default function Home({ user }: any) {
           </Flex>
 
           {currentPasswords?.length > 0 && (
-            <Card withBorder radius={"md"} mt={"sm"} p={0}>
-              <Table.ScrollContainer minWidth={"100%"}>
-                <Table verticalSpacing={"sm"}>
-                  <Table.Tbody>{currentPasswords}</Table.Tbody>
-                </Table>
-              </Table.ScrollContainer>
-            </Card>
+            <ScrollArea h={"100%"}>{currentPasswords}</ScrollArea>
           )}
         </Tabs.Panel>
 
