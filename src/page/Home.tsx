@@ -26,25 +26,18 @@ import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { readNotes } from "../query/notes";
 import { random } from "../utils/generic/helper";
-import { addPassword, readPasswords } from "../query/passwords";
+import { readPasswords } from "../query/passwords";
 
 export default function Home({ user }: any) {
   const iconStyle = { width: rem(12), height: rem(12) };
   const [opened, { open, close }] = useDisclosure(false);
-  const [LazyComponent, setLazyComponent] = useState<any>(null);
+  const [lazyNote, setLazyNote] = useState<any>(null);
+  const [lazyPassword, setLazyPassword] = useState<any>(null);
   const [modalContent, setModalContent] = useState<any>("");
   const [modalTitle, setModalTitle] = useState<any>("");
   const [modalSize, setModalSize] = useState<any>("sm");
   const [notes, setNotes] = useState<any>([]);
   const [passwords, setPasswords] = useState<any>([]);
-
-  const [password, setPassword] = useState<any>("");
-  const [website, setWebsite] = useState<any>("");
-  const [username, setUsername] = useState<any>("");
-
-  useEffect(() => {
-    setModalContent(passwordContent);
-  }, [password, website, username]);
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -59,8 +52,10 @@ export default function Home({ user }: any) {
 
   useEffect(() => {
     const importLazyComponent = async () => {
-      const component = await import("../components/Editor/TextEditor");
-      setLazyComponent(React.createElement(component.TextEditor, { close }));
+      const note = await import("../components/Editor/TextEditor");
+      const password = await import("../components/Password");
+      setLazyNote(React.createElement(note.TextEditor, { close }));
+      setLazyPassword(React.createElement(password.Password, { close }));
     };
 
     importLazyComponent();
@@ -140,15 +135,6 @@ export default function Home({ user }: any) {
       <Table.Tr
         key={random()}
         onClick={() => {
-          // setModalTitle("Password");
-          // setModalSize("xl");
-          // setModalContent(
-          //   <Text
-          //   >
-
-          //   </Text>
-          // );
-          // open();
         }}
       >
         <Table.Td pl={"sm"} style={{ cursor: "pointer" }}>
@@ -203,56 +189,8 @@ export default function Home({ user }: any) {
     )
   );
 
-  const passwordContent = (
-    <>
-      <TextInput
-        onChange={(e) => setWebsite(e.target.value)}
-        placeholder="Website"
-        type={"url"}
-        radius={"md"}
-      />
-      <TextInput
-        placeholder="Username/Email"
-        type="text"
-        mt={"sm"}
-        onChange={(e) => setUsername(e.target.value)}
-        radius={"md"}
-      />
-      <PasswordInput
-        onChange={(e) => setPassword(e.target.value)}
-        mt={"sm"}
-        radius={"md"}
-        placeholder="Password"
-      />
-      <div>
-        <Button
-          onClick={async () => {
-            await addPassword(website, username, password, user.uid);
-            close()
-          }}
-          variant={"default"}
-          mt={"sm"}
-          size="xs"
-          radius={"md"}
-        >
-          Submit
-        </Button>
-
-        <Button
-          variant={"default"}
-          mt={"sm"}
-          ml={"xs"}
-          onClick={close}
-          size="xs"
-          radius={"md"}
-        >
-          Close
-        </Button>
-      </div>
-    </>
-  );
-
-  const noteContent = <>{LazyComponent ? LazyComponent : null}</>;
+  const noteContent = <>{lazyNote ? lazyNote : null}</>;
+  const passwordContent = <>{lazyPassword ? lazyPassword : null}</>;
 
   return (
     <>
