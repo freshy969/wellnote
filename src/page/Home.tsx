@@ -71,7 +71,8 @@ export default function Home({ user }: any) {
                   "Note",
                   <Text
                     dangerouslySetInnerHTML={{ __html: doc.data().content }}
-                  ></Text>
+                  ></Text>,
+                  "lg"
                 );
               }}
               style={{ cursor: "pointer", width: "100%" }}
@@ -203,7 +204,7 @@ export default function Home({ user }: any) {
             <div>
               <Button
                 onClick={() => {
-                  openDrawer("Add note", noteContent);
+                  openDrawer("Add note", noteContent, "lg");
                 }}
                 variant={"default"}
                 // mt={"sm"}

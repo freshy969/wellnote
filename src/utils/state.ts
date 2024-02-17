@@ -3,6 +3,7 @@ import { create } from "zustand";
 const store = {
   drawerOpen: false,
   drawerTitle: "",
+  drawerSize: "md",
   drawerContent: null,
   user: null,
 };
@@ -10,6 +11,7 @@ const store = {
 type BearStore = {
   drawerOpen: boolean;
   drawerTitle: string;
+  drawerSize: string,
   drawerContent: any;
   user: any;
   setUser: any;
@@ -20,9 +22,10 @@ type BearStore = {
 
 export const useBearStore = create<BearStore>((set) => ({
   ...store,
-  openDrawer: (title: string, content: any) =>
-    set(() => ({
+  openDrawer: (title: string, content: any, size: any) =>
+    set((state) => ({
       drawerOpen: true,
+      drawerSize: size ? size : state.drawerSize,
       drawerTitle: title,
       drawerContent: content,
     })),

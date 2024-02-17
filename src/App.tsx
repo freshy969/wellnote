@@ -22,6 +22,7 @@ export default function App() {
   const drawerTitle = useBearStore((state: any) => state.drawerTitle);
   const drawerContent = useBearStore((state: any) => state.drawerContent);
   const closeDrawer = useBearStore((state: any) => state.closeDrawer);
+  const drawerSize = useBearStore((state: any) => state.drawerSize);
 
 
 
@@ -55,6 +56,7 @@ export default function App() {
         opened={drawerOpen}
         onClose={closeDrawer}
         title={drawerTitle}
+        size={drawerSize}
         position={"right"}
         overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
       >
