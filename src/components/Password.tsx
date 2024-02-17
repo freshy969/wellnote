@@ -7,22 +7,37 @@ import {
   PasswordInput,
   TextInput,
   rem,
+  Popover,
 } from "@mantine/core";
 import { useState } from "react";
 import { addPassword } from "../query/passwords";
 import { useBearStore } from "../utils/state";
 import {
   IconArrowBack,
+  IconCheck,
   IconCopy,
   IconDots,
   IconMessages,
 } from "@tabler/icons-react";
 import { random } from "../utils/generic/helper";
 
-export function Password({ item }:any) {
+export function Password({ item }: any) {
+  const handleClick = async (item: any) => {
+    try {
+      await navigator.clipboard.writeText(item.password);
+    } catch (error) {
+      console.error("Error copying to clipboard:", error);
+    }
+  };
   return (
     <>
-      <Card withBorder mt={"xs"} radius={"md"} key={random()} onClick={() => {}}>
+      <Card
+        withBorder
+        mt={"xs"}
+        radius={"md"}
+        key={random()}
+        onClick={() => {}}
+      >
         <Flex justify={"space-between"} align={"center"}>
           <div style={{ cursor: "pointer", width: "100%" }}>
             <Flex direction={"column"}>
@@ -37,17 +52,30 @@ export function Password({ item }:any) {
 
           <div>
             <Flex align={"center"}>
-              <Button
-                ml={"xs"}
-                variant={"default"}
-                size={"compact-sm"}
-                color="gray"
-              >
-                <IconCopy
-                  style={{ width: rem(16), height: rem(16) }}
-                  stroke={1.5}
-                />
-              </Button>
+              <Popover withArrow shadow="md">
+                <Popover.Target>
+                  <Button
+                    ml={"xs"}
+                    variant={"default"}
+                    size={"compact-sm"}
+                    color="gray"
+                    onClick={() => handleClick(item)}
+                  >
+                    <IconCopy
+                      style={{ width: rem(16), height: rem(16) }}
+                      stroke={1.5}
+                    />
+                  </Button>
+                </Popover.Target>
+                <Popover.Dropdown p={rem(7)}>
+                  <Flex align={"center"} gap={rem(5)}>
+                    <IconCheck color={"lime"} size={15} />
+                    <Text c={"green"} size="xs">
+                      Copied
+                    </Text>
+                  </Flex>
+                </Popover.Dropdown>
+              </Popover>
               <Button
                 ml={"xs"}
                 variant={"default"}
