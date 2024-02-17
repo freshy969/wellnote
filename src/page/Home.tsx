@@ -62,75 +62,83 @@ export default function Home({ user }: any) {
 
   notes?.forEach((doc: any) =>
     currentNotes.push(
-      <>
-        <Card withBorder mt={"xs"} radius={"md"} key={random()}>
-          <Flex justify={"space-between"} align={"center"}>
-            <div
-              onClick={() => {
-                openDrawer(
-                  "Note",
-                  <Text
-                    dangerouslySetInnerHTML={{ __html: doc.data().content }}
-                  ></Text>,
-                  "lg"
-                );
-              }}
-              style={{ cursor: "pointer", width: "100%" }}
-            >
-              <Text lineClamp={1}>
-                {doc.data().content.replace(/<[^>]*>/g, " ")}
-              </Text>
-            </div>
+      <Card withBorder mt={"xs"} radius={"md"} key={random()}>
+        <Flex justify={"space-between"} align={"center"}>
+          <div
+            onClick={() => {
+              openDrawer(
+                "Note",
+                <Text
+                  dangerouslySetInnerHTML={{ __html: doc.data().content }}
+                ></Text>,
+                "lg"
+              );
+            }}
+            style={{ cursor: "pointer", width: "100%" }}
+          >
+            <Text lineClamp={1}>
+              {doc.data().content.replace(/<[^>]*>/g, " ")}
+            </Text>
+          </div>
 
-            <div>
-              <Group gap={0} justify="flex-end">
-                <Menu
-                  transitionProps={{ transition: "pop" }}
-                  withArrow
-                  position="bottom-end"
-                  withinPortal
-                >
-                  <Menu.Target>
-                    <ActionIcon variant="subtle" color="gray">
-                      <IconDots
+          <div>
+            <Group gap={0} justify="flex-end">
+              <Menu
+                transitionProps={{ transition: "pop" }}
+                withArrow
+                position="bottom-end"
+                withinPortal
+              >
+                <Menu.Target>
+                  <ActionIcon variant="subtle" color="gray">
+                    <IconDots
+                      style={{ width: rem(16), height: rem(16) }}
+                      stroke={1.5}
+                    />
+                  </ActionIcon>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <Menu.Item
+                    leftSection={
+                      <IconMessages
                         style={{ width: rem(16), height: rem(16) }}
                         stroke={1.5}
                       />
-                    </ActionIcon>
-                  </Menu.Target>
-                  <Menu.Dropdown>
-                    <Menu.Item
-                      leftSection={
-                        <IconMessages
-                          style={{ width: rem(16), height: rem(16) }}
-                          stroke={1.5}
-                        />
-                      }
-                    >
-                      Send message
-                    </Menu.Item>
-                    <Menu.Item
-                      leftSection={
-                        <IconArrowBack
-                          style={{ width: rem(16), height: rem(16) }}
-                          stroke={1.5}
-                        />
-                      }
-                    >
-                      Reschedule
-                    </Menu.Item>
-                  </Menu.Dropdown>
-                </Menu>
-              </Group>
-            </div>
-          </Flex>
-        </Card>
-      </>
+                    }
+                  >
+                    Send message
+                  </Menu.Item>
+                  <Menu.Item
+                    leftSection={
+                      <IconArrowBack
+                        style={{ width: rem(16), height: rem(16) }}
+                        stroke={1.5}
+                      />
+                    }
+                  >
+                    Reschedule
+                  </Menu.Item>
+                </Menu.Dropdown>
+              </Menu>
+            </Group>
+          </div>
+        </Flex>
+      </Card>
     )
   );
 
   passwords?.forEach((doc: any) =>
-    currentPasswords.push(<Password item={doc.data()} />)
+    currentPasswords.push(
+      <Card
+        withBorder
+        mt={"xs"}
+        radius={"md"}
+        key={random()}
+        onClick={() => {}}
+      >
+        <Password item={doc.data()} />
+      </Card>
+    )
   );
 
   const noteContent = <>{lazyNote ? lazyNote : null}</>;
@@ -189,7 +197,9 @@ export default function Home({ user }: any) {
           </Flex>
 
           {currentPasswords?.length > 0 && (
-            <ScrollArea h={"100%"}>{currentPasswords}</ScrollArea>
+            <ScrollArea key={random()} h={"100%"}>
+              {currentPasswords}
+            </ScrollArea>
           )}
         </Tabs.Panel>
 
@@ -217,7 +227,9 @@ export default function Home({ user }: any) {
           </Flex>
 
           {currentNotes?.length > 0 && (
-            <ScrollArea h={"100%"}>{currentNotes}</ScrollArea>
+            <ScrollArea key={random()} h={"100%"}>
+              {currentNotes}
+            </ScrollArea>
           )}
         </Tabs.Panel>
       </Tabs>
