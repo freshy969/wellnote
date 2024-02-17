@@ -10,6 +10,10 @@ import {
   CopyButton,
   Tooltip,
   ActionIcon,
+  Divider,
+  Grid,
+  Popover,
+  Slider,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
 import { addPassword, updatePassword } from "../query/passwords";
@@ -19,9 +23,11 @@ import {
   IconCheck,
   IconDots,
   IconMessages,
+  IconReload,
   IconSquareRoundedLetterP,
   IconSquareRoundedLetterU,
 } from "@tabler/icons-react";
+import { random } from "../utils/generic/helper";
 
 export function Password({ item }: any) {
   const openDrawer = useBearStore((state: any) => state.openDrawer);
@@ -163,6 +169,9 @@ export function EditPassword({ item }: any) {
 
   return (
     <>
+      <Text mb={"sm"} c={"dimmed"}>
+        View or update your saved password
+      </Text>
       <TextInput
         onChange={(e) => setWebsite(e.target.value)}
         placeholder="Website"
@@ -227,27 +236,81 @@ export function NewPassword() {
   const [password, setPassword] = useState<any>("");
   const [website, setWebsite] = useState<any>("");
   const [username, setUsername] = useState<any>("");
+  const [passLength, setPassLength] = useState(20);
   return (
     <>
+      <Text mb={"sm"} c={"dimmed"}>
+        Add a new password
+      </Text>
       <TextInput
+        label={"Website URL"}
+        labelProps={{
+          mb: rem(5),
+        }}
         onChange={(e) => setWebsite(e.target.value)}
         placeholder="Website"
         type={"url"}
         radius={"md"}
       />
       <TextInput
-        placeholder="Username/Email"
+        label={"Email or username"}
+        labelProps={{
+          mb: rem(5),
+        }}
+        placeholder="Email/Username"
         type="text"
         mt={"sm"}
         onChange={(e) => setUsername(e.target.value)}
         radius={"md"}
       />
-      <PasswordInput
-        onChange={(e) => setPassword(e.target.value)}
-        mt={"sm"}
-        radius={"md"}
-        placeholder="Password"
-      />
+      <Grid align={"end"}>
+        <Grid.Col span={8}>
+          <PasswordInput
+            label={"Password"}
+            labelProps={{
+              mb: rem(5),
+            }}
+            onChange={(e) => setPassword(e.target.value)}
+            mt={"sm"}
+            radius={"md"}
+            placeholder="Password"
+            value={password}
+          />
+        </Grid.Col>
+        <Grid.Col span={4}>
+          <Popover
+            width={300}
+            trapFocus
+            position={"top-end"}
+            withArrow
+            shadow="md"
+            onOpen={() => {
+              setPassword(random(passLength));
+            }}
+          >
+            <Popover.Target>
+              <Button fullWidth radius={"md"}>
+                <Group gap={rem(4)}>
+                  Generate
+                  <IconReload size={17} />
+                </Group>
+              </Button>
+            </Popover.Target>
+            <Popover.Dropdown p={"xs"}>
+              <Slider
+                defaultValue={passLength}
+                onChange={(v) => {
+                  setPassLength(v);
+                  setPassword(random(v));
+                }}
+                max={50}
+                labelAlwaysOn
+              />
+            </Popover.Dropdown>
+          </Popover>
+        </Grid.Col>
+      </Grid>
+      <Divider mt={"sm"} />
       <div>
         <Button
           onClick={async () => {
@@ -258,6 +321,7 @@ export function NewPassword() {
           mt={"sm"}
           size="xs"
           radius={"md"}
+          disabled={!website || !username || !password}
         >
           Submit
         </Button>

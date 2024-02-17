@@ -1,4 +1,4 @@
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc, Timestamp } from "firebase/firestore";
 import { query, where } from "firebase/firestore";
 import { getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase/config";
@@ -15,6 +15,7 @@ export async function addPassword(
       username: username,
       password: password,
       userId: userId,
+      modifiedAt: Timestamp.now()
     });
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
@@ -34,7 +35,8 @@ export async function updatePassword(
       website: website,
       username: username,
       password: password,
-      userId: userId
+      userId: userId,
+      modifiedAt: Timestamp.now()
     });
   } catch (e) {
     console.error("Error adding document: ", e);

@@ -1,4 +1,4 @@
-import { collection, addDoc, setDoc, doc } from "firebase/firestore";
+import { collection, addDoc, setDoc, doc,Timestamp } from "firebase/firestore";
 import { query, where } from "firebase/firestore";
 import { getDocs } from "firebase/firestore";
 import { db } from "../utils/firebase/config";
@@ -8,6 +8,7 @@ export async function addNote(note: any, userId: string) {
     const docRef = await addDoc(collection(db, "notes"), {
       content: note,
       userId: userId,
+      modifiedAt: Timestamp.now()
     });
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
@@ -22,6 +23,7 @@ export async function updateNote(id:any ,note: any, userId: string) {
     await setDoc(doc(db, "notes", id), {
       content: note,
       userId: userId,
+      modifiedAt: Timestamp.now()
     });
   } catch (e) {
     console.error("Error adding document: ", e);

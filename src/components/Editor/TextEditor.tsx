@@ -92,6 +92,7 @@ export function TextEditor({ update, id, content }: any) {
             mt={"sm"}
             size="xs"
             radius={"md"}
+            disabled={editor?.isEmpty}
           >
             Submit
           </Button>

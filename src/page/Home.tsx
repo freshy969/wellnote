@@ -78,6 +78,14 @@ export default function Home({ user }: any) {
             <Text size={"sm"} lineClamp={1}>
               {doc.data().content.replace(/<[^>]*>/g, " ")}
             </Text>
+            <Text c={"dimmed"} size={"xs"} lineClamp={1}>
+              Modified at {
+              new Date(doc.data()?.modifiedAt).toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}
+            </Text>
           </div>
 
           <div>
