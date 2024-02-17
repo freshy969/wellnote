@@ -26,10 +26,12 @@ import {
   IconSquareRoundedLetterP,
   IconSquareRoundedLetterU,
 } from "@tabler/icons-react";
-import { random } from "../utils/generic/helper";
+import { companyIcon, random } from "../utils/generic/helper";
+import React from "react";
 
 export function Password({ item }: any) {
   const openDrawer = useBearStore((state: any) => state.openDrawer);
+  const icon = companyIcon(item.data().website)
   return (
     <Flex justify={"space-between"} align={"center"}>
       <div
@@ -39,16 +41,7 @@ export function Password({ item }: any) {
         style={{ cursor: "pointer", width: "100%" }}
       >
         <Group>
-          {/* <Button
-            variant={"default"}
-            size={"compact-sm"}
-            color="gray"
-            onClick={() => {
-              openDrawer("Password", <EditPassword item={item} />);
-            }}
-          >
-            <Text size={"xs"}>Open</Text>
-          </Button> */}
+          {React.createElement(icon, { size: 30})}
           <Flex direction={"column"}>
             <Text size={"sm"} lineClamp={1}>
               {item.data().username}
