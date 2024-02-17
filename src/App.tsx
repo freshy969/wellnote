@@ -1,6 +1,6 @@
 import "@mantine/core/styles.css";
 import "@mantine/tiptap/styles.css";
-import { MantineProvider, Container } from "@mantine/core";
+import { MantineProvider, Container, Drawer } from "@mantine/core";
 import Home from "./page/Home";
 import Login from "./page/Login";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -18,6 +18,12 @@ import {Helmet} from "react-helmet";
 export default function App() {
   const user = useBearStore((state: any) => state.user);
   const setUser = useBearStore((state: any) => state.setUser);
+  const drawerOpen = useBearStore((state: any) => state.drawerOpen);
+  const drawerTitle = useBearStore((state: any) => state.drawerTitle);
+  const drawerContent = useBearStore((state: any) => state.drawerContent);
+  const closeDrawer = useBearStore((state: any) => state.closeDrawer);
+
+
 
   useEffect(() => {
     if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -45,6 +51,15 @@ export default function App() {
         <title>Dolph - Passwords & Notes</title>
     </Helmet>
     <MantineProvider>
+    <Drawer
+        opened={drawerOpen}
+        onClose={closeDrawer}
+        title={drawerTitle}
+        position={"right"}
+        overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
+      >
+        {drawerContent}
+      </Drawer>
       <Router>
         <Header user={user} />
         <Container size="lg">

@@ -106,8 +106,9 @@ export function Password({ item }:any) {
   );
 }
 
-export function NewPassword({ close }: any) {
+export function NewPassword() {
   const user = useBearStore((state: any) => state.user);
+  const closeDrawer = useBearStore((state: any) => state.closeDrawer);
   const [password, setPassword] = useState<any>("");
   const [website, setWebsite] = useState<any>("");
   const [username, setUsername] = useState<any>("");
@@ -136,7 +137,7 @@ export function NewPassword({ close }: any) {
         <Button
           onClick={async () => {
             await addPassword(website, username, password, user.uid);
-            close();
+            closeDrawer();
           }}
           variant={"default"}
           mt={"sm"}
@@ -150,7 +151,7 @@ export function NewPassword({ close }: any) {
           variant={"default"}
           mt={"sm"}
           ml={"xs"}
-          onClick={close}
+          onClick={closeDrawer}
           size="xs"
           radius={"md"}
         >

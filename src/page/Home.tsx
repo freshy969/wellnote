@@ -4,7 +4,6 @@ import {
   rem,
   Title,
   Text,
-  Drawer,
   Card,
   ActionIcon,
   Group,
@@ -20,23 +19,21 @@ import {
   IconArrowBack,
 } from "@tabler/icons-react";
 import React from "react";
-import { useDisclosure } from "@mantine/hooks";
 import { useEffect, useState } from "react";
 import { readNotes } from "../query/notes";
 import { random } from "../utils/generic/helper";
 import { readPasswords } from "../query/passwords";
 import { Password } from "../components/Password";
+import { useBearStore } from "../utils/state";
 
 export default function Home({ user }: any) {
   const iconStyle = { width: rem(12), height: rem(12) };
-  const [opened, { open, close }] = useDisclosure(false);
   const [lazyNote, setLazyNote] = useState<any>(null);
   const [lazyPassword, setLazyPassword] = useState<any>(null);
-  const [modalContent, setModalContent] = useState<any>("");
-  const [modalTitle, setModalTitle] = useState<any>("");
-  const [modalSize, setModalSize] = useState<any>("sm");
   const [notes, setNotes] = useState<any>([]);
   const [passwords, setPasswords] = useState<any>([]);
+  const drawerOpen = useBearStore((state: any) => state.drawerOpen);
+  const openDrawer = useBearStore((state: any) => state.openDrawer);
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -47,14 +44,14 @@ export default function Home({ user }: any) {
     if (user?.uid) {
       fetchMyAPI();
     }
-  }, [user, opened]);
+  }, [user, drawerOpen]);
 
   useEffect(() => {
     const importLazyComponent = async () => {
       const note = await import("../components/Editor/TextEditor");
       const password = await import("../components/Password");
-      setLazyNote(React.createElement(note.TextEditor, { close }));
-      setLazyPassword(React.createElement(password.NewPassword, { close }));
+      setLazyNote(React.createElement(note.TextEditor));
+      setLazyPassword(React.createElement(password.NewPassword));
     };
 
     importLazyComponent();
@@ -66,69 +63,67 @@ export default function Home({ user }: any) {
   notes?.forEach((doc: any) =>
     currentNotes.push(
       <>
-      <Card withBorder mt={"xs"} radius={"md"} key={random()}>
-        <Flex justify={"space-between"} align={"center"}>
-          <div
-            onClick={() => {
-              setModalTitle("Note");
-              setModalSize("xl");
-              setModalContent(
-                <Text
-                  dangerouslySetInnerHTML={{ __html: doc.data().content }}
-                ></Text>
-              );
-              open();
-            }}
-            style={{ cursor: "pointer", width:"100%" }}
-          >
-            <Text lineClamp={1}>
-              {doc.data().content.replace(/<[^>]*>/g, " ")}
-            </Text>
-          </div>
+        <Card withBorder mt={"xs"} radius={"md"} key={random()}>
+          <Flex justify={"space-between"} align={"center"}>
+            <div
+              onClick={() => {
+                openDrawer(
+                  "Note",
+                  <Text
+                    dangerouslySetInnerHTML={{ __html: doc.data().content }}
+                  ></Text>
+                );
+              }}
+              style={{ cursor: "pointer", width: "100%" }}
+            >
+              <Text lineClamp={1}>
+                {doc.data().content.replace(/<[^>]*>/g, " ")}
+              </Text>
+            </div>
 
-          <div>
-            <Group gap={0} justify="flex-end">
-              <Menu
-                transitionProps={{ transition: "pop" }}
-                withArrow
-                position="bottom-end"
-                withinPortal
-              >
-                <Menu.Target>
-                  <ActionIcon variant="subtle" color="gray">
-                    <IconDots
-                      style={{ width: rem(16), height: rem(16) }}
-                      stroke={1.5}
-                    />
-                  </ActionIcon>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item
-                    leftSection={
-                      <IconMessages
+            <div>
+              <Group gap={0} justify="flex-end">
+                <Menu
+                  transitionProps={{ transition: "pop" }}
+                  withArrow
+                  position="bottom-end"
+                  withinPortal
+                >
+                  <Menu.Target>
+                    <ActionIcon variant="subtle" color="gray">
+                      <IconDots
                         style={{ width: rem(16), height: rem(16) }}
                         stroke={1.5}
                       />
-                    }
-                  >
-                    Send message
-                  </Menu.Item>
-                  <Menu.Item
-                    leftSection={
-                      <IconArrowBack
-                        style={{ width: rem(16), height: rem(16) }}
-                        stroke={1.5}
-                      />
-                    }
-                  >
-                    Reschedule
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </Group>
-          </div>
-        </Flex>
-      </Card>
+                    </ActionIcon>
+                  </Menu.Target>
+                  <Menu.Dropdown>
+                    <Menu.Item
+                      leftSection={
+                        <IconMessages
+                          style={{ width: rem(16), height: rem(16) }}
+                          stroke={1.5}
+                        />
+                      }
+                    >
+                      Send message
+                    </Menu.Item>
+                    <Menu.Item
+                      leftSection={
+                        <IconArrowBack
+                          style={{ width: rem(16), height: rem(16) }}
+                          stroke={1.5}
+                        />
+                      }
+                    >
+                      Reschedule
+                    </Menu.Item>
+                  </Menu.Dropdown>
+                </Menu>
+              </Group>
+            </div>
+          </Flex>
+        </Card>
       </>
     )
   );
@@ -142,16 +137,6 @@ export default function Home({ user }: any) {
 
   return (
     <>
-      <Drawer
-        opened={opened}
-        onClose={close}
-        title={modalTitle}
-        size={modalSize}
-        position={"right"}
-        overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
-      >
-        {modalContent}
-      </Drawer>
       <Tabs mt={"lg"} variant={"pills"} radius="md" defaultValue="passwords">
         <Tabs.List>
           <div
@@ -190,10 +175,7 @@ export default function Home({ user }: any) {
             <div>
               <Button
                 onClick={() => {
-                  setModalTitle("Add password");
-                  setModalSize("sm");
-                  setModalContent(passwordContent);
-                  open();
+                  openDrawer("Add password", passwordContent);
                 }}
                 variant={"default"}
                 // mt={"sm"}
@@ -221,10 +203,7 @@ export default function Home({ user }: any) {
             <div>
               <Button
                 onClick={() => {
-                  setModalTitle("Add note");
-                  setModalSize("xl");
-                  setModalContent(noteContent);
-                  open();
+                  openDrawer("Add note", noteContent);
                 }}
                 variant={"default"}
                 // mt={"sm"}
