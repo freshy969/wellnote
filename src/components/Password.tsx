@@ -14,7 +14,7 @@ import { addPassword } from "../query/passwords";
 import { useBearStore } from "../utils/state";
 import {
   IconArrowBack,
-  IconCheck,
+  IconCircleCheck,
   IconCopy,
   IconDots,
   IconMessages,
@@ -69,7 +69,7 @@ export function Password({ item }: any) {
                 </Popover.Target>
                 <Popover.Dropdown p={rem(7)}>
                   <Flex align={"center"} gap={rem(5)}>
-                    <IconCheck color={"lime"} size={15} />
+                    <IconCircleCheck color={"lime"} size={15} />
                     <Text c={"green"} size="xs">
                       Copied
                     </Text>
