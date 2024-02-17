@@ -136,7 +136,7 @@ export default function Home({ user }: any) {
         key={random()}
         onClick={() => {}}
       >
-        <Password item={doc.data()} />
+        <Password item={doc} />
       </Card>
     )
   );

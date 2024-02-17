@@ -6,72 +6,102 @@ import {
   PasswordInput,
   TextInput,
   rem,
-  Popover,
+  Group,
+  CopyButton,
+  Tooltip,
+  ActionIcon,
 } from "@mantine/core";
-import { useState } from "react";
-import { addPassword } from "../query/passwords";
+import { useEffect, useState } from "react";
+import { addPassword, updatePassword } from "../query/passwords";
 import { useBearStore } from "../utils/state";
 import {
   IconArrowBack,
-  IconCircleCheck,
-  IconCopy,
+  IconCheck,
   IconDots,
   IconMessages,
+  IconSquareRoundedLetterP,
+  IconSquareRoundedLetterU,
 } from "@tabler/icons-react";
 
 export function Password({ item }: any) {
+  const openDrawer = useBearStore((state: any) => state.openDrawer);
   return (
     <Flex justify={"space-between"} align={"center"}>
-      <div style={{ cursor: "pointer", width: "100%" }}>
-        <Flex direction={"column"}>
-          <Text size={"xs"} lineClamp={1}>
-            {item.username}
-          </Text>
-          <Text size={"xs"} lineClamp={1}>
-            {item.website}
-          </Text>
-        </Flex>
-      </div>
-
-      <div>
-        <Flex align={"center"}>
-          <Popover
-            onOpen={() => {
-              navigator.clipboard.writeText(item.password);
-            }}
-            withArrow
-            shadow="md"
-          >
-            <Popover.Target>
-              <Button
-                ml={"xs"}
-                variant={"default"}
-                size={"compact-sm"}
-                color="gray"
-              >
-                <IconCopy
-                  style={{ width: rem(16), height: rem(16) }}
-                  stroke={1.5}
-                />
-              </Button>
-            </Popover.Target>
-            <Popover.Dropdown p={rem(7)}>
-              <Flex align={"center"} gap={rem(5)}>
-                <IconCircleCheck color={"lime"} size={15} />
-                <Text c={"green"} size="xs">
-                  Copied
-                </Text>
-              </Flex>
-            </Popover.Dropdown>
-          </Popover>
-          <Button
-            ml={"xs"}
+      <div
+        onClick={() => {
+          openDrawer("Password", <EditPassword item={item} />);
+        }}
+        style={{ cursor: "pointer", width: "100%" }}
+      >
+        <Group>
+          {/* <Button
             variant={"default"}
             size={"compact-sm"}
             color="gray"
+            onClick={() => {
+              openDrawer("Password", <EditPassword item={item} />);
+            }}
           >
             <Text size={"xs"}>Open</Text>
-          </Button>
+          </Button> */}
+          <Flex direction={"column"}>
+            <Text size={"sm"} lineClamp={1}>
+              {item.data().username}
+            </Text>
+
+            <Text size={"xs"} lineClamp={1}>
+              {item.data().website}
+            </Text>
+          </Flex>
+        </Group>
+      </div>
+
+      <div>
+        <Flex gap={rem(8)} align={"center"}>
+          <CopyButton value={item.data().username} timeout={2000}>
+            {({ copied, copy }) => (
+              <Tooltip
+                label={copied ? "Username copied" : "Copy username"}
+                withArrow
+                position="left"
+              >
+                <ActionIcon
+                  color={copied ? "teal" : "gray"}
+                  variant={"subtle"}
+                  onClick={copy}
+                >
+                  {copied ? (
+                    <IconCheck style={{ width: rem(16) }} />
+                  ) : (
+                    <IconSquareRoundedLetterU style={{ width: rem(16) }} />
+                  )}
+                </ActionIcon>
+              </Tooltip>
+            )}
+          </CopyButton>
+
+          <CopyButton value={item.data().password} timeout={2000}>
+            {({ copied, copy }) => (
+              <Tooltip
+                label={copied ? "Password copied" : "Copy password"}
+                withArrow
+                position="left"
+              >
+                <ActionIcon
+                  color={copied ? "teal" : "gray"}
+                  variant={"subtle"}
+                  onClick={copy}
+                >
+                  {copied ? (
+                    <IconCheck style={{ width: rem(16) }} />
+                  ) : (
+                    <IconSquareRoundedLetterP style={{ width: rem(16) }} />
+                  )}
+                </ActionIcon>
+              </Tooltip>
+            )}
+          </CopyButton>
+
           <Menu
             transitionProps={{ transition: "pop" }}
             withArrow
@@ -79,17 +109,12 @@ export function Password({ item }: any) {
             withinPortal
           >
             <Menu.Target>
-              <Button
-                ml={"xs"}
-                variant={"default"}
-                size={"compact-sm"}
-                color="gray"
-              >
+              <ActionIcon variant={"subtle"}>
                 <IconDots
                   style={{ width: rem(16), height: rem(16) }}
                   stroke={1.5}
                 />
-              </Button>
+              </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item
@@ -117,6 +142,82 @@ export function Password({ item }: any) {
         </Flex>
       </div>
     </Flex>
+  );
+}
+
+export function EditPassword({ item }: any) {
+  const user = useBearStore((state: any) => state.user);
+  const closeDrawer = useBearStore((state: any) => state.closeDrawer);
+  const [password, setPassword] = useState<any>(item.data().password);
+  const [website, setWebsite] = useState<any>(item.data().website);
+  const [username, setUsername] = useState<any>(item.data().username);
+  const [disabled, disable] = useState(true);
+
+  useEffect(() => {
+    const action =
+      username != item.data().username ||
+      password != item.data().password ||
+      website != item.data().website;
+    disable(!action);
+  }, [username, password, website]);
+
+  return (
+    <>
+      <TextInput
+        onChange={(e) => setWebsite(e.target.value)}
+        placeholder="Website"
+        type={"url"}
+        radius={"md"}
+        defaultValue={item.data().website}
+      />
+      <TextInput
+        placeholder="Username/Email"
+        type="text"
+        mt={"sm"}
+        onChange={(e) => setUsername(e.target.value)}
+        radius={"md"}
+        defaultValue={item.data().username}
+      />
+      <PasswordInput
+        onChange={(e) => setPassword(e.target.value)}
+        mt={"sm"}
+        radius={"md"}
+        placeholder="Password"
+        defaultValue={item.data().password}
+      />
+      <div>
+        <Button
+          onClick={async () => {
+            await updatePassword(
+              item.id,
+              website,
+              username,
+              password,
+              user.uid
+            );
+            closeDrawer();
+          }}
+          variant={"default"}
+          mt={"sm"}
+          size="xs"
+          radius={"md"}
+          disabled={disabled}
+        >
+          Update
+        </Button>
+
+        <Button
+          variant={"default"}
+          mt={"sm"}
+          ml={"xs"}
+          onClick={closeDrawer}
+          size="xs"
+          radius={"md"}
+        >
+          Close
+        </Button>
+      </div>
+    </>
   );
 }
 
