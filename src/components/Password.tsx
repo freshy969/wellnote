@@ -23,7 +23,6 @@ import {
   IconCheck,
   IconDots,
   IconMessages,
-  IconReload,
   IconSquareRoundedLetterP,
   IconSquareRoundedLetterU,
 } from "@tabler/icons-react";
