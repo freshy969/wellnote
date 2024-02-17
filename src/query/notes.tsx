@@ -8,7 +8,7 @@ export async function addNote(note: any, userId: string) {
     const docRef = await addDoc(collection(db, "notes"), {
       content: note,
       userId: userId,
-      modifiedAt: Timestamp.now()
+      modifiedAt: Date.now()
     });
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
@@ -23,7 +23,7 @@ export async function updateNote(id:any ,note: any, userId: string) {
     await setDoc(doc(db, "notes", id), {
       content: note,
       userId: userId,
-      modifiedAt: Timestamp.now()
+      modifiedAt: Date.now()
     });
   } catch (e) {
     console.error("Error adding document: ", e);

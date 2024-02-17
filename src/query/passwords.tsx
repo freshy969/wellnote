@@ -15,7 +15,7 @@ export async function addPassword(
       username: username,
       password: password,
       userId: userId,
-      modifiedAt: Timestamp.now()
+      modifiedAt: Date.now()
     });
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
@@ -36,7 +36,7 @@ export async function updatePassword(
       username: username,
       password: password,
       userId: userId,
-      modifiedAt: Timestamp.now()
+      modifiedAt: Date.now()
     });
   } catch (e) {
     console.error("Error adding document: ", e);

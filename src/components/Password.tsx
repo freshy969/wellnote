@@ -291,13 +291,15 @@ export function NewPassword() {
             <Popover.Target>
               <Button fullWidth radius={"md"}>
                 <Group gap={rem(4)}>
+                  <Text size={"xs"}>
                   Generate
-                  <IconReload size={17} />
+                  </Text>
                 </Group>
               </Button>
             </Popover.Target>
             <Popover.Dropdown p={"xs"}>
               <Slider
+              min={5}
                 defaultValue={passLength}
                 onChange={(v) => {
                   setPassLength(v);
