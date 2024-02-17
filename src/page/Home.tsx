@@ -25,6 +25,7 @@ import { random } from "../utils/generic/helper";
 import { readPasswords } from "../query/passwords";
 import { Password } from "../components/Password";
 import { useBearStore } from "../utils/state";
+import { EditNote } from "../components/Note";
 
 export default function Home({ user }: any) {
   const iconStyle = { width: rem(12), height: rem(12) };
@@ -68,15 +69,13 @@ export default function Home({ user }: any) {
             onClick={() => {
               openDrawer(
                 "Note",
-                <Text
-                  dangerouslySetInnerHTML={{ __html: doc.data().content }}
-                ></Text>,
+                <EditNote doc={doc} />,
                 "lg"
               );
             }}
             style={{ cursor: "pointer", width: "100%" }}
           >
-            <Text lineClamp={1}>
+            <Text size={"sm"} lineClamp={1}>
               {doc.data().content.replace(/<[^>]*>/g, " ")}
             </Text>
           </div>

@@ -8,10 +8,11 @@ import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import HardBreak from "@tiptap/extension-hard-break";
 import { Button } from "@mantine/core";
-import { addNote } from "../../query/notes";
+import { addNote, updateNote } from "../../query/notes";
 import { useBearStore } from "../../utils/state";
 
-export function TextEditor() {
+export function TextEditor({ update, id, content }: any) {
+  console.log(content);
   const user = useBearStore((state: any) => state.user);
   const closeDrawer = useBearStore((state: any) => state.closeDrawer);
   const editor = useEditor({
@@ -25,6 +26,7 @@ export function TextEditor() {
       Highlight,
       TextAlign.configure({ types: ["heading", "paragraph"] }),
     ],
+    content: content || <></>,
   });
 
   return (
@@ -76,23 +78,37 @@ export function TextEditor() {
             <RichTextEditor.Redo />
           </RichTextEditor.ControlsGroup> */}
         </RichTextEditor.Toolbar>
-
-        <RichTextEditor.Content></RichTextEditor.Content>
+        <RichTextEditor.Content />
       </RichTextEditor>
       <div>
-        <Button
-          onClick={async () => {
-            await addNote(editor?.getHTML(), user.uid);
+        {!update ? (
+          <Button
+            onClick={async () => {
+              await addNote(editor?.getHTML(), user.uid);
 
-            closeDrawer();
-          }}
-          variant={"default"}
-          mt={"sm"}
-          size="xs"
-          radius={"md"}
-        >
-          Submit
-        </Button>
+              closeDrawer();
+            }}
+            variant={"default"}
+            mt={"sm"}
+            size="xs"
+            radius={"md"}
+          >
+            Submit
+          </Button>
+        ) : (
+          <Button
+            onClick={async () => {
+              await updateNote(id, editor?.getHTML(), user.uid);
+              closeDrawer();
+            }}
+            variant={"default"}
+            mt={"sm"}
+            size="xs"
+            radius={"md"}
+          >
+            Update
+          </Button>
+        )}
         <Button
           variant={"default"}
           mt={"sm"}
