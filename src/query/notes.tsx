@@ -35,3 +35,12 @@ export function readNotes(userId: string) {
   const q = query(collection(db, "notes"), where("userId", "==", userId));
   return getDocs(q);
 }
+
+
+
+import { deleteDoc } from "firebase/firestore";
+
+
+export function deleteNote(id: string) {
+  return deleteDoc(doc(db, "notes", id));
+}

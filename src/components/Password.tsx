@@ -16,15 +16,14 @@ import {
   Slider,
 } from "@mantine/core";
 import { useEffect, useState } from "react";
-import { addPassword, updatePassword } from "../query/passwords";
+import { addPassword, deletePassword, updatePassword } from "../query/passwords";
 import { useBearStore } from "../utils/state";
 import {
-  IconArrowBack,
   IconCheck,
   IconDots,
-  IconMessages,
   IconSquareRoundedLetterP,
   IconSquareRoundedLetterU,
+  IconTrash,
 } from "@tabler/icons-react";
 import { companyIcon, random } from "../utils/generic/helper";
 import React from "react";
@@ -116,24 +115,18 @@ export function Password({ item }: any) {
             </Menu.Target>
             <Menu.Dropdown>
               <Menu.Item
+                onClick={async () => {
+                  await deletePassword(item.id)
+                }}
                 leftSection={
-                  <IconMessages
+                  <IconTrash
                     style={{ width: rem(16), height: rem(16) }}
                     stroke={1.5}
+                    color={"red"}
                   />
                 }
               >
-                Send message
-              </Menu.Item>
-              <Menu.Item
-                leftSection={
-                  <IconArrowBack
-                    style={{ width: rem(16), height: rem(16) }}
-                    stroke={1.5}
-                  />
-                }
-              >
-                Reschedule
+                Delete
               </Menu.Item>
             </Menu.Dropdown>
           </Menu>

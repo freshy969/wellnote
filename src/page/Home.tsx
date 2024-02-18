@@ -14,13 +14,12 @@ import {
 import {
   IconPhoto,
   IconMessageCircle,
-  IconMessages,
   IconDots,
-  IconArrowBack,
+  IconTrash,
 } from "@tabler/icons-react";
 import React from "react";
 import { useEffect, useState } from "react";
-import { readNotes } from "../query/notes";
+import { deleteNote, readNotes } from "../query/notes";
 import { random } from "../utils/generic/helper";
 import { readPasswords } from "../query/passwords";
 import { Password } from "../components/Password";
@@ -106,24 +105,18 @@ export default function Home({ user }: any) {
                 </Menu.Target>
                 <Menu.Dropdown>
                   <Menu.Item
+                  onClick={async () => {
+                    await deleteNote(doc.id)
+                  }}
                     leftSection={
-                      <IconMessages
+                      <IconTrash
                         style={{ width: rem(16), height: rem(16) }}
                         stroke={1.5}
+                        color={"red"}
                       />
                     }
                   >
-                    Send message
-                  </Menu.Item>
-                  <Menu.Item
-                    leftSection={
-                      <IconArrowBack
-                        style={{ width: rem(16), height: rem(16) }}
-                        stroke={1.5}
-                      />
-                    }
-                  >
-                    Reschedule
+                    Delete
                   </Menu.Item>
                 </Menu.Dropdown>
               </Menu>

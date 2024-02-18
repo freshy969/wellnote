@@ -14,6 +14,7 @@ import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import { Hero } from "./components/Hero/Hero";
 
 import {Helmet} from "react-helmet";
+import { FooterLinks } from "./components/Footer/FooterLinks";
 
 export default function App() {
   const user = useBearStore((state: any) => state.user);
@@ -76,6 +77,7 @@ export default function App() {
           </Routes>
         </Container>
       </Router>
+      <FooterLinks />
     </MantineProvider>
     </>
   );
