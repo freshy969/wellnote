@@ -28,7 +28,7 @@ import {
 import { companyIcon, random } from "../utils/generic/helper";
 import React from "react";
 
-export function Password({ item }: any) {
+export function Password({ item, setUpdated }: any) {
   const openDrawer = useBearStore((state: any) => state.openDrawer);
   const icon = companyIcon(item.data().website)
   return (
@@ -117,6 +117,7 @@ export function Password({ item }: any) {
               <Menu.Item
                 onClick={async () => {
                   await deletePassword(item.id)
+                  setUpdated(true)
                 }}
                 leftSection={
                   <IconTrash

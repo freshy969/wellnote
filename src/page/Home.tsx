@@ -5,26 +5,21 @@ import {
   Title,
   Text,
   Card,
-  ActionIcon,
-  Group,
-  Menu,
   Flex,
   ScrollArea,
 } from "@mantine/core";
 import {
   IconPhoto,
   IconMessageCircle,
-  IconDots,
-  IconTrash,
 } from "@tabler/icons-react";
 import React from "react";
 import { useEffect, useState } from "react";
-import { deleteNote, readNotes } from "../query/notes";
+import { readNotes } from "../query/notes";
 import { random } from "../utils/generic/helper";
 import { readPasswords } from "../query/passwords";
 import { Password } from "../components/Password";
 import { useBearStore } from "../utils/state";
-import { EditNote } from "../components/Note";
+import { Note } from "../components/Note";
 
 export default function Home({ user }: any) {
   const iconStyle = { width: rem(12), height: rem(12) };
@@ -34,6 +29,7 @@ export default function Home({ user }: any) {
   const [passwords, setPasswords] = useState<any>([]);
   const drawerOpen = useBearStore((state: any) => state.drawerOpen);
   const openDrawer = useBearStore((state: any) => state.openDrawer);
+  const [updated, setUpdated] = useState(false);
 
   useEffect(() => {
     async function fetchMyAPI() {
@@ -44,7 +40,7 @@ export default function Home({ user }: any) {
     if (user?.uid) {
       fetchMyAPI();
     }
-  }, [user, drawerOpen]);
+  }, [user, drawerOpen, updated]);
 
   useEffect(() => {
     const importLazyComponent = async () => {
@@ -63,66 +59,7 @@ export default function Home({ user }: any) {
   notes?.forEach((doc: any) =>
     currentNotes.push(
       <Card withBorder mt={"xs"} radius={"md"} key={random()}>
-        <Flex justify={"space-between"} align={"center"}>
-          <div
-            onClick={() => {
-              openDrawer(
-                "Note",
-                <EditNote doc={doc} />,
-                "lg"
-              );
-            }}
-            style={{ cursor: "pointer", width: "100%" }}
-          >
-            <Text size={"sm"} lineClamp={1}>
-              {doc.data().content.replace(/<[^>]*>/g, " ")}
-            </Text>
-            <Text c={"dimmed"} size={"xs"} lineClamp={1}>
-              Modified at {
-              new Date(doc.data()?.modifiedAt).toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "short",
-                year: "numeric",
-              })}
-            </Text>
-          </div>
-
-          <div>
-            <Group gap={0} justify="flex-end">
-              <Menu
-                transitionProps={{ transition: "pop" }}
-                withArrow
-                position="bottom-end"
-                withinPortal
-              >
-                <Menu.Target>
-                  <ActionIcon variant="subtle" color="gray">
-                    <IconDots
-                      style={{ width: rem(16), height: rem(16) }}
-                      stroke={1.5}
-                    />
-                  </ActionIcon>
-                </Menu.Target>
-                <Menu.Dropdown>
-                  <Menu.Item
-                  onClick={async () => {
-                    await deleteNote(doc.id)
-                  }}
-                    leftSection={
-                      <IconTrash
-                        style={{ width: rem(16), height: rem(16) }}
-                        stroke={1.5}
-                        color={"red"}
-                      />
-                    }
-                  >
-                    Delete
-                  </Menu.Item>
-                </Menu.Dropdown>
-              </Menu>
-            </Group>
-          </div>
-        </Flex>
+        <Note doc={doc} setUpdated={setUpdated} />
       </Card>
     )
   );
@@ -136,7 +73,7 @@ export default function Home({ user }: any) {
         key={random()}
         onClick={() => {}}
       >
-        <Password item={doc} />
+        <Password item={doc} setUpdated={setUpdated} />
       </Card>
     )
   );
