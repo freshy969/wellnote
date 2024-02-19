@@ -1,5 +1,17 @@
-import { ActionIcon, Card, Flex, Group, Menu, Text, rem } from "@mantine/core";
-import { IconDots, IconPencil, IconTrash } from "@tabler/icons-react";
+import {
+  ActionIcon,
+  Button,
+  Card,
+  Flex,
+  Group,
+  Menu,
+  Text,
+  rem,
+} from "@mantine/core";
+import {
+  IconDots,
+  IconTrash,
+} from "@tabler/icons-react";
 import React from "react";
 import { useEffect, useState } from "react";
 import classes from "./Note.module.css";
@@ -72,6 +84,7 @@ export function Note({ doc, setUpdated }: any) {
 
 export function EditNote({ doc }: any) {
   const [lazyNote, setLazyNote] = useState<any>(null);
+  const closeDrawer = useBearStore((state: any) => state.closeDrawer);
 
   useEffect(() => {
     const importLazyComponent = async () => {
@@ -95,10 +108,19 @@ export function EditNote({ doc }: any) {
   ) : (
     <>
       <Card withBorder className={classes.card}>
-        <Card.Section pl={"md"} py={"xs"} withBorder>
-          <ActionIcon variant={"default"} onClick={() => setEdit(true)}>
-            <IconPencil size={15} />
-          </ActionIcon>
+        <Card.Section px={"md"} py={"xs"} withBorder>
+          <Flex justify={"space-between"} align={"center"}>
+            <Button radius={"md"} size={"compact-sm"} onClick={() => setEdit(true)} variant={"default"}>
+              <Group align={"center"} gap={rem(3)}>
+                <Text size={"xs"}>Edit</Text>
+              </Group>
+            </Button>
+            <Button radius={"md"} size={"compact-sm"} onClick={()=> closeDrawer()} variant={"default"}>
+              <Group align={"center"} gap={rem(4)}>
+                <Text size={"xs"} >Close</Text>
+              </Group>
+            </Button>
+          </Flex>
         </Card.Section>
         <Text dangerouslySetInnerHTML={{ __html: doc.data().content }}></Text>
       </Card>
