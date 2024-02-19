@@ -34,10 +34,23 @@ function Success() {
   );
 }
 
+function isValidEmail(email: string): boolean {
+  var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  return emailRegex.test(email);
+}
 
 function Join() {
   const [email, setEmail] = useState("");
   const [emailSent, sendEmail] = useState(false);
+  const [error, setError] = useState(false);
+
+  const handleChange = (e:any) => {
+    const valid = isValidEmail(e.target.value);
+    setError(!valid);
+    if (valid) {
+      setEmail(e.target.value);
+    }
+  };
 
   const actionCodeSettings = {
     url: "https://dolph-69334.web.app/",
@@ -71,9 +84,10 @@ function Join() {
             labelProps={{ mb: rem(5) }}
             label="Email"
             name="email"
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => handleChange(e)}
             placeholder="mail@example.com"
             required
+            error={error ? "A valid email required" : false}
           />
           <Group justify="space-between" mt="lg">
             <Text size="xs" c="dimmed">
@@ -89,6 +103,7 @@ function Join() {
             color="teal"
             mt="xl"
             onClick={onSubmit}
+            disabled={error == true || email == ""}
           >
             Get access link
           </Button>

@@ -50,7 +50,6 @@ function Header({ user }: any) {
               withArrow
               position="bottom-end"
               shadow="md"
-              width={180}
               transitionProps={{ transition: "pop" }}
             >
               <Menu.Target>
