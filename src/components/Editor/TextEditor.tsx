@@ -10,22 +10,30 @@ import HardBreak from "@tiptap/extension-hard-break";
 import { Button } from "@mantine/core";
 import { addNote, updateNote } from "../../query/notes";
 import { useBearStore } from "../../utils/state";
+import Placeholder from "@tiptap/extension-placeholder";
 
 export function TextEditor({ update, id, content }: any) {
-  console.log(content);
   const user = useBearStore((state: any) => state.user);
   const closeDrawer = useBearStore((state: any) => state.closeDrawer);
+  let ext: any = [
+    StarterKit,
+    Underline,
+    Link,
+    Superscript,
+    HardBreak,
+    SubScript,
+    Highlight,
+    TextAlign.configure({ types: ["heading", "paragraph"] }),
+  ];
+  if (!update) {
+    ext.push(
+      Placeholder.configure({
+        placeholder: "Write something",
+      })
+    );
+  }
   const editor = useEditor({
-    extensions: [
-      StarterKit,
-      Underline,
-      Link,
-      Superscript,
-      HardBreak,
-      SubScript,
-      Highlight,
-      TextAlign.configure({ types: ["heading", "paragraph"] }),
-    ],
+    extensions: ext,
     content: content || <></>,
   });
 

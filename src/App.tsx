@@ -38,13 +38,8 @@ export default function App() {
         .catch(() => {});
     }
 
-    if (!localStorage.getItem("user")) {
-      setUser(localStorage.getItem("user"));
-    }
-
     onAuthStateChanged(auth, (user) => {
       if (user) {
-        localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
       }
     });
