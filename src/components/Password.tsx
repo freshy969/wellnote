@@ -47,7 +47,7 @@ export function Password({ item, setUpdated }: any) {
             </Text>
 
             <Text size={"xs"} lineClamp={1}>
-              {item.data().website}
+              {item.data().website.toLowerCase()}
             </Text>
           </Flex>
         </Group>

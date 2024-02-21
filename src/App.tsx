@@ -13,7 +13,7 @@ import { useBearStore } from "./utils/state";
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import { Hero } from "./components/Hero/Hero";
 
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 import { FooterLinks } from "./components/Footer/FooterLinks";
 
 export default function App() {
@@ -24,8 +24,6 @@ export default function App() {
   const drawerContent = useBearStore((state: any) => state.drawerContent);
   const closeDrawer = useBearStore((state: any) => state.closeDrawer);
   const drawerSize = useBearStore((state: any) => state.drawerSize);
-
-
 
   useEffect(() => {
     if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -40,8 +38,13 @@ export default function App() {
         .catch(() => {});
     }
 
+    if (!localStorage.getItem("user")) {
+      setUser(localStorage.getItem("user"));
+    }
+
     onAuthStateChanged(auth, (user) => {
       if (user) {
+        localStorage.setItem("user", JSON.stringify(user));
         setUser(user);
       }
     });
@@ -49,36 +52,36 @@ export default function App() {
 
   return (
     <>
-    <Helmet>
+      <Helmet>
         <title>Dolph - Passwords & Notes</title>
-    </Helmet>
-    <MantineProvider>
-    <Drawer
-        opened={drawerOpen}
-        onClose={closeDrawer}
-        title={drawerTitle}
-        size={drawerSize}
-        position={"right"}
-        overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
-      >
-        {drawerContent}
-      </Drawer>
-      <Router>
-        <Header user={user} />
-        <Container size="lg">
-          <Routes>
-            {" "}
-            {user ? (
-              <Route path="/" element={<Home user={user} />} />
-            ) : (
-              <Route path="/" element={<Hero />} />
-            )}
-            <Route path="/join" element={<Login />} />
-          </Routes>
-        </Container>
-      </Router>
-      <FooterLinks />
-    </MantineProvider>
+      </Helmet>
+      <MantineProvider>
+        <Drawer
+          opened={drawerOpen}
+          onClose={closeDrawer}
+          title={drawerTitle}
+          size={drawerSize}
+          position={"right"}
+          overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
+        >
+          {drawerContent}
+        </Drawer>
+        <Router>
+          <Header user={user} />
+          <Container size="lg">
+            <Routes>
+              {" "}
+              {user ? (
+                <Route path="/" element={<Home user={user} />} />
+              ) : (
+                <Route path="/" element={<Hero />} />
+              )}
+              <Route path="/join" element={<Login />} />
+            </Routes>
+          </Container>
+        </Router>
+        <FooterLinks />
+      </MantineProvider>
     </>
   );
 }
