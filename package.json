@@ -27,6 +27,7 @@
     "@tiptap/starter-kit": "^2.2.2",
     "@types/react-helmet": "^6.1.11",
     "firebase": "^10.8.0",
+    "million": "latest",
     "postcss": "^8.4.35",
     "postcss-preset-mantine": "^1.13.0",
     "postcss-simple-vars": "^7.0.1",
