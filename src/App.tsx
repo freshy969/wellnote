@@ -38,13 +38,27 @@ export default function App() {
         .catch(() => {});
     }
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        setUser(user);
-      }
-    });
-  }, [auth]);
+    // Check if user data is already in localStorage
+    const storedUserData = window.localStorage.getItem("userData");
+    if (storedUserData) {
+      const user = JSON.parse(storedUserData);
+      setUser(user);
+    } else {
+      // If user data is not in localStorage, fetch it
+      const unsubscribe = onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // Set user data in state
+          setUser(user);
 
+          // Save user data in localStorage
+          window.localStorage.setItem("userData", JSON.stringify(user));
+        }
+      });
+
+      // Cleanup the subscription when component unmounts
+      return () => unsubscribe();
+    }
+}, [auth]);
   return (
     <>
       <Helmet>
