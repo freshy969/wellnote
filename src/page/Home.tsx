@@ -3,14 +3,11 @@ import {
   Button,
   rem,
   Title,
-  Text,
   Card,
   Flex,
-  ScrollArea,
   Grid,
 } from "@mantine/core";
 import { IconMessageCircle } from "@tabler/icons-react";
-import React from "react";
 import { useEffect, useState } from "react";
 import { readNotes } from "../query/notes";
 import { random } from "../utils/generic/helper";
