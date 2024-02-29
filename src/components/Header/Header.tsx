@@ -21,7 +21,7 @@ function Logo() {
         style={{ cursor: "pointer" }}
         className={classes.title}
       >
-        dolph
+        Wellnote
       </Title>
     </>
   );

@@ -1,5 +1,5 @@
 .footer {
-    margin-top: rem(120px);
+    margin-top: rem(20px);
     padding-top: calc(var(--mantine-spacing-lg) * 2);
     padding-bottom: calc(var(--mantine-spacing-lg) * 2);
     /* background-color: light-dark(var(--mantine-color-gray-0), var(--mantine-color-dark-6)); */
@@ -27,7 +27,7 @@
   
   .inner {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
   
     /* @media (max-width: $mantine-breakpoint-sm) {
       flex-direction: column;

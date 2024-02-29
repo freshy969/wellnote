@@ -62,7 +62,7 @@ export default function App() {
   return (
     <>
       <Helmet>
-        <title>Dolph - Passwords & Notes</title>
+        <title>Wellnote</title>
       </Helmet>
       <MantineProvider>
         <Drawer

@@ -1,12 +1,4 @@
-import {
-  Tabs,
-  Button,
-  rem,
-  Title,
-  Card,
-  Flex,
-  Grid,
-} from "@mantine/core";
+import { Tabs, Button, rem, Title, Card, Flex, Grid } from "@mantine/core";
 import { IconMessageCircle } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { readNotes } from "../query/notes";
@@ -44,57 +36,36 @@ export default function Home({ user }: any) {
     )
   );
 
-  const noteContent = <TextEditor />
+  const noteContent = <TextEditor />;
 
   return (
     <>
-      <Tabs mt={"lg"} variant={"pills"} radius="md" defaultValue="notes">
-        <Tabs.List>
-          <div
-            style={{
-              display: "inline-flex",
-              justifyItems: "center",
-              overflowY: "hidden",
-              overflowX: "scroll",
-              whiteSpace: "nowrap",
+      <Flex mt={"sm"} justify={"space-between"} align={"center"}>
+        <div>
+          <Title>Notes</Title>
+        </div>
+        <div>
+          <Button
+            onClick={() => {
+              openDrawer("Add note", noteContent, "lg");
             }}
+            variant={"default"}
+            // mt={"sm"}
+            radius={"md"}
+            size="xs"
           >
-            <Tabs.Tab
-              value="notes"
-              leftSection={<IconMessageCircle style={iconStyle} />}
-            >
-              Notes
-            </Tabs.Tab>
-          </div>
-        </Tabs.List>
+            Add new
+          </Button>
+        </div>
+      </Flex>
 
-        <Tabs.Panel mt={"sm"} value="notes">
-          <Flex justify={"space-between"} align={"center"}>
-            <div>
-              <Title>Notes</Title>
-            </div>
-            <div>
-              <Button
-                onClick={() => {
-                  openDrawer("Add note", noteContent, "lg");
-                }}
-                variant={"default"}
-                // mt={"sm"}
-                radius={"md"}
-                size="xs"
-              >
-                Add new
-              </Button>
-            </div>
-          </Flex>
-
-          {currentNotes?.length > 0 && (
-            // <ScrollArea mt={rem(5)} key={random()} h={"100%"}>
-              <Grid mt={"md"} gutter={"xs"}>{currentNotes}</Grid>
-            // </ScrollArea>
-          )}
-        </Tabs.Panel>
-      </Tabs>
+      {currentNotes?.length > 0 && (
+        // <ScrollArea mt={rem(5)} key={random()} h={"100%"}>
+        <Grid mt={"md"} gutter={"xs"}>
+          {currentNotes}
+        </Grid>
+        // </ScrollArea>
+      )}
     </>
   );
 }
