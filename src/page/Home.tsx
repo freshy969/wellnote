@@ -7,26 +7,20 @@ import {
   Card,
   Flex,
   ScrollArea,
+  Grid,
 } from "@mantine/core";
-import {
-  IconPhoto,
-  IconMessageCircle,
-} from "@tabler/icons-react";
+import { IconMessageCircle } from "@tabler/icons-react";
 import React from "react";
 import { useEffect, useState } from "react";
 import { readNotes } from "../query/notes";
 import { random } from "../utils/generic/helper";
-import { readPasswords } from "../query/passwords";
-import { Password } from "../components/Password";
 import { useBearStore } from "../utils/state";
 import { Note } from "../components/Note";
+import { TextEditor } from "../components/Editor/TextEditor";
 
 export default function Home({ user }: any) {
   const iconStyle = { width: rem(12), height: rem(12) };
-  const [lazyNote, setLazyNote] = useState<any>(null);
-  const [lazyPassword, setLazyPassword] = useState<any>(null);
   const [notes, setNotes] = useState<any>([]);
-  const [passwords, setPasswords] = useState<any>([]);
   const drawerOpen = useBearStore((state: any) => state.drawerOpen);
   const openDrawer = useBearStore((state: any) => state.openDrawer);
   const [updated, setUpdated] = useState(false);
@@ -34,7 +28,6 @@ export default function Home({ user }: any) {
   useEffect(() => {
     async function fetchMyAPI() {
       setNotes(await readNotes(user?.uid));
-      setPasswords(await readPasswords(user?.uid));
     }
 
     if (user?.uid) {
@@ -42,48 +35,23 @@ export default function Home({ user }: any) {
     }
   }, [user, drawerOpen, updated]);
 
-  useEffect(() => {
-    const importLazyComponent = async () => {
-      const note = await import("../components/Editor/TextEditor");
-      const password = await import("../components/Password");
-      setLazyNote(React.createElement(note.TextEditor));
-      setLazyPassword(React.createElement(password.NewPassword));
-    };
-
-    importLazyComponent();
-  }, []);
-
   const currentNotes: any = [];
-  const currentPasswords: any = [];
 
   notes?.forEach((doc: any) =>
     currentNotes.push(
-      <Card withBorder mt={"xs"} radius={"md"} key={random()}>
-        <Note doc={doc} setUpdated={setUpdated} />
-      </Card>
+      <Grid.Col span={{ xs: 12, sm: 6, md: 4 }}>
+        <Card withBorder radius={"md"} key={random()}>
+          <Note doc={doc} setUpdated={setUpdated} />
+        </Card>
+      </Grid.Col>
     )
   );
 
-  passwords?.forEach((doc: any) =>
-    currentPasswords.push(
-      <Card
-        withBorder
-        mt={"xs"}
-        radius={"md"}
-        key={random()}
-        onClick={() => {}}
-      >
-        <Password item={doc} setUpdated={setUpdated} />
-      </Card>
-    )
-  );
-
-  const noteContent = <>{lazyNote ? lazyNote : null}</>;
-  const passwordContent = <>{lazyPassword ? lazyPassword : null}</>;
+  const noteContent = <TextEditor />
 
   return (
     <>
-      <Tabs mt={"lg"} variant={"pills"} radius="md" defaultValue="passwords">
+      <Tabs mt={"lg"} variant={"pills"} radius="md" defaultValue="notes">
         <Tabs.List>
           <div
             style={{
@@ -95,14 +63,7 @@ export default function Home({ user }: any) {
             }}
           >
             <Tabs.Tab
-              value="passwords"
-              leftSection={<IconPhoto style={iconStyle} />}
-            >
-              Passwords
-            </Tabs.Tab>
-            <Tabs.Tab
               value="notes"
-              ml={"xs"}
               leftSection={<IconMessageCircle style={iconStyle} />}
             >
               Notes
@@ -110,40 +71,10 @@ export default function Home({ user }: any) {
           </div>
         </Tabs.List>
 
-        <Tabs.Panel mt={"sm"} value="passwords">
-          <Flex justify={"space-between"} align={"center"}>
-            <div>
-              <Title>Passwords</Title>
-            </div>
-            <div>
-              <Button
-                onClick={() => {
-                  openDrawer("Add password", passwordContent);
-                }}
-                variant={"default"}
-                // mt={"sm"}
-                radius={"md"}
-                size="xs"
-              >
-                Add new
-              </Button>
-            </div>
-          </Flex>
-
-          {currentPasswords?.length > 0 && (
-            <ScrollArea key={random()} h={"100%"}>
-              {currentPasswords}
-            </ScrollArea>
-          )}
-        </Tabs.Panel>
-
         <Tabs.Panel mt={"sm"} value="notes">
           <Flex justify={"space-between"} align={"center"}>
             <div>
               <Title>Notes</Title>
-              <Text c={"dimmed"} size={"xs"}>
-                Add more notes
-              </Text>
             </div>
             <div>
               <Button
@@ -161,9 +92,9 @@ export default function Home({ user }: any) {
           </Flex>
 
           {currentNotes?.length > 0 && (
-            <ScrollArea key={random()} h={"100%"}>
-              {currentNotes}
-            </ScrollArea>
+            // <ScrollArea mt={rem(5)} key={random()} h={"100%"}>
+              <Grid mt={"md"} gutter={"xs"}>{currentNotes}</Grid>
+            // </ScrollArea>
           )}
         </Tabs.Panel>
       </Tabs>

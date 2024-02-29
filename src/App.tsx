@@ -71,6 +71,7 @@ export default function App() {
           title={drawerTitle}
           size={drawerSize}
           position={"right"}
+          transitionProps={{ transition: "fade", duration: 0, timingFunction: 'linear' }}
           overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
         >
           {drawerContent}
