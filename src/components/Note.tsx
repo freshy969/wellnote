@@ -29,9 +29,12 @@ export function Note({ doc, setUpdated }: any) {
         }}
         style={{ cursor: "pointer", width: "100%" }}
       >
-        <Text size={"sm"} lineClamp={1}>
+        <div>
+
+        <Text style={{ wordBreak:"break-all"}} size={"sm"} lineClamp={1}>
           {doc.data().content.replace(/<[^>]*>/g, " ")}
         </Text>
+        </div>
         <Text c={"dimmed"} size={"xs"} lineClamp={1}>
           Modified at{" "}
           {new Date(doc.data()?.modifiedAt).toLocaleDateString("en-US", {

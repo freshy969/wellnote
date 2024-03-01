@@ -53,7 +53,8 @@ function Join() {
   };
 
   const actionCodeSettings = {
-    url: "https://dolph-69334.web.app/",
+    // url: "https://dolph-69334.web.app/",
+    url: "http://localhost:5173/",
     handleCodeInApp: true,
   };
 

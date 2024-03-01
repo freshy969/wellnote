@@ -1,4 +1,4 @@
-import { Title, Container, Flex, Menu } from "@mantine/core";
+import { Title, Container, Flex, Menu, Group, Image } from "@mantine/core";
 import {
   IconSquareRounded,
   IconSquareRoundedFilled,
@@ -9,20 +9,21 @@ import classes from "./Header.module.css";
 import { signOut } from "firebase/auth";
 import { auth } from "../../utils/firebase/config";
 import { useBearStore } from "../../utils/state";
+import loginIcon from "../../wellnote.svg";
 
-function Logo() {
-  const navigate = useNavigate();
+function Logo({ opacity }: any) {
   return (
     <>
-      <Title
-        onClick={() => {
-          navigate("/");
-        }}
-        style={{ cursor: "pointer" }}
-        className={classes.title}
-      >
-        Wellnote
-      </Title>
+      <Group gap={"xs"} align={"center"}>
+        <Image w={"40px"} opacity={opacity ? opacity : 1} src={loginIcon} />
+        <Title
+          opacity={opacity ? opacity : 1}
+          style={{ cursor: "pointer" }}
+          className={classes.title}
+        >
+          Wellnote
+        </Title>
+      </Group>
     </>
   );
 }
