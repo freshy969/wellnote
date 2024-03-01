@@ -3,43 +3,37 @@ import {
   IconArrowRight,
   IconFolder,
   IconGauge,
-  IconHash,
   IconNote,
-  IconNumber1,
-  IconPlus,
+  IconRefresh,
   IconSettings,
-  IconSquareRoundedNumber1,
-  IconSquareRoundedNumber2,
   IconStar,
-  IconTag,
 } from "@tabler/icons-react";
-import { Button, Flex, NavLink, Text, rem } from "@mantine/core";
+import { Button, Flex, NavLink, Text } from "@mantine/core";
 
 import { useMediaQuery } from "@mantine/hooks";
 
 import { Card, Grid } from "@mantine/core";
 import { useEffect } from "react";
-import { readNotes } from "../query/notes";
-import { random } from "../utils/generic/helper";
+import { getUniqueId, random } from "../utils/generic/helper";
 import { useBearStore } from "../utils/state";
 import { Note } from "../components/Note";
 import { TextEditor } from "../components/Editor/TextEditor";
-import { UserButton } from "../components/UserButton/UserButton";
+import { useLiveQuery } from "dexie-react-hooks";
 
 export function Bro({ user }: any) {
-  const [notes, setNotes] = useState<any>([]);
-  const drawerOpen = useBearStore((state: any) => state.drawerOpen);
+  
+  // const [notes, setNotes] = useState<any>([]);
+  // const drawerOpen = useBearStore((state: any) => state.drawerOpen);
+  // const message = useBearStore((state: any) => state.message);
   const [updated, setUpdated] = useState(false);
+  const notes = useLiveQuery(() => db.notes.reverse().toArray());
 
-  useEffect(() => {
-    async function fetchMyAPI() {
-      setNotes(await readNotes(user?.uid));
-    }
-
-    if (user?.uid) {
-      fetchMyAPI();
-    }
-  }, [user, drawerOpen, updated]);
+  // useEffect(() => {
+  //   async function fetchMyAPI() {
+  //     setNotes(await db.notes.toArray());
+  //   }
+  //   fetchMyAPI();
+  // }, []);
 
   const currentNotes: any = [];
 
@@ -54,15 +48,22 @@ export function Bro({ user }: any) {
   );
 
   return (
-    <>{currentNotes?.length > 0 && <Grid mt={"md"} gutter={"xs"}>{currentNotes}</Grid>}</>
+    <>
+      {currentNotes?.length > 0 && (
+        <Grid mt={"md"} gutter={"xs"}>
+          {currentNotes}
+        </Grid>
+      )}
+    </>
   );
 }
 
 export default function Home({ user }: any) {
+
   const [active, setActive] = useState(1);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
-
   const openDrawer = useBearStore((state: any) => state.openDrawer);
+  const message = useBearStore((state: any) => state.message);
   const noteContent = <TextEditor />;
 
   const data = [
@@ -113,20 +114,18 @@ export default function Home({ user }: any) {
 
   const tags = [
     {
-      label: "add tag",
+      label: "Add tag",
       onClick: (index) => {
         // openDrawer("Add note", noteContent, "lg");
       },
       right: <></>,
     },
-
     {
-      icon: IconSettings,
-      label: "settings",
+      label: "#settings",
       onClick: (index) => {
-        setActive(index);
+        // openDrawer("Add note", noteContent, "lg");
       },
-      right: <IconSquareRoundedNumber2 size="1rem" stroke={1.5} />,
+      right: <></>,
     },
   ];
 
@@ -142,59 +141,97 @@ export default function Home({ user }: any) {
   ));
 
   const navItems = data.map((item, index) => (
-    <NavLink
+    <Anchor
       variant={"subtle"}
-      style={{ borderRadius: rem(5) }}
+      // style={{ borderRadius: rem(5) }}
       key={item.label}
-      active={index === active}
-      label={item.label}
-      description={item.description}
-      rightSection={index === active ? item.right : null}
-      leftSection={<item.icon size="1rem" stroke={1.5} />}
+      size={"sm"}
+      // active={index === active}
+      // label={item.label}
+      // description={item.description}
+      // rightSection={index === active ? item.right : null}
+      // leftSection={<item.icon size="1rem" stroke={1.5} />}
       onClick={() => {
         item.onClick(index);
       }}
-    />
+    >
+      {item.label}
+      </Anchor>
   ));
 
   const tagItems = tags.map((item, index) => (
-    <NavLink
+    <Anchor
+      w={"100%"}
+      truncate={"end"}
       variant={"subtle"}
-      py={rem(8)}
-      style={{ borderRadius: rem(5) }}
+      size={"sm"}
+      // style={{ borderRadius: rem(5) }}
       key={item.label}
-      active={index === active}
-      label={<Text size={rem(14)}>{item.label}</Text>}
-      description={item?.description}
-      rightSection={item.right}
-      leftSection={
-        index == 0 ? (
-          <IconPlus size="1rem" stroke={1.5} />
-        ) : (
-          <IconHash size="1rem" stroke={1.5} />
-        )
-      }
+      // active={index === active}
+      // label={item.label}
+      // description={item?.description}
+      // rightSection={item.right}
+      ta={"end"}
+      // rightSection={
+      //   index == 0 ? (
+      //     <IconPlus size="1rem" stroke={1.5} />
+      //   ) : (
+      //     <IconHash size="1rem" stroke={1.5} />
+      //   )
+      // }
       onClick={() => {
         item.onClick(index);
       }}
-    />
+    >
+      {item.label}
+    </Anchor>
   ));
 
   return (
-    <Flex mt={"xs"} justify={"space-between"} gap={"lg"}>
+    <Flex mt={"xs"} justify={"space-between"} gap={"xs"}>
       <Flex
-        w={isSmallScreen ? "auto" : "20%"}
+        w={isSmallScreen ? "auto" : "15%"}
         gap={isSmallScreen ? "md" : 0}
         direction={"column"}
       >
         {isSmallScreen ? items : navItems}
       </Flex>
-      <div style={{ width: "100%", marginTop: rem(15) }}>
+      <div style={{ width: "100%" }}>
+        <Card
+          withBorder
+          py={0}
+          style={{
+            minHeight: "100px",
+            maxHeight: "200px",
+            overflowY: "scroll",
+          }}
+        >
+          <Editor />
+          <Flex justify={"end"}>
+            <Button
+              onClick={async () => {
+                await db.notes.add({
+                  uniqueId: getUniqueId(),
+                  content: message,
+                  type: "any",
+                  modifiedAt: Date.now(),
+                });
+              }}
+              mb={"sm"}
+              size={"compact-sm"}
+              variant={"default"}
+              radius={"sm"}
+            >
+              Submit
+            </Button>
+          </Flex>
+        </Card>
         <Demo />
         <Bro user={user} />
       </div>
       <Flex
-        w={isSmallScreen ? "auto" : "20%"}
+        style={{ maxWidth: "15%", minWidth: "10%" }}
+        // w={isSmallScreen ? "auto" : "20%"}
         gap={isSmallScreen ? "md" : 0}
         direction={"column"}
       >
@@ -205,6 +242,8 @@ export default function Home({ user }: any) {
 }
 
 import { Breadcrumbs, Anchor } from "@mantine/core";
+import { Editor } from "../components/Editor/MiniEditor";
+import { db } from "../utils/dexie/config";
 
 const items = [
   { title: "Wellnote", href: null },
@@ -223,11 +262,11 @@ const items = [
 
 function Demo() {
   return (
-    <Flex align={"center"} justify={"space-between"}>
-      <Breadcrumbs >{items}</Breadcrumbs>
-      <Button variant={"default"} size={"compact-xs"}>
-        Sync
-      </Button>
+    <Flex mt={"sm"} align={"center"} justify={"space-between"}>
+      <Breadcrumbs>{items}</Breadcrumbs>
+      {/* <Button variant={"default"} size={"compact-xs"}> */}
+      <IconRefresh size="20" stroke={1.5} />
+      {/* </Button> */}
     </Flex>
   );
 }

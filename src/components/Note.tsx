@@ -32,12 +32,12 @@ export function Note({ doc, setUpdated }: any) {
         <div>
 
         <Text style={{ wordBreak:"break-all"}} size={"sm"} lineClamp={1}>
-          {doc.data().content.replace(/<[^>]*>/g, " ")}
+          {doc.content.replace(/<[^>]*>/g, " ")}
         </Text>
         </div>
         <Text c={"dimmed"} size={"xs"} lineClamp={1}>
           Modified at{" "}
-          {new Date(doc.data()?.modifiedAt).toLocaleDateString("en-US", {
+          {new Date(doc?.modifiedAt).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
             year: "numeric",
@@ -96,7 +96,7 @@ export function EditNote({ doc }: any) {
         React.createElement(note.TextEditor, {
           update: true,
           id: doc.id,
-          content: doc.data().content,
+          content: doc.content,
         })
       );
     };
@@ -125,7 +125,7 @@ export function EditNote({ doc }: any) {
             </Button>
           </Flex>
         </Card.Section>
-        <Text dangerouslySetInnerHTML={{ __html: doc.data().content }}></Text>
+        <Text dangerouslySetInnerHTML={{ __html: doc.content }}></Text>
       </Card>
     </>
   );

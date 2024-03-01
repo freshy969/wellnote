@@ -6,22 +6,30 @@ const store = {
   drawerSize: "md",
   drawerContent: null,
   user: null,
+  message: "",
 };
 
 type BearStore = {
   drawerOpen: boolean;
   drawerTitle: string;
-  drawerSize: string,
+  drawerSize: string;
   drawerContent: any;
   user: any;
+  message: any;
   setUser: any;
   openDrawer: any;
+  setMessage: any;
   closeDrawer: any;
   reset: () => void;
 };
 
 export const useBearStore = create<BearStore>((set) => ({
   ...store,
+  setMessage: (newMessage: any) => {
+    set(() => ({
+      message: newMessage,
+    }));
+  },
   openDrawer: (title: string, content: any, size: any) =>
     set((state) => ({
       drawerOpen: true,

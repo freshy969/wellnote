@@ -11,7 +11,7 @@ import { auth } from "./utils/firebase/config";
 import { Header } from "./components/Header/Header";
 import { useBearStore } from "./utils/state";
 import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
-import { Hero } from "./components/Hero/Hero";
+import "./App.css";
 
 import { Helmet } from "react-helmet";
 import { FooterLinks } from "./components/Footer/FooterLinks";
@@ -58,7 +58,7 @@ export default function App() {
       // Cleanup the subscription when component unmounts
       return () => unsubscribe();
     }
-}, [auth]);
+  }, [auth]);
   return (
     <>
       <Helmet>
@@ -71,7 +71,11 @@ export default function App() {
           title={drawerTitle}
           size={drawerSize}
           position={"right"}
-          transitionProps={{ transition: "fade", duration: 0, timingFunction: 'linear' }}
+          transitionProps={{
+            transition: "fade",
+            duration: 0,
+            timingFunction: "linear",
+          }}
           overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
         >
           {drawerContent}
@@ -81,11 +85,7 @@ export default function App() {
           <Container size="lg">
             <Routes>
               {" "}
-              {user ? (
-                <Route path="/" element={<Home user={user} />} />
-              ) : (
-                <Route path="/" element={<Hero />} />
-              )}
+              <Route path="/" element={<Home user={user} />} />
               <Route path="/join" element={<Login />} />
             </Routes>
           </Container>
