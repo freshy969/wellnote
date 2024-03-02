@@ -72,7 +72,9 @@ export function FooterLinks() {
         </Text>
 
         <Group gap={0} className={classes.social} justify="flex-end" wrap="nowrap">
-          <ActionIcon size="lg" color="gray" variant="subtle">
+          <ActionIcon onClick={()=>{
+            window.open("https://github.com/henshalb/wellnote", "_blank");
+          }} size="lg" color="gray" variant="subtle">
             <IconBrandGithub style={{ width: rem(18), height: rem(18) }} stroke={1.5} />
           </ActionIcon>
         </Group>

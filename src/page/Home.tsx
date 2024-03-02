@@ -238,8 +238,6 @@ export default function Home({ user }: any) {
               size={"sm"}
               disabled={message === "<p></p>" || message === ""}
               variant={"transparent"}
-
-              // radius={"sm"}
             >
               Submit
             </Button>
