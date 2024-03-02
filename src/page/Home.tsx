@@ -8,12 +8,11 @@ import {
   IconSettings,
   IconStar,
 } from "@tabler/icons-react";
-import { Button, Flex, NavLink, Text } from "@mantine/core";
+import { Button, Flex, Group, Menu, Text, rem } from "@mantine/core";
 
 import { useMediaQuery } from "@mantine/hooks";
 
 import { Card, Grid } from "@mantine/core";
-import { useEffect } from "react";
 import { getUniqueId, random } from "../utils/generic/helper";
 import { useBearStore } from "../utils/state";
 import { Note } from "../components/Note";
@@ -21,12 +20,16 @@ import { TextEditor } from "../components/Editor/TextEditor";
 import { useLiveQuery } from "dexie-react-hooks";
 
 export function Bro({ user }: any) {
-  
   // const [notes, setNotes] = useState<any>([]);
   // const drawerOpen = useBearStore((state: any) => state.drawerOpen);
   // const message = useBearStore((state: any) => state.message);
   const [updated, setUpdated] = useState(false);
-  const notes = useLiveQuery(() => db.notes.reverse().toArray());
+  const PAGE_SIZE = 12;
+  const page = 1;
+  const offset = (page - 1) * PAGE_SIZE;
+  const notes = useLiveQuery(() =>
+    db.notes.offset(offset).limit(PAGE_SIZE).reverse().toArray()
+  );
 
   // useEffect(() => {
   //   async function fetchMyAPI() {
@@ -59,7 +62,6 @@ export function Bro({ user }: any) {
 }
 
 export default function Home({ user }: any) {
-
   const [active, setActive] = useState(1);
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const openDrawer = useBearStore((state: any) => state.openDrawer);
@@ -142,10 +144,12 @@ export default function Home({ user }: any) {
 
   const navItems = data.map((item, index) => (
     <Anchor
-      variant={"subtle"}
+      variant={"text"}
+      // c={"default"}
       // style={{ borderRadius: rem(5) }}
       key={item.label}
-      size={"sm"}
+      py={rem(5)}
+      size={"md"}
       // active={index === active}
       // label={item.label}
       // description={item.description}
@@ -155,8 +159,14 @@ export default function Home({ user }: any) {
         item.onClick(index);
       }}
     >
-      {item.label}
-      </Anchor>
+      <Flex align={"center"} justify={"space-between"}>
+        <Group gap={"xs"} align={"center"}>
+          <item.icon size="1rem" stroke={1.5} />
+          {item.label}
+        </Group>
+        {/* {item.right} */}
+      </Flex>
+    </Anchor>
   ));
 
   const tagItems = tags.map((item, index) => (
@@ -188,19 +198,23 @@ export default function Home({ user }: any) {
   ));
 
   return (
-    <Flex mt={"xs"} justify={"space-between"} gap={"xs"}>
-      <Flex
-        w={isSmallScreen ? "auto" : "15%"}
+    <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
+      {/* <Flex
+        w={isSmallScreen ? "auto" : "20%"}
         gap={isSmallScreen ? "md" : 0}
         direction={"column"}
       >
         {isSmallScreen ? items : navItems}
-      </Flex>
+      </Flex> */}
+      {isSmallScreen ? null : <NavbarSearch />}
       <div style={{ width: "100%" }}>
         <Card
           withBorder
           py={0}
           style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
             minHeight: "100px",
             maxHeight: "200px",
             overflowY: "scroll",
@@ -217,10 +231,12 @@ export default function Home({ user }: any) {
                   modifiedAt: Date.now(),
                 });
               }}
-              mb={"sm"}
-              size={"compact-sm"}
-              variant={"default"}
-              radius={"sm"}
+              mb={rem(8)}
+              size={"sm"}
+              disabled={message != "<p></p>" ? false : true}
+              variant={"transparent"}
+
+              // radius={"sm"}
             >
               Submit
             </Button>
@@ -229,14 +245,14 @@ export default function Home({ user }: any) {
         <Demo />
         <Bro user={user} />
       </div>
-      <Flex
+      {/* <Flex
         style={{ maxWidth: "15%", minWidth: "10%" }}
         // w={isSmallScreen ? "auto" : "20%"}
         gap={isSmallScreen ? "md" : 0}
         direction={"column"}
       >
         {isSmallScreen ? items : tagItems}
-      </Flex>
+      </Flex> */}
     </Flex>
   );
 }
@@ -244,6 +260,7 @@ export default function Home({ user }: any) {
 import { Breadcrumbs, Anchor } from "@mantine/core";
 import { Editor } from "../components/Editor/MiniEditor";
 import { db } from "../utils/dexie/config";
+import { NavbarSearch } from "../components/NavBar/NavSearch";
 
 const items = [
   { title: "Wellnote", href: null },
@@ -261,11 +278,23 @@ const items = [
 );
 
 function Demo() {
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+
   return (
     <Flex mt={"sm"} align={"center"} justify={"space-between"}>
       <Breadcrumbs>{items}</Breadcrumbs>
       {/* <Button variant={"default"} size={"compact-xs"}> */}
-      <IconRefresh size="20" stroke={1.5} />
+
+      <Menu position={"bottom-end"} shadow="md" >
+        <Menu.Target>
+          <IconRefresh size="20" stroke={1.5} />
+        </Menu.Target>
+
+        <Menu.Dropdown p={"md"}>
+          <NavbarSearch />
+        </Menu.Dropdown>
+      </Menu>
+
       {/* </Button> */}
     </Flex>
   );
