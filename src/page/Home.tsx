@@ -43,7 +43,7 @@ export function Bro({ user }: any) {
   notes?.forEach((doc: any) =>
     currentNotes.push(
       <Grid.Col span={{ xs: 12, sm: 6, md: 4 }}>
-        <Card withBorder radius={"md"} key={random()}>
+        <Card withBorder radius={"sm"} key={random()}>
           <Note doc={doc} setUpdated={setUpdated} />
         </Card>
       </Grid.Col>
