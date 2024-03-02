@@ -12,6 +12,7 @@ import { useBearStore } from "../utils/state";
 import { Editor } from "../components/Editor/MiniEditor"
 
 export function Note({ doc }: any) {
+
   const openDrawer = useBearStore((state: any) => state.openDrawer);
   const setNote = useBearStore((state: any) => state.setNote);
 
@@ -59,7 +60,6 @@ export function Note({ doc }: any) {
               <Menu.Item
                 onClick={async () => {
                   await deleteNote(doc.id);
-                  // setUpdated(true);
                 }}
                 leftSection={
                   <IconTrash

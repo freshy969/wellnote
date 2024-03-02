@@ -31,7 +31,7 @@ export const Editor = ({ read }: any) => {
     if (editor) {
       editor
         .chain()
-        .setContent(note && read ? `${note.content}` : "")
+        .setContent(note && read == true ? note.content : "")
         .run();
     }
   }, [note, editor]);

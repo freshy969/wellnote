@@ -1,18 +1,18 @@
-import {
-  IconRefresh,
-} from "@tabler/icons-react";
+import { IconRefresh } from "@tabler/icons-react";
 import { Button, Flex, Menu, Text, rem } from "@mantine/core";
-
 import { useMediaQuery } from "@mantine/hooks";
-
 import { Card, Grid } from "@mantine/core";
 import { getUniqueId, random } from "../utils/generic/helper";
 import { useBearStore } from "../utils/state";
 import { Note } from "../components/Note";
 import { useLiveQuery } from "dexie-react-hooks";
+import { Breadcrumbs, Anchor } from "@mantine/core";
+import { Editor } from "../components/Editor/MiniEditor";
+import { db } from "../utils/dexie/config";
+import { NavbarSearch } from "../components/NavBar/NavSearch";
+import { useEffect } from "react";
 
 export function Bro() {
-
   const PAGE_SIZE = 12;
   const page = 1;
   const offset = (page - 1) * PAGE_SIZE;
@@ -21,14 +21,10 @@ export function Bro() {
   );
 
   const setNoteCount = useBearStore((state: any) => state.setNoteCount);
-  // const setNote = useBearStore((state: any) => state.setNote);
 
-  useEffect(()=>{
-
-    // setNote("")
-    setNoteCount()
-
-  },[notes])
+  useEffect(() => {
+    setNoteCount();
+  }, [notes]);
 
   const currentNotes: any = [];
 
@@ -54,6 +50,7 @@ export function Bro() {
 }
 
 export default function Home() {
+  
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const message = useBearStore((state: any) => state.message);
   const setNote = useBearStore((state: any) => state.setNote);
@@ -85,8 +82,8 @@ export default function Home() {
                   type: "any",
                   modifiedAt: Date.now(),
                 });
+                setMessage("");
                 setNote("");
-                setMessage("")
               }}
               mb={rem(8)}
               pr={0}
@@ -104,12 +101,6 @@ export default function Home() {
     </Flex>
   );
 }
-
-import { Breadcrumbs, Anchor } from "@mantine/core";
-import { Editor } from "../components/Editor/MiniEditor";
-import { db } from "../utils/dexie/config";
-import { NavbarSearch } from "../components/NavBar/NavSearch";
-import { useEffect } from "react";
 
 const items = [
   { title: "Wellnote", href: null },
@@ -132,20 +123,16 @@ function Demo() {
   return (
     <Flex mt={"sm"} align={"center"} justify={"space-between"}>
       <Breadcrumbs>{items}</Breadcrumbs>
-      {/* <Button variant={"default"} size={"compact-xs"}> */}
       {isSmallScreen ? (
         <Menu position={"bottom-end"} shadow="md">
           <Menu.Target>
             <IconRefresh size="20" stroke={1.5} />
           </Menu.Target>
-
           <Menu.Dropdown p={"md"}>
             <NavbarSearch />
           </Menu.Dropdown>
         </Menu>
       ) : null}
-
-      {/* </Button> */}
     </Flex>
   );
 }
