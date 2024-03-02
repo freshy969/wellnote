@@ -9,7 +9,7 @@ const store = {
   user: null,
   message: "",
   note: "",
-  noteCount: await db.notes.count(),
+  noteCount: 0,
 };
 
 type BearStore = {
