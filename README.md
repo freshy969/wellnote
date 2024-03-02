@@ -4,7 +4,7 @@ A lightweight and intuitive browser-based note-taking application. Easily jot do
 
 ## Contribute
 
-Contribute to Wellnote on GitHub and be a part of shaping its success – your skills can make a significant difference!
+🚀 Hey folks! 👋 Want to join our note-taking app project? We'd love your help! Whether you're a pro coder or just starting out, there are cool tasks for everyone. Check get started block to know how to jump in. Let's make note-taking awesome together! 
 
 ## Get started
 
@@ -19,7 +19,7 @@ bun i && bun run dev
 ```
 - Create a branch:
 ```bash
-git checkout -b feature/your-feature
+git checkout -b your-feature
 ```
 - Make changes
 - Test your changes
