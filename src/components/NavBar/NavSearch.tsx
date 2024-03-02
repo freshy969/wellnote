@@ -8,13 +8,13 @@ import {
     Tooltip,
     rem,
   } from '@mantine/core';
-  import { IconBulb, IconUser, IconCheckbox, IconSearch, IconPlus } from '@tabler/icons-react';
+  import { IconSearch, IconPlus, IconNote, IconStar, IconSettings } from '@tabler/icons-react';
   import classes from './NavSearch.module.css';
   
   const links = [
-    { icon: IconBulb, label: 'Activity', notifications: 3 },
-    { icon: IconCheckbox, label: 'Tasks', notifications: 4 },
-    { icon: IconUser, label: 'Contacts' },
+    { icon: IconNote, label: 'Notes', notifications: 3 },
+    { icon: IconStar, label: 'Favourites', notifications: 4 },
+    { icon: IconSettings, label: 'Settings' },
   ];
   
   const collections = [

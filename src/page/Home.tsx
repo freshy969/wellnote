@@ -233,7 +233,7 @@ export default function Home({ user }: any) {
               }}
               mb={rem(8)}
               size={"sm"}
-              disabled={message != "<p></p>" ? false : true}
+              disabled={message != "<p></p>" || !message ? false : true}
               variant={"transparent"}
 
               // radius={"sm"}
