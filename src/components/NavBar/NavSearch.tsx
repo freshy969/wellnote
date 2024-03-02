@@ -10,23 +10,27 @@ import {
   } from '@mantine/core';
   import { IconSearch, IconPlus, IconNote, IconStar, IconSettings } from '@tabler/icons-react';
   import classes from './NavSearch.module.css';
+import { useBearStore } from '../../utils/state';
   
-  const links = [
-    { icon: IconNote, label: 'Notes', notifications: 3 },
-    { icon: IconStar, label: 'Favourites', notifications: 4 },
-    { icon: IconSettings, label: 'Settings' },
-  ];
   
-  const collections = [
-    { emoji: '👍', label: 'Sales' },
-    { emoji: '🚚', label: 'Deliveries' },
-    { emoji: '💸', label: 'Discounts' },
-    { emoji: '💰', label: 'Profits' },
-    { emoji: '✨', label: 'Reports' },
-    { emoji: '🛒', label: 'Orders' }
-  ];
   
   export function NavbarSearch() {
+
+    const links = [
+      { icon: IconNote, label: 'Notes', notifications: useBearStore((state) => state.noteCount) },
+      { icon: IconStar, label: 'Favourites' },
+      { icon: IconSettings, label: 'Settings' },
+    ];
+    
+    const collections = [
+      { emoji: '👍', label: 'Sales' },
+      { emoji: '🚚', label: 'Deliveries' },
+      { emoji: '💸', label: 'Discounts' },
+      { emoji: '💰', label: 'Profits' },
+      { emoji: '✨', label: 'Reports' },
+      { emoji: '🛒', label: 'Orders' }
+    ];
+
     const mainLinks = links.map((link) => (
       <UnstyledButton key={link.label} className={classes.mainLink}>
         <div className={classes.mainLinkInner}>

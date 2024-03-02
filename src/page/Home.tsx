@@ -12,12 +12,23 @@ import { Note } from "../components/Note";
 import { useLiveQuery } from "dexie-react-hooks";
 
 export function Bro() {
+
   const PAGE_SIZE = 12;
   const page = 1;
   const offset = (page - 1) * PAGE_SIZE;
   const notes = useLiveQuery(() =>
     db.notes.offset(offset).limit(PAGE_SIZE).reverse().toArray()
   );
+
+  const setNoteCount = useBearStore((state: any) => state.setNoteCount);
+  // const setNote = useBearStore((state: any) => state.setNote);
+
+  useEffect(()=>{
+
+    // setNote("")
+    setNoteCount()
+
+  },[notes])
 
   const currentNotes: any = [];
 
@@ -45,6 +56,8 @@ export function Bro() {
 export default function Home() {
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const message = useBearStore((state: any) => state.message);
+  const setNote = useBearStore((state: any) => state.setNote);
+  const setMessage = useBearStore((state: any) => state.setMessage);
 
   return (
     <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
@@ -72,6 +85,8 @@ export default function Home() {
                   type: "any",
                   modifiedAt: Date.now(),
                 });
+                setNote("");
+                setMessage("")
               }}
               mb={rem(8)}
               pr={0}
@@ -94,6 +109,7 @@ import { Breadcrumbs, Anchor } from "@mantine/core";
 import { Editor } from "../components/Editor/MiniEditor";
 import { db } from "../utils/dexie/config";
 import { NavbarSearch } from "../components/NavBar/NavSearch";
+import { useEffect } from "react";
 
 const items = [
   { title: "Wellnote", href: null },

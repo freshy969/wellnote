@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { db } from "./dexie/config";
 
 const store = {
   drawerOpen: false,
@@ -7,7 +8,8 @@ const store = {
   drawerContent: null,
   user: null,
   message: "",
-  note: ""
+  note: "",
+  noteCount: await db.notes.count(),
 };
 
 type BearStore = {
@@ -22,6 +24,7 @@ type BearStore = {
   openDrawer: any;
   setMessage: any;
   closeDrawer: any;
+  noteCount: any;
   reset: () => void;
 };
 
@@ -50,4 +53,8 @@ export const useBearStore = create<BearStore>((set) => ({
     })),
   setUser: (newUser: any) => set(() => ({ user: newUser })),
   reset: () => set(store),
+  setNoteCount: async () => {
+    const count = await db.notes.count();
+    set(() => ({ noteCount: count }));
+  },
 }));
