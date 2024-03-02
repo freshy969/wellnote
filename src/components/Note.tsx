@@ -65,7 +65,7 @@ export function Note({ doc, setUpdated }: any) {
               <Menu.Item
                 onClick={async () => {
                   await deleteNote(doc.id);
-                  setUpdated(true);
+                  // setUpdated(true);
                 }}
                 leftSection={
                   <IconTrash

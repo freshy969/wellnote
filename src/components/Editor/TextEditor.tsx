@@ -8,7 +8,6 @@ import Superscript from "@tiptap/extension-superscript";
 import SubScript from "@tiptap/extension-subscript";
 import HardBreak from "@tiptap/extension-hard-break";
 import { Button } from "@mantine/core";
-import { addNote, updateNote } from "../../query/notes";
 import { useBearStore } from "../../utils/state";
 import Placeholder from "@tiptap/extension-placeholder";
 
@@ -92,7 +91,6 @@ export function TextEditor({ update, id, content }: any) {
         {!update ? (
           <Button
             onClick={async () => {
-              await addNote(editor?.getHTML(), user.uid);
 
               closeDrawer();
             }}
@@ -107,7 +105,6 @@ export function TextEditor({ update, id, content }: any) {
         ) : (
           <Button
             onClick={async () => {
-              await updateNote(id, editor?.getHTML(), user.uid);
               closeDrawer();
             }}
             variant={"default"}
