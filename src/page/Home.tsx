@@ -197,6 +197,8 @@ export default function Home({ user }: any) {
     </Anchor>
   ));
 
+  console.log(message)
+
   return (
     <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
       {/* <Flex
@@ -232,8 +234,9 @@ export default function Home({ user }: any) {
                 });
               }}
               mb={rem(8)}
+              pr={0}
               size={"sm"}
-              disabled={message != "<p></p>" || !message ? false : true}
+              disabled={message === "<p></p>" || message === ""}
               variant={"transparent"}
 
               // radius={"sm"}
