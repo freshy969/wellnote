@@ -8,19 +8,19 @@ Contribute to Wellnote on GitHub and be a part of shaping its success – your s
 
 ## Get started
 
-1. Fork the Repository
-2. Clone the Repository:
-```
+Fork the Repository
+Clone the Repository:
+```bash
 git clone git@github.com:henshalb/wellnote.git
 ```
-3. Set Up Development Environment:
-```
+Set Up Development Environment:
+```bash
 bun i && bun run dev
 ```
-4. Create a Branch:
-```
+Create a Branch:
+```bash
 git checkout -b feature/your-feature
 ```
-5. Make Changes
-6. Test Your Changes
-7. Create a Pull Request
+Make Changes
+Test Your Changes
+Create a Pull Request
