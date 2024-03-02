@@ -1,5 +1,4 @@
 import "@mantine/core/styles.css";
-import "@mantine/tiptap/styles.css";
 import { MantineProvider, Container, Drawer } from "@mantine/core";
 import Home from "./page/Home";
 import Login from "./page/Login";
@@ -85,7 +84,7 @@ export default function App() {
           <Container size="lg">
             <Routes>
               {" "}
-              <Route path="/" element={<Home user={user} />} />
+              <Route path="/" element={<Home />} />
               <Route path="/join" element={<Login />} />
             </Routes>
           </Container>

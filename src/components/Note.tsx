@@ -1,7 +1,5 @@
 import {
   ActionIcon,
-  Button,
-  Card,
   Flex,
   Group,
   Menu,
@@ -9,14 +7,11 @@ import {
   rem,
 } from "@mantine/core";
 import { IconDots, IconTrash } from "@tabler/icons-react";
-import React from "react";
-import { useEffect, useState } from "react";
-import classes from "./Note.module.css";
 import { deleteNote } from "../query/notes";
 import { useBearStore } from "../utils/state";
-import { Editor } from "./Editor/MiniEditor";
+import { Editor } from "../components/Editor/MiniEditor"
 
-export function Note({ doc, setUpdated }: any) {
+export function Note({ doc }: any) {
   const openDrawer = useBearStore((state: any) => state.openDrawer);
   const setNote = useBearStore((state: any) => state.setNote);
 
@@ -81,61 +76,5 @@ export function Note({ doc, setUpdated }: any) {
         </Group>
       </div>
     </Flex>
-  );
-}
-
-export function EditNote({ doc }: any) {
-  const [lazyNote, setLazyNote] = useState<any>(null);
-  const closeDrawer = useBearStore((state: any) => state.closeDrawer);
-
-  useEffect(() => {
-    const importLazyComponent = async () => {
-      const note = await import("../components/Editor/TextEditor");
-      setLazyNote(
-        React.createElement(note.TextEditor, {
-          update: true,
-          id: doc.id,
-          content: doc.content,
-        })
-      );
-    };
-
-    importLazyComponent();
-  }, []);
-
-  const [edit, setEdit] = useState(false);
-
-  return edit ? (
-    <>{lazyNote}</>
-  ) : (
-    <>
-      <Card withBorder className={classes.card}>
-        <Card.Section px={"md"} py={"xs"} withBorder>
-          <Flex justify={"space-between"} align={"center"}>
-            <Button
-              radius={"md"}
-              size={"compact-sm"}
-              onClick={() => setEdit(true)}
-              variant={"default"}
-            >
-              <Group align={"center"} gap={rem(3)}>
-                <Text size={"xs"}>Edit</Text>
-              </Group>
-            </Button>
-            <Button
-              radius={"md"}
-              size={"compact-sm"}
-              onClick={() => closeDrawer()}
-              variant={"default"}
-            >
-              <Group align={"center"} gap={rem(4)}>
-                <Text size={"xs"}>Close</Text>
-              </Group>
-            </Button>
-          </Flex>
-        </Card.Section>
-        <Text dangerouslySetInnerHTML={{ __html: doc.content }}></Text>
-      </Card>
-    </>
   );
 }

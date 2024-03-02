@@ -1,14 +1,7 @@
-import { useState } from "react";
 import {
-  IconArrowRight,
-  IconFolder,
-  IconGauge,
-  IconNote,
   IconRefresh,
-  IconSettings,
-  IconStar,
 } from "@tabler/icons-react";
-import { Button, Flex, Group, Menu, Text, rem } from "@mantine/core";
+import { Button, Flex, Menu, Text, rem } from "@mantine/core";
 
 import { useMediaQuery } from "@mantine/hooks";
 
@@ -16,14 +9,9 @@ import { Card, Grid } from "@mantine/core";
 import { getUniqueId, random } from "../utils/generic/helper";
 import { useBearStore } from "../utils/state";
 import { Note } from "../components/Note";
-import { TextEditor } from "../components/Editor/TextEditor";
 import { useLiveQuery } from "dexie-react-hooks";
 
-export function Bro({ user }: any) {
-  // const [notes, setNotes] = useState<any>([]);
-  // const drawerOpen = useBearStore((state: any) => state.drawerOpen);
-  // const message = useBearStore((state: any) => state.message);
-  const [updated, setUpdated] = useState(false);
+export function Bro() {
   const PAGE_SIZE = 12;
   const page = 1;
   const offset = (page - 1) * PAGE_SIZE;
@@ -31,20 +19,13 @@ export function Bro({ user }: any) {
     db.notes.offset(offset).limit(PAGE_SIZE).reverse().toArray()
   );
 
-  // useEffect(() => {
-  //   async function fetchMyAPI() {
-  //     setNotes(await db.notes.toArray());
-  //   }
-  //   fetchMyAPI();
-  // }, []);
-
   const currentNotes: any = [];
 
   notes?.forEach((doc: any) =>
     currentNotes.push(
       <Grid.Col span={{ xs: 12, sm: 6, md: 4 }}>
         <Card withBorder radius={"sm"} key={random()}>
-          <Note doc={doc} setUpdated={setUpdated} />
+          <Note doc={doc} />
         </Card>
       </Grid.Col>
     )
@@ -61,151 +42,12 @@ export function Bro({ user }: any) {
   );
 }
 
-export default function Home({ user }: any) {
-  const [active, setActive] = useState(1);
+export default function Home() {
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
-  const openDrawer = useBearStore((state: any) => state.openDrawer);
   const message = useBearStore((state: any) => state.message);
-  const noteContent = <TextEditor />;
-
-  const data = [
-    {
-      icon: IconNote,
-      label: "New note",
-      onClick: (index) => {
-        openDrawer("Add note", noteContent, "lg");
-      },
-      right: <></>,
-    },
-    {
-      icon: IconGauge,
-      label: "All notes",
-      onClick: (index) => {
-        setActive(index);
-      },
-      right: <IconArrowRight size="1rem" stroke={1.5} />,
-    },
-
-    {
-      icon: IconFolder,
-      label: "Folders",
-      onClick: (index) => {
-        setActive(index);
-      },
-      right: <IconArrowRight size="1rem" stroke={1.5} />,
-    },
-
-    {
-      icon: IconStar,
-      label: "Favourites",
-      onClick: (index) => {
-        setActive(index);
-      },
-      right: <IconArrowRight size="1rem" stroke={1.5} />,
-    },
-
-    {
-      icon: IconSettings,
-      label: "Settings",
-      onClick: (index) => {
-        setActive(index);
-      },
-      right: <IconArrowRight size="1rem" stroke={1.5} />,
-    },
-  ];
-
-  const tags = [
-    {
-      label: "Add tag",
-      onClick: (index) => {
-        // openDrawer("Add note", noteContent, "lg");
-      },
-      right: <></>,
-    },
-    {
-      label: "#settings",
-      onClick: (index) => {
-        // openDrawer("Add note", noteContent, "lg");
-      },
-      right: <></>,
-    },
-  ];
-
-  const items = data.map((item, index) => (
-    <Button
-      radius={"sm"}
-      key={item.label}
-      onClick={() => setActive(index)}
-      variant="default"
-    >
-      <item.icon size="1rem" stroke={1.5} />
-    </Button>
-  ));
-
-  const navItems = data.map((item, index) => (
-    <Anchor
-      variant={"text"}
-      // c={"default"}
-      // style={{ borderRadius: rem(5) }}
-      key={item.label}
-      py={rem(5)}
-      size={"md"}
-      // active={index === active}
-      // label={item.label}
-      // description={item.description}
-      // rightSection={index === active ? item.right : null}
-      // leftSection={<item.icon size="1rem" stroke={1.5} />}
-      onClick={() => {
-        item.onClick(index);
-      }}
-    >
-      <Flex align={"center"} justify={"space-between"}>
-        <Group gap={"xs"} align={"center"}>
-          <item.icon size="1rem" stroke={1.5} />
-          {item.label}
-        </Group>
-        {/* {item.right} */}
-      </Flex>
-    </Anchor>
-  ));
-
-  const tagItems = tags.map((item, index) => (
-    <Anchor
-      w={"100%"}
-      truncate={"end"}
-      variant={"subtle"}
-      size={"sm"}
-      // style={{ borderRadius: rem(5) }}
-      key={item.label}
-      // active={index === active}
-      // label={item.label}
-      // description={item?.description}
-      // rightSection={item.right}
-      ta={"end"}
-      // rightSection={
-      //   index == 0 ? (
-      //     <IconPlus size="1rem" stroke={1.5} />
-      //   ) : (
-      //     <IconHash size="1rem" stroke={1.5} />
-      //   )
-      // }
-      onClick={() => {
-        item.onClick(index);
-      }}
-    >
-      {item.label}
-    </Anchor>
-  ));
 
   return (
     <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
-      {/* <Flex
-        w={isSmallScreen ? "auto" : "20%"}
-        gap={isSmallScreen ? "md" : 0}
-        direction={"column"}
-      >
-        {isSmallScreen ? items : navItems}
-      </Flex> */}
       {isSmallScreen ? null : <NavbarSearch />}
       <div style={{ width: "100%" }}>
         <Card
@@ -242,16 +84,8 @@ export default function Home({ user }: any) {
           </Flex>
         </Card>
         <Demo />
-        <Bro user={user} />
+        <Bro />
       </div>
-      {/* <Flex
-        style={{ maxWidth: "15%", minWidth: "10%" }}
-        // w={isSmallScreen ? "auto" : "20%"}
-        gap={isSmallScreen ? "md" : 0}
-        direction={"column"}
-      >
-        {isSmallScreen ? items : tagItems}
-      </Flex> */}
     </Flex>
   );
 }

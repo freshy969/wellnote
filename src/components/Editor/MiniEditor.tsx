@@ -7,13 +7,14 @@ import { useBearStore } from "../../utils/state";
 import { useEffect } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 
-export function Editor({ read }) {
-  const setMessage = useBearStore((state: any) => state.setMessage);
-  const note = useBearStore((state: any) => state.note);
+export const Editor = ({ read }: any) => {
+  
+  const setMessage = useBearStore((state) => state.setMessage);
+  const note = useBearStore((state) => state.note);
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
+      StarterKit as any,
       Placeholder.configure({
         placeholder: "Write something",
         considerAnyAsEmpty: true,
