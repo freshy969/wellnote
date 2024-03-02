@@ -7,10 +7,9 @@ import { useBearStore } from "../../utils/state";
 import { useEffect } from "react";
 import Placeholder from "@tiptap/extension-placeholder";
 
-export function Editor() {
-
-  const selectedNote = useBearStore((state: any) => state.selectedNote);
+export function Editor({ read }) {
   const setMessage = useBearStore((state: any) => state.setMessage);
+  const note = useBearStore((state: any) => state.note);
 
   const editor = useEditor({
     extensions: [
@@ -20,8 +19,10 @@ export function Editor() {
         considerAnyAsEmpty: true,
       }),
     ],
-    content: selectedNote ? `<h5>${selectedNote.content}</h5>` : "",
-    onUpdate: (instance) => {setMessage(instance.editor.getHTML())},
+    content: note && read == true ? note.content : "",
+    onUpdate: (instance) => {
+      setMessage(instance.editor.getHTML());
+    },
     autofocus: true,
   });
 
@@ -29,10 +30,10 @@ export function Editor() {
     if (editor) {
       editor
         .chain()
-        .setContent(selectedNote ? `${selectedNote.content}` : "")
+        .setContent(note && read ? `${note.content}` : "")
         .run();
     }
-  }, [selectedNote, editor]);
+  }, [note, editor]);
 
   return (
     <>

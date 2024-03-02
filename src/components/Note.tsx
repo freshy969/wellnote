@@ -8,32 +8,31 @@ import {
   Text,
   rem,
 } from "@mantine/core";
-import {
-  IconDots,
-  IconTrash,
-} from "@tabler/icons-react";
+import { IconDots, IconTrash } from "@tabler/icons-react";
 import React from "react";
 import { useEffect, useState } from "react";
 import classes from "./Note.module.css";
 import { deleteNote } from "../query/notes";
 import { useBearStore } from "../utils/state";
+import { Editor } from "./Editor/MiniEditor";
 
 export function Note({ doc, setUpdated }: any) {
   const openDrawer = useBearStore((state: any) => state.openDrawer);
+  const setNote = useBearStore((state: any) => state.setNote);
 
   return (
     <Flex justify={"space-between"} align={"center"}>
       <div
         onClick={() => {
-          openDrawer("Note", <EditNote doc={doc} />, "lg");
+          setNote(doc);
+          openDrawer("Note", <Editor read={true} />, "lg");
         }}
         style={{ cursor: "pointer", width: "100%" }}
       >
         <div>
-
-        <Text style={{ wordBreak:"break-all"}} size={"sm"} lineClamp={1}>
-          {doc.content.replace(/<[^>]*>/g, " ")}
-        </Text>
+          <Text style={{ wordBreak: "break-all" }} size={"sm"} lineClamp={1}>
+            {doc.content.replace(/<[^>]*>/g, " ")}
+          </Text>
         </div>
         <Text c={"dimmed"} size={"xs"} lineClamp={1}>
           Modified at{" "}
@@ -113,14 +112,24 @@ export function EditNote({ doc }: any) {
       <Card withBorder className={classes.card}>
         <Card.Section px={"md"} py={"xs"} withBorder>
           <Flex justify={"space-between"} align={"center"}>
-            <Button radius={"md"} size={"compact-sm"} onClick={() => setEdit(true)} variant={"default"}>
+            <Button
+              radius={"md"}
+              size={"compact-sm"}
+              onClick={() => setEdit(true)}
+              variant={"default"}
+            >
               <Group align={"center"} gap={rem(3)}>
                 <Text size={"xs"}>Edit</Text>
               </Group>
             </Button>
-            <Button radius={"md"} size={"compact-sm"} onClick={()=> closeDrawer()} variant={"default"}>
+            <Button
+              radius={"md"}
+              size={"compact-sm"}
+              onClick={() => closeDrawer()}
+              variant={"default"}
+            >
               <Group align={"center"} gap={rem(4)}>
-                <Text size={"xs"} >Close</Text>
+                <Text size={"xs"}>Close</Text>
               </Group>
             </Button>
           </Flex>

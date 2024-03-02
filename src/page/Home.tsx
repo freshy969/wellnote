@@ -197,8 +197,6 @@ export default function Home({ user }: any) {
     </Anchor>
   ));
 
-  console.log(message)
-
   return (
     <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
       {/* <Flex
@@ -222,7 +220,7 @@ export default function Home({ user }: any) {
             overflowY: "scroll",
           }}
         >
-          <Editor />
+          <Editor read={false} />
           <Flex justify={"end"}>
             <Button
               onClick={async () => {
@@ -285,16 +283,17 @@ function Demo() {
     <Flex mt={"sm"} align={"center"} justify={"space-between"}>
       <Breadcrumbs>{items}</Breadcrumbs>
       {/* <Button variant={"default"} size={"compact-xs"}> */}
+      {isSmallScreen ? (
+        <Menu position={"bottom-end"} shadow="md">
+          <Menu.Target>
+            <IconRefresh size="20" stroke={1.5} />
+          </Menu.Target>
 
-      <Menu position={"bottom-end"} shadow="md" >
-        <Menu.Target>
-          <IconRefresh size="20" stroke={1.5} />
-        </Menu.Target>
-
-        <Menu.Dropdown p={"md"}>
-          <NavbarSearch />
-        </Menu.Dropdown>
-      </Menu>
+          <Menu.Dropdown p={"md"}>
+            <NavbarSearch />
+          </Menu.Dropdown>
+        </Menu>
+      ) : null}
 
       {/* </Button> */}
     </Flex>
