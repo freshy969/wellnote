@@ -1,4 +1,4 @@
-import { IconRefresh } from "@tabler/icons-react";
+import { IconDots, IconRefresh } from "@tabler/icons-react";
 import { Button, Flex, Menu, Text, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Card, Grid } from "@mantine/core";
@@ -9,7 +9,7 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Breadcrumbs, Anchor } from "@mantine/core";
 import { Editor } from "../components/Editor/MiniEditor";
 import { db } from "../utils/dexie/config";
-import { NavbarSearch } from "../components/NavBar/NavSearch";
+import { NavbarSearch, NavbarSearchMobile } from "../components/NavBar/NavSearch";
 import { useEffect } from "react";
 
 export function Bro() {
@@ -97,6 +97,7 @@ export function Favourites() {
 }
 
 export default function Home() {
+
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const message = useBearStore((state: any) => state.message);
   const setNote = useBearStore((state: any) => state.setNote);
@@ -178,10 +179,10 @@ function Demo() {
       {isSmallScreen ? (
         <Menu position={"bottom-end"} shadow="md">
           <Menu.Target>
-            <IconRefresh size="20" stroke={1.5} />
+            <IconDots size="20" stroke={1.5} />
           </Menu.Target>
-          <Menu.Dropdown p={"md"}>
-            <NavbarSearch />
+          <Menu.Dropdown>
+            <NavbarSearchMobile />
           </Menu.Dropdown>
         </Menu>
       ) : null}
