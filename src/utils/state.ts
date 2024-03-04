@@ -6,12 +6,18 @@ const store = {
   drawerTitle: "",
   drawerSize: "md",
   drawerContent: null,
+
+  modalOpen: false,
+  modalTitle: "",
+  modalSize: "md",
+  modalContent: null,
+
   user: null,
   message: "",
   note: "",
   noteCount: 0,
   favouriteCount: 0,
-  activeTab: "notes"
+  activeTab: "notes",
 };
 
 type BearStore = {
@@ -19,6 +25,12 @@ type BearStore = {
   drawerTitle: string;
   drawerSize: string;
   drawerContent: any;
+
+  modalOpen: any;
+  modalTitle: any;
+  modalSize: any;
+  modalContent: any;
+
   user: any;
   message: any;
   note: any;
@@ -28,7 +40,7 @@ type BearStore = {
   closeDrawer: any;
   noteCount: any;
   favouriteCount: any;
-  activeTab: string,
+  activeTab: string;
   reset: () => void;
 };
 
@@ -55,6 +67,17 @@ export const useBearStore = create<BearStore>((set) => ({
     set(() => ({
       drawerOpen: false,
     })),
+  openModal: (title: string, content: any, size: any) =>
+    set((state) => ({
+      modalOpen: true,
+      modalSize: size ? size : state.modalSize,
+      modalTitle: title,
+      modalContent: content,
+    })),
+  closeModal: () =>
+    set(() => ({
+      modalOpen: false,
+    })),
   setUser: (newUser: any) => set(() => ({ user: newUser })),
   reset: () => set(store),
   setNoteCount: async () => {
@@ -62,8 +85,9 @@ export const useBearStore = create<BearStore>((set) => ({
     set(() => ({ noteCount: count }));
   },
   setFavouriteCount: async () => {
-    const count = await db.notes.filter(note => note.favourite === true).count()
-    console.log(count)
+    const count = await db.notes
+      .filter((note) => note.favourite === true)
+      .count();
     set(() => ({ favouriteCount: count }));
   },
   setActiveTab: (tab: any) => set(() => ({ activeTab: tab })),

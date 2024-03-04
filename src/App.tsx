@@ -1,5 +1,5 @@
 import "@mantine/core/styles.css";
-import { MantineProvider, Container, Drawer } from "@mantine/core";
+import { MantineProvider, Container, Drawer, Modal } from "@mantine/core";
 import Home from "./page/Home";
 import Login from "./page/Login";
 import { BrowserRouter as Router } from "react-router-dom";
@@ -16,13 +16,21 @@ import { Helmet } from "react-helmet";
 import { FooterLinks } from "./components/Footer/FooterLinks";
 
 export default function App() {
+  
   const user = useBearStore((state: any) => state.user);
   const setUser = useBearStore((state: any) => state.setUser);
+
   const drawerOpen = useBearStore((state: any) => state.drawerOpen);
   const drawerTitle = useBearStore((state: any) => state.drawerTitle);
   const drawerContent = useBearStore((state: any) => state.drawerContent);
   const closeDrawer = useBearStore((state: any) => state.closeDrawer);
   const drawerSize = useBearStore((state: any) => state.drawerSize);
+
+  const modalOpen = useBearStore((state: any) => state.modalOpen);
+  const modalTitle = useBearStore((state: any) => state.modalTitle);
+  const modalContent = useBearStore((state: any) => state.modalContent);
+  const closeModal = useBearStore((state: any) => state.closeModal);
+  const modalSize = useBearStore((state: any) => state.modalSize);
 
   useEffect(() => {
     if (isSignInWithEmailLink(auth, window.location.href)) {
@@ -64,6 +72,16 @@ export default function App() {
         <title>Wellnote</title>
       </Helmet>
       <MantineProvider>
+        <Modal
+          opened={modalOpen}
+          size={modalSize}
+          onClose={closeModal}
+          title={modalTitle}
+          centered
+        >
+          {modalContent}
+        </Modal>
+
         <Drawer
           opened={drawerOpen}
           onClose={closeDrawer}

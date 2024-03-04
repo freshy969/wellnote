@@ -22,6 +22,7 @@ import { useBearStore } from "../../utils/state";
 export function NavbarSearch() {
   const setActiveTab = useBearStore((state: any) => state.setActiveTab);
   const activeTab = useBearStore((state: any) => state.activeTab);
+  const openModal = useBearStore((state: any) => state.openModal);
 
   const links = [
     {
@@ -57,7 +58,7 @@ export function NavbarSearch() {
       onClick={link.action}
       key={link.label}
       className={classes.mainLink}
-      { ...link.label.toLowerCase() == activeTab ? { c : "lime"} : {}}
+      {...(link.label.toLowerCase() == activeTab ? { c: "lime" } : {})}
     >
       <div className={classes.mainLinkInner}>
         <link.icon size={20} className={classes.mainLinkIcon} stroke={1.5} />
@@ -111,7 +112,24 @@ export function NavbarSearch() {
             Collections
           </Text>
           <Tooltip label="Create collection" withArrow position="right">
-            <ActionIcon variant="default" size={18}>
+            <ActionIcon
+              onClick={() => {
+                openModal(
+                  "Add collection",
+                  <>
+                    <Text size="xs">
+                      Collections serve as tags or organized groups for related
+                      notes. Prior to creating a note, simply choose the
+                      relevant collection. Alternatively, you can add a note to
+                      any collection by tapping the three dots on the note.
+                    </Text>
+                  </>,
+                  "lg"
+                );
+              }}
+              variant="default"
+              size={18}
+            >
               <IconPlus
                 style={{ width: rem(12), height: rem(12) }}
                 stroke={1.5}
@@ -125,13 +143,11 @@ export function NavbarSearch() {
   );
 }
 
-
-
-
-
 export function NavbarSearchMobile() {
+  
   const setActiveTab = useBearStore((state: any) => state.setActiveTab);
   const activeTab = useBearStore((state: any) => state.activeTab);
+  const openModal = useBearStore((state: any) => state.openModal);
 
   const links = [
     {
@@ -167,10 +183,14 @@ export function NavbarSearchMobile() {
       onClick={link.action}
       key={link.label}
       className={mobileClasses.mainLink}
-      { ...link.label.toLowerCase() == activeTab ? { c : "lime"} : {}}
+      {...(link.label.toLowerCase() == activeTab ? { c: "lime" } : {})}
     >
       <div className={mobileClasses.mainLinkInner}>
-        <link.icon size={20} className={mobileClasses.mainLinkIcon} stroke={1.5} />
+        <link.icon
+          size={20}
+          className={mobileClasses.mainLinkIcon}
+          stroke={1.5}
+        />
         <span>{link.label}</span>
       </div>
       {link.notifications}
@@ -221,7 +241,24 @@ export function NavbarSearchMobile() {
             Collections
           </Text>
           <Tooltip label="Create collection" withArrow position="right">
-            <ActionIcon variant="default" size={18}>
+            <ActionIcon
+              onClick={() => {
+                openModal(
+                  "Add collection",
+                  <>
+                    <Text size="xs">
+                      Collections serve as tags or organized groups for related
+                      notes. Prior to creating a note, simply choose the
+                      relevant collection. Alternatively, you can add a note to
+                      any collection by tapping the three dots on the note.
+                    </Text>
+                  </>,
+                  "lg"
+                );
+              }}
+              variant="default"
+              size={18}
+            >
               <IconPlus
                 style={{ width: rem(12), height: rem(12) }}
                 stroke={1.5}
@@ -234,4 +271,3 @@ export function NavbarSearchMobile() {
     </nav>
   );
 }
-

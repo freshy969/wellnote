@@ -171,7 +171,9 @@ const items = [
 );
 
 function Demo() {
+
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
+  
 
   return (
     <Flex mt={"sm"} align={"center"} justify={"space-between"}>
