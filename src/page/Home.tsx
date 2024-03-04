@@ -1,4 +1,4 @@
-import { IconDots, IconRefresh } from "@tabler/icons-react";
+import { IconDots } from "@tabler/icons-react";
 import { Button, Flex, Menu, Text, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Card, Grid } from "@mantine/core";
