@@ -7,7 +7,7 @@ import {
   Tooltip,
   rem,
   Tabs,
-  Paper,
+  Divider,
 } from "@mantine/core";
 import {
   IconSearch,
@@ -15,7 +15,8 @@ import {
   IconNote,
   IconStar,
   IconSettings,
-  IconStack,
+  IconDatabase,
+  Icon360,
 } from "@tabler/icons-react";
 import classes from "./NavSearch.module.css";
 import mobileClasses from "./NavSearchMobile.module.css";
@@ -52,23 +53,47 @@ export function NavbarSearch() {
         openModal(
           "Settings",
           <>
-            <Tabs variant={"outline"} radius={0} defaultValue="general">
+            <Tabs
+              variant={"pills"}
+              orientation="vertical"
+              defaultValue="general"
+            >
               <Tabs.List>
                 <Tabs.Tab
                   value="general"
-                  leftSection={<IconStack size={15} stroke={1.5} />}
+                  py={rem(7)}
+                  leftSection={<Icon360 size={16} stroke={1.5} />}
                 >
+                  <Text size="xs">
                   General
+                  </Text>
+                </Tabs.Tab>
+                <Tabs.Tab
+                py={rem(7)}
+                  value="database"
+                  leftSection={<IconDatabase size={16} stroke={1.5} />}
+                >
+                  <Text size="xs">
+
+                  Database
+                  </Text>
                 </Tabs.Tab>
               </Tabs.List>
 
-              <Tabs.Panel mt={0} pt={0}  value="general">
-                <Paper radius={0} style={{ borderTop: 0}} mt={0} withBorder p="lg">
-                  <Text size="sm" c={"dimmed"}>
-                    General setup
-                  </Text>
-                </Paper>
+              <Divider ml={"sm"} orientation={"vertical"} />
+
+              <Tabs.Panel ml={"sm"} p={"lg"} pt={0} pl={0} value="general">
+                <Text size={"lg"}>
+                  General
+                </Text>
               </Tabs.Panel>
+
+              <Tabs.Panel ml={"sm"} p={"lg"} pt={0} pl={0} value="database">
+                <Text size={"lg"}>
+                  Database
+                </Text>
+              </Tabs.Panel>
+
             </Tabs>
           </>,
           "lg"
