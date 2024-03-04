@@ -6,8 +6,8 @@ import {
   Text,
   rem,
 } from "@mantine/core";
-import { IconDots, IconTrash } from "@tabler/icons-react";
-import { deleteNote } from "../query/notes";
+import { IconDots, IconStar, IconTrash } from "@tabler/icons-react";
+import { deleteNote, updateFieldIfNotExist } from "../query/notes";
 import { useBearStore } from "../utils/state";
 import { Editor } from "../components/Editor/MiniEditor"
 
@@ -57,6 +57,20 @@ export function Note({ doc }: any) {
               </ActionIcon>
             </Menu.Target>
             <Menu.Dropdown>
+            <Menu.Item
+                onClick={async () => {
+                  await updateFieldIfNotExist(doc.id)
+                }}
+                leftSection={
+                  <IconStar
+                    style={{ width: rem(16), height: rem(16) }}
+                    stroke={1.5}
+                    color={"lime"}
+                  />
+                }
+              >
+                Favourite
+              </Menu.Item>
               <Menu.Item
                 onClick={async () => {
                   await deleteNote(doc.id);

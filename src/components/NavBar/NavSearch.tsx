@@ -18,14 +18,27 @@ import classes from "./NavSearch.module.css";
 import { useBearStore } from "../../utils/state";
 
 export function NavbarSearch() {
+  const setActiveTab = useBearStore((state: any) => state.setActiveTab);
+  const activeTab = useBearStore((state: any) => state.activeTab);
+
   const links = [
     {
       icon: IconNote,
       label: "Notes",
       notifications: useBearStore((state) => state.noteCount),
+      action: () => {
+        setActiveTab("notes");
+      },
     },
-    { icon: IconStar, label: "Favourites" },
-    { icon: IconSettings, label: "Settings" },
+    {
+      icon: IconStar,
+      label: "Favourites",
+      notifications: useBearStore((state) => state.favouriteCount),
+      action: () => {
+        setActiveTab("favourites");
+      },
+    },
+    { icon: IconSettings, label: "Settings", notifications: null },
   ];
 
   const collections = [
@@ -38,12 +51,17 @@ export function NavbarSearch() {
   ];
 
   const mainLinks = links.map((link) => (
-    <UnstyledButton key={link.label} className={classes.mainLink}>
+    <UnstyledButton
+      onClick={link.action}
+      key={link.label}
+      className={classes.mainLink}
+      { ...link.label.toLowerCase() == activeTab ? { c : "lime"} : {}}
+    >
       <div className={classes.mainLinkInner}>
         <link.icon size={20} className={classes.mainLinkIcon} stroke={1.5} />
         <span>{link.label}</span>
       </div>
-      {link.notifications != 0 ? link.notifications : null}
+      {link.notifications}
     </UnstyledButton>
   ));
 

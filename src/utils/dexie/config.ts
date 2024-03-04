@@ -3,20 +3,19 @@ import Dexie, { Table } from "dexie";
 export interface Notes {
   id?: number;
   uniqueId: string;
+  favourite: boolean;
   content: string;
-  type: string,
+  type: string;
   modifiedAt: number;
 }
 
 export class WellnoteDexie extends Dexie {
-  // 'friends' is added by dexie when declaring the stores()
-  // We just tell the typing system this is the case
   notes!: Table<Notes>;
 
   constructor() {
     super("Wellnote");
     this.version(1).stores({
-      notes: "++id, uniqueId, content,type, modifiedAt",
+      notes: "++id, uniqueId, favourite, content,type, modifiedAt",
     });
   }
 }

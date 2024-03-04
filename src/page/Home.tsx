@@ -21,9 +21,56 @@ export function Bro() {
   );
 
   const setNoteCount = useBearStore((state: any) => state.setNoteCount);
+  const setFavouriteCount = useBearStore(
+    (state: any) => state.setFavouriteCount
+  );
 
   useEffect(() => {
     setNoteCount();
+    setFavouriteCount();
+  }, [notes]);
+
+  const currentNotes: any = [];
+
+  notes?.forEach((doc: any) =>
+    currentNotes.push(
+      <Grid.Col span={{ xs: 12, sm: 6, md: 4 }}>
+        <Card withBorder radius={"sm"} key={random()}>
+          <Note doc={doc} />
+        </Card>
+      </Grid.Col>
+    )
+  );
+
+  return (
+    <>
+      {currentNotes?.length > 0 && (
+        <Grid mt={"md"} gutter={"xs"}>
+          {currentNotes}
+        </Grid>
+      )}
+    </>
+  );
+}
+
+
+
+export function Favourites() {
+  const PAGE_SIZE = 12;
+  const page = 1;
+  const offset = (page - 1) * PAGE_SIZE;
+  const notes = useLiveQuery(() =>
+    db.notes.filter(notes => notes.favourite === true).offset(offset).limit(PAGE_SIZE).reverse().toArray()
+  );
+
+  const setNoteCount = useBearStore((state: any) => state.setNoteCount);
+  const setFavouriteCount = useBearStore(
+    (state: any) => state.setFavouriteCount
+  );
+
+  useEffect(() => {
+    setNoteCount();
+    setFavouriteCount();
   }, [notes]);
 
   const currentNotes: any = [];
@@ -50,11 +97,16 @@ export function Bro() {
 }
 
 export default function Home() {
-  
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const message = useBearStore((state: any) => state.message);
   const setNote = useBearStore((state: any) => state.setNote);
   const setMessage = useBearStore((state: any) => state.setMessage);
+  const activeTab = useBearStore<string>((state: any) => state.activeTab);
+
+  const view: any = {
+    notes: <Bro />,
+    favourites: <Favourites />
+  }[activeTab];
 
   return (
     <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
@@ -78,6 +130,7 @@ export default function Home() {
               onClick={async () => {
                 await db.notes.add({
                   uniqueId: getUniqueId(),
+                  favourite: false,
                   content: message,
                   type: "any",
                   modifiedAt: Date.now(),
@@ -96,7 +149,7 @@ export default function Home() {
           </Flex>
         </Card>
         <Demo />
-        <Bro />
+        {view}
       </div>
     </Flex>
   );

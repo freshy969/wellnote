@@ -10,6 +10,8 @@ const store = {
   message: "",
   note: "",
   noteCount: 0,
+  favouriteCount: 0,
+  activeTab: "notes"
 };
 
 type BearStore = {
@@ -25,6 +27,8 @@ type BearStore = {
   setMessage: any;
   closeDrawer: any;
   noteCount: any;
+  favouriteCount: any;
+  activeTab: string,
   reset: () => void;
 };
 
@@ -57,4 +61,10 @@ export const useBearStore = create<BearStore>((set) => ({
     const count = await db.notes.count();
     set(() => ({ noteCount: count }));
   },
+  setFavouriteCount: async () => {
+    const count = await db.notes.filter(note => note.favourite === true).count()
+    console.log(count)
+    set(() => ({ favouriteCount: count }));
+  },
+  setActiveTab: (tab: any) => set(() => ({ activeTab: tab })),
 }));
