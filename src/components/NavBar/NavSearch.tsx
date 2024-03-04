@@ -6,6 +6,8 @@ import {
   ActionIcon,
   Tooltip,
   rem,
+  Tabs,
+  Paper,
 } from "@mantine/core";
 import {
   IconSearch,
@@ -13,6 +15,7 @@ import {
   IconNote,
   IconStar,
   IconSettings,
+  IconStack,
 } from "@tabler/icons-react";
 import classes from "./NavSearch.module.css";
 import mobileClasses from "./NavSearchMobile.module.css";
@@ -41,7 +44,37 @@ export function NavbarSearch() {
         setActiveTab("favourites");
       },
     },
-    { icon: IconSettings, label: "Settings", notifications: null },
+    {
+      icon: IconSettings,
+      label: "Settings",
+      notifications: null,
+      action: () => {
+        openModal(
+          "Settings",
+          <>
+            <Tabs variant={"outline"} radius={0} defaultValue="general">
+              <Tabs.List>
+                <Tabs.Tab
+                  value="general"
+                  leftSection={<IconStack size={15} stroke={1.5} />}
+                >
+                  General
+                </Tabs.Tab>
+              </Tabs.List>
+
+              <Tabs.Panel mt={0} pt={0}  value="general">
+                <Paper radius={0} style={{ borderTop: 0}} mt={0} withBorder p="lg">
+                  <Text size="sm" c={"dimmed"}>
+                    General setup
+                  </Text>
+                </Paper>
+              </Tabs.Panel>
+            </Tabs>
+          </>,
+          "lg"
+        );
+      },
+    },
   ];
 
   const collections = [
@@ -144,7 +177,6 @@ export function NavbarSearch() {
 }
 
 export function NavbarSearchMobile() {
-  
   const setActiveTab = useBearStore((state: any) => state.setActiveTab);
   const activeTab = useBearStore((state: any) => state.activeTab);
   const openModal = useBearStore((state: any) => state.openModal);
