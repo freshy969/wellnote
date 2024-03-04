@@ -26,7 +26,7 @@ export function Note({ doc }: any) {
         style={{ cursor: "pointer", width: "100%" }}
       >
         <div>
-          <Text style={{ wordBreak: "break-all" }} size={"sm"} lineClamp={1}>
+          <Text style={{ wordBreak: "break-word" }} size={"sm"} lineClamp={1}>
             {doc.content.replace(/<[^>]*>/g, " ")}
           </Text>
         </div>

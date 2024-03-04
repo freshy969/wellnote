@@ -139,10 +139,9 @@ export default function Home() {
                 setNote("");
               }}
               mb={rem(8)}
-              pr={0}
-              size={"sm"}
+              size={"xs"}
               disabled={message === "<p></p>" || message === ""}
-              variant={"transparent"}
+              variant={"default"}
             >
               Submit
             </Button>
