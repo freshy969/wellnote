@@ -1,5 +1,4 @@
 import { create } from "zustand";
-import { db } from "./dexie/config";
 
 const store = {
   drawerOpen: false,
