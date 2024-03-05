@@ -12,6 +12,7 @@
   "dependencies": {
     "@mantine/core": "^7.5.2",
     "@mantine/hooks": "^7.5.2",
+    "@react-spring/web": "^9.7.3",
     "@tabler/icons-react": "^2.47.0",
     "@tiptap/extension-code-block": "^2.2.4",
     "@tiptap/extension-placeholder": "^2.2.4",

@@ -14,6 +14,7 @@ import {
   NavbarSearchMobile,
 } from "../components/NavBar/NavSearch";
 import { useEffect } from "react";
+import { animated, useSpring } from "@react-spring/web";
 
 export function Bro() {
   const PAGE_SIZE = 12;
@@ -87,14 +88,23 @@ export function Bro() {
     )
   );
 
+  const springs = useSpring({
+    from: { y: 10 },
+    to: { y: 0 },
+  });
+
   return (
-    <>
+    <animated.div
+      style={{
+        ...springs,
+      }}
+    >
       {currentNotes?.length > 0 && (
         <Grid mt={"md"} gutter={"xs"}>
           {currentNotes}
         </Grid>
       )}
-    </>
+    </animated.div>
   );
 }
 
@@ -157,14 +167,23 @@ export function Favourites() {
     )
   );
 
+  const springs = useSpring({
+    from: { y: 10 },
+    to: { y: 0 },
+  });
+
   return (
-    <>
+    <animated.div
+      style={{
+        ...springs,
+      }}
+    >
       {currentNotes?.length > 0 && (
         <Grid mt={"md"} gutter={"xs"}>
           {currentNotes}
         </Grid>
       )}
-    </>
+    </animated.div>
   );
 }
 
@@ -180,6 +199,11 @@ export default function Home() {
     notes: <Bro />,
     favourites: <Favourites />,
   }[activeTab];
+
+  const springs = useSpring({
+    from: { y: -10 },
+    to: { y: 0 },
+  });
 
   return (
     <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
@@ -198,7 +222,13 @@ export default function Home() {
               overflowY: "scroll",
             }}
           >
-            <Editor read={false} />
+            <animated.div
+              style={{
+                ...springs,
+              }}
+            >
+              <Editor read={false} />
+            </animated.div>
             <Flex justify={"end"}>
               <Button
                 onClick={async () => {
