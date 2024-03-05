@@ -1,6 +1,5 @@
-import { Button, rem } from "@mantine/core";
 import "./styles.scss";
-
+import { Button, rem } from "@mantine/core";
 import { BubbleMenu, EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import { useBearStore } from "../../utils/state";

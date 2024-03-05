@@ -3,7 +3,7 @@ import { create } from "zustand";
 const store = {
   drawerOpen: false,
   drawerTitle: "",
-  drawerSize: "md",
+  drawerSize: "lg",
   drawerContent: null,
 
   modalOpen: false,
@@ -94,4 +94,6 @@ export const useBearStore = create<BearStore>((set) => ({
   setActiveTab: (tab: any) => set(() => ({ activeTab: tab })),
   setColor: (color: any) => set(() => ({ color: color })),
   setSearch: (search: any) => set(() => ({ search: search })),
+  setDrawerFullScreen: (make: boolean) =>
+    set(() => ({ drawerSize: make == true ? "100%" : "lg" })),
 }));
