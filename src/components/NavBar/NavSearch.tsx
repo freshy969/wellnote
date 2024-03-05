@@ -8,6 +8,11 @@ import {
   rem,
   Tabs,
   Divider,
+  Flex,
+  Button,
+  ColorSwatch,
+  Popover,
+  ColorPicker,
 } from "@mantine/core";
 import {
   IconSearch,
@@ -22,11 +27,115 @@ import classes from "./NavSearch.module.css";
 import mobileClasses from "./NavSearchMobile.module.css";
 
 import { useBearStore } from "../../utils/state";
+import { useEffect, useState } from "react";
+
+
+function Settings () {
+
+  const setColor = useBearStore((state: any) => state.setColor);
+  const color = useBearStore((state: any) => state.color);
+
+  return (
+    <>
+      <Tabs variant={"pills"} orientation="vertical" defaultValue="general">
+        <Tabs.List>
+          <Tabs.Tab
+            // bg={"green"}
+
+            color={color == "lime" ? "green" : color}
+            value="general"
+            py={rem(7)}
+            leftSection={<Icon360 size={16} stroke={1.5} />}
+          >
+            <Text size="xs">General</Text>
+          </Tabs.Tab>
+          <Tabs.Tab
+            color={color == "lime" ? "green" : color}
+            py={rem(7)}
+            value="database"
+            leftSection={<IconDatabase size={16} stroke={1.5} />}
+          >
+            <Text size="xs">Database</Text>
+          </Tabs.Tab>
+        </Tabs.List>
+
+        <Divider ml={"sm"} orientation={"vertical"} />
+
+        <Tabs.Panel ml={"sm"} p={"lg"} pt={0} pl={0} value="general">
+          <Text
+            td={"underline"}
+            style={{ textUnderlineOffset: rem(5) }}
+            unselectable={"on"}
+            size={"sm"}
+          >
+            General
+          </Text>
+          <Flex justify={"space-between"} mt={"md"} align={"center"}>
+            <Text size={"sm"}>App accent color</Text>
+            <div>
+              <Popover position="bottom" withArrow shadow="md">
+                <Popover.Target>
+                  <ColorSwatch color={color} />
+                </Popover.Target>
+                <Popover.Dropdown
+                  pt={0}
+                  p={rem(5)}
+                  bg="var(--mantine-color-body)"
+                >
+                  <ColorPicker
+                    withPicker={false}
+                    onColorSwatchClick={(color) => {
+                      setColor(color);
+                    }}
+                    format="hex"
+                    swatches={[
+                      "#2e2e2e",
+                      "#868e96",
+                      "#fa5252",
+                      "#e64980",
+                      "#be4bdb",
+                      "#7950f2",
+                      "#4c6ef5",
+                      "#228be6",
+                      "#15aabf",
+                      "#12b886",
+                      "#40c057",
+                      "#82c91e",
+                      "#fab005",
+                      "#fd7e14",
+                    ]}
+                  />
+                </Popover.Dropdown>
+              </Popover>
+            </div>
+          </Flex>
+        </Tabs.Panel>
+
+        <Tabs.Panel ml={"sm"} p={"lg"} pt={0} pl={0} value="database">
+          <Text
+            td={"underline"}
+            style={{ textUnderlineOffset: rem(5) }}
+            unselectable={"on"}
+            size={"sm"}
+          >
+            Database
+          </Text>
+        </Tabs.Panel>
+      </Tabs>
+    </>
+  )
+}
+
 
 export function NavbarSearch() {
   const setActiveTab = useBearStore((state: any) => state.setActiveTab);
   const activeTab = useBearStore((state: any) => state.activeTab);
   const openModal = useBearStore((state: any) => state.openModal);
+  const store = useBearStore();
+
+  const [settings, setSettings] = useState(<Settings />);
+
+  useEffect(() => {setSettings(<Settings />)}, [store.color]);
 
   const links = [
     {
@@ -50,54 +159,7 @@ export function NavbarSearch() {
       label: "Settings",
       notifications: null,
       action: () => {
-        openModal(
-          "Settings",
-          <>
-            <Tabs
-              variant={"pills"}
-              orientation="vertical"
-              defaultValue="general"
-            >
-              <Tabs.List>
-                <Tabs.Tab
-                  value="general"
-                  py={rem(7)}
-                  leftSection={<Icon360 size={16} stroke={1.5} />}
-                >
-                  <Text size="xs">
-                  General
-                  </Text>
-                </Tabs.Tab>
-                <Tabs.Tab
-                py={rem(7)}
-                  value="database"
-                  leftSection={<IconDatabase size={16} stroke={1.5} />}
-                >
-                  <Text size="xs">
-
-                  Database
-                  </Text>
-                </Tabs.Tab>
-              </Tabs.List>
-
-              <Divider ml={"sm"} orientation={"vertical"} />
-
-              <Tabs.Panel ml={"sm"} p={"lg"} pt={0} pl={0} value="general">
-                <Text size={"lg"}>
-                  General
-                </Text>
-              </Tabs.Panel>
-
-              <Tabs.Panel ml={"sm"} p={"lg"} pt={0} pl={0} value="database">
-                <Text size={"lg"}>
-                  Database
-                </Text>
-              </Tabs.Panel>
-
-            </Tabs>
-          </>,
-          "lg"
-        );
+        openModal("Settings", settings, "lg");
       },
     },
   ];
@@ -116,10 +178,19 @@ export function NavbarSearch() {
       onClick={link.action}
       key={link.label}
       className={classes.mainLink}
-      {...(link.label.toLowerCase() == activeTab ? { c: "lime" } : {})}
+      {...(link.label.toLowerCase() == activeTab
+        ? { c: store.color == "lime" ? "green" : store.color }
+        : {})}
     >
       <div className={classes.mainLinkInner}>
-        <link.icon size={20} className={classes.mainLinkIcon} stroke={1.5} />
+        <link.icon
+          {...(link.label.toLowerCase() == activeTab
+            ? { color: store.color }
+            : {})}
+          size={20}
+          className={classes.mainLinkIcon}
+          stroke={1.5}
+        />
         <span>{link.label}</span>
       </div>
       {link.notifications}

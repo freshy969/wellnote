@@ -18,6 +18,8 @@ const store = {
   noteCount: 0,
   favouriteCount: 0,
   activeTab: "notes",
+
+  color: "lime"
 };
 
 type BearStore = {
@@ -41,6 +43,8 @@ type BearStore = {
   noteCount: any;
   favouriteCount: any;
   activeTab: string;
+
+  color: string;
   reset: () => void;
 };
 
@@ -91,4 +95,5 @@ export const useBearStore = create<BearStore>((set) => ({
     set(() => ({ favouriteCount: count }));
   },
   setActiveTab: (tab: any) => set(() => ({ activeTab: tab })),
+  setColor: (color: any) => set(() => ({ color: color })),
 }));

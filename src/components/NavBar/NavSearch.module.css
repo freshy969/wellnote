@@ -56,7 +56,8 @@
 
 .mainLinkIcon {
   margin-right: var(--mantine-spacing-sm);
-  color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2));
+  /* color: light-dark(var(--mantine-color-gray-6), var(--mantine-color-dark-2)); */
+
 }
 
 .mainLinkBadge {
