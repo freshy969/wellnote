@@ -19,7 +19,7 @@ const store = {
   favouriteCount: 0,
   activeTab: "notes",
 
-  color: "lime"
+  color:  window.localStorage.getItem("accentColor") || "lime"
 };
 
 type BearStore = {

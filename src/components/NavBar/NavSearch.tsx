@@ -9,7 +9,6 @@ import {
   Tabs,
   Divider,
   Flex,
-  Button,
   ColorSwatch,
   Popover,
   ColorPicker,
@@ -86,6 +85,7 @@ function Settings () {
                     withPicker={false}
                     onColorSwatchClick={(color) => {
                       setColor(color);
+                      window.localStorage.setItem("accentColor", color);
                     }}
                     format="hex"
                     swatches={[
