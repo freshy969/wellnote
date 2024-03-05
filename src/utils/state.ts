@@ -19,8 +19,8 @@ const store = {
   favouriteCount: 0,
   activeTab: "notes",
 
-  color:  window.localStorage.getItem("accentColor") || "lime",
-  search: ""
+  color: window.localStorage.getItem("accentColor") || "lime",
+  search: "",
 };
 
 type BearStore = {
@@ -86,15 +86,11 @@ export const useBearStore = create<BearStore>((set) => ({
     })),
   setUser: (newUser: any) => set(() => ({ user: newUser })),
   reset: () => set(store),
-  setNoteCount: async () => {
-    const count = await db.notes.count();
+  setNoteCount: (count: any) => {
     set(() => ({ noteCount: count }));
   },
-  setFavouriteCount: async () => {
-    const count = await db.notes
-      .filter((note) => note.favourite === true)
-      .count();
-    set(() => ({ favouriteCount: count }));
+  setFavouriteCount: (favourite: any) => {
+    set(() => ({ favouriteCount: favourite }));
   },
   setActiveTab: (tab: any) => set(() => ({ activeTab: tab })),
   setColor: (color: any) => set(() => ({ color: color })),

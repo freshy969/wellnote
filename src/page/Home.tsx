@@ -48,9 +48,32 @@ export function Bro() {
   );
 
   useEffect(() => {
-    setNoteCount();
-    setFavouriteCount();
-  }, [notes]);
+    async function dude() {
+      if (search) {
+        const note = await db.notes
+          .filter((item) =>
+            item.content.toLowerCase().includes(search.toLowerCase())
+          )
+          .count();
+        const favourite = await db.notes
+          .filter((item) =>
+            item.content.toLowerCase().includes(search.toLowerCase())
+          )
+          .filter((note) => note.favourite === true)
+          .count();
+        setNoteCount(note);
+        setFavouriteCount(favourite);
+      } else {
+        const note = await db.notes.count();
+        const favourite = await db.notes
+          .filter((note) => note.favourite === true)
+          .count();
+        setNoteCount(note);
+        setFavouriteCount(favourite);
+      }
+    }
+    dude();
+  }, [notes, search]);
 
   const currentNotes: any = [];
 
@@ -89,14 +112,38 @@ export function Favourites() {
   );
 
   const setNoteCount = useBearStore((state: any) => state.setNoteCount);
+  const search = useBearStore((state: any) => state.search);
   const setFavouriteCount = useBearStore(
     (state: any) => state.setFavouriteCount
   );
 
   useEffect(() => {
-    setNoteCount();
-    setFavouriteCount();
-  }, [notes]);
+    async function dude() {
+      if (search) {
+        const note = await db.notes
+          .filter((item) =>
+            item.content.toLowerCase().includes(search.toLowerCase())
+          )
+          .count();
+        const favourite = await db.notes
+          .filter((item) =>
+            item.content.toLowerCase().includes(search.toLowerCase())
+          )
+          .filter((note) => note.favourite === true)
+          .count();
+        setNoteCount(note);
+        setFavouriteCount(favourite);
+      } else {
+        const note = await db.notes.count();
+        const favourite = await db.notes
+          .filter((note) => note.favourite === true)
+          .count();
+        setNoteCount(note);
+        setFavouriteCount(favourite);
+      }
+    }
+    dude();
+  }, [notes, search]);
 
   const currentNotes: any = [];
 
