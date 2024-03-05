@@ -131,6 +131,7 @@ export function NavbarSearch() {
   const setActiveTab = useBearStore((state: any) => state.setActiveTab);
   const activeTab = useBearStore((state: any) => state.activeTab);
   const openModal = useBearStore((state: any) => state.openModal);
+  const setSearch = useBearStore((state: any) => state.setSearch);
   const store = useBearStore();
 
   const [settings, setSettings] = useState(<Settings />);
@@ -197,6 +198,26 @@ export function NavbarSearch() {
     </UnstyledButton>
   ));
 
+
+  // useEffect(() => {
+
+  //   async function makeSearch(){
+  //     return await db.notes
+  //       .filter((note) => note.content.toLowerCase().includes(store.search.toLowerCase()))
+  //       .toArray()
+  //       .then((results) => {
+  //         console.log(results)
+  //       })
+  //       .catch((error) => {
+  //         console.error('Error searching database:', error);
+  //       });
+  //   }
+
+  //   makeSearch()
+
+      
+  // },[store.search]);
+
   const collectionLinks = collections.map((collection) => (
     <a
       href="#"
@@ -211,6 +232,7 @@ export function NavbarSearch() {
     </a>
   ));
 
+
   return (
     <nav className={classes.navbar}>
       <TextInput
@@ -222,6 +244,9 @@ export function NavbarSearch() {
             stroke={1.5}
           />
         }
+        onChange={(e)=>{
+          setSearch(e.target.value)
+        }}
         rightSectionWidth={70}
         styles={{ section: { pointerEvents: "none" } }}
         mb="sm"

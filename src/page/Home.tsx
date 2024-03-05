@@ -9,16 +9,38 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { Breadcrumbs, Anchor } from "@mantine/core";
 import { Editor } from "../components/Editor/MiniEditor";
 import { db } from "../utils/dexie/config";
-import { NavbarSearch, NavbarSearchMobile } from "../components/NavBar/NavSearch";
+import {
+  NavbarSearch,
+  NavbarSearchMobile,
+} from "../components/NavBar/NavSearch";
 import { useEffect } from "react";
 
 export function Bro() {
   const PAGE_SIZE = 12;
   const page = 1;
   const offset = (page - 1) * PAGE_SIZE;
-  const notes = useLiveQuery(() =>
-    db.notes.offset(offset).limit(PAGE_SIZE).reverse().toArray()
-  );
+  const search = useBearStore((state: any) => state.search);
+  let notes: any = [];
+
+  if (search) {
+    notes = useLiveQuery(
+      () =>
+        db.notes
+          .filter((item) =>
+            item.content.toLowerCase().includes(search.toLowerCase())
+          )
+          .offset(offset)
+          .limit(PAGE_SIZE)
+          .reverse()
+          .toArray(),
+      [search]
+    );
+  } else {
+    notes = useLiveQuery(
+      () => db.notes.offset(offset).limit(PAGE_SIZE).reverse().toArray(),
+      [search]
+    );
+  }
 
   const setNoteCount = useBearStore((state: any) => state.setNoteCount);
   const setFavouriteCount = useBearStore(
@@ -53,14 +75,17 @@ export function Bro() {
   );
 }
 
-
-
 export function Favourites() {
   const PAGE_SIZE = 12;
   const page = 1;
   const offset = (page - 1) * PAGE_SIZE;
   const notes = useLiveQuery(() =>
-    db.notes.filter(notes => notes.favourite === true).offset(offset).limit(PAGE_SIZE).reverse().toArray()
+    db.notes
+      .filter((notes) => notes.favourite === true)
+      .offset(offset)
+      .limit(PAGE_SIZE)
+      .reverse()
+      .toArray()
   );
 
   const setNoteCount = useBearStore((state: any) => state.setNoteCount);
@@ -97,60 +122,69 @@ export function Favourites() {
 }
 
 export default function Home() {
-
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const message = useBearStore((state: any) => state.message);
   const setNote = useBearStore((state: any) => state.setNote);
   const setMessage = useBearStore((state: any) => state.setMessage);
   const activeTab = useBearStore<string>((state: any) => state.activeTab);
+  const store = useBearStore();
 
   const view: any = {
     notes: <Bro />,
-    favourites: <Favourites />
+    favourites: <Favourites />,
   }[activeTab];
 
   return (
     <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
       {isSmallScreen ? null : <NavbarSearch />}
-      <div style={{ width: "100%" }}>
-        <Card
-          withBorder
-          py={0}
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            minHeight: "100px",
-            maxHeight: "200px",
-            overflowY: "scroll",
-          }}
-        >
-          <Editor read={false} />
-          <Flex justify={"end"}>
-            <Button
-              onClick={async () => {
-                await db.notes.add({
-                  uniqueId: getUniqueId(),
-                  favourite: false,
-                  content: message,
-                  type: "any",
-                  modifiedAt: Date.now(),
-                });
-                setMessage("");
-                setNote("");
-              }}
-              mb={rem(8)}
-              size={"xs"}
-              disabled={message === "<p></p>" || message === ""}
-              variant={"default"}
-            >
-              Submit
-            </Button>
-          </Flex>
-        </Card>
-        <Demo />
-        {view}
-      </div>
+      {!store.search ? (
+        <div style={{ width: "100%" }}>
+          <Card
+            withBorder
+            py={0}
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+              minHeight: "100px",
+              maxHeight: "200px",
+              overflowY: "scroll",
+            }}
+          >
+            <Editor read={false} />
+            <Flex justify={"end"}>
+              <Button
+                onClick={async () => {
+                  await db.notes.add({
+                    uniqueId: getUniqueId(),
+                    favourite: false,
+                    content: message,
+                    type: "any",
+                    modifiedAt: Date.now(),
+                  });
+                  setMessage("");
+                  setNote("");
+                }}
+                mb={rem(8)}
+                size={"xs"}
+                disabled={message === "<p></p>" || message === ""}
+                variant={"default"}
+              >
+                Submit
+              </Button>
+            </Flex>
+          </Card>
+          <Demo />
+          {view}
+        </div>
+      ) : (
+        <>
+          <div style={{ width: "100%" }}>
+            <Text size="xs">You are searching in all notes</Text>
+            {view}
+          </div>
+        </>
+      )}
     </Flex>
   );
 }
@@ -171,9 +205,7 @@ const items = [
 );
 
 function Demo() {
-
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
-  
 
   return (
     <Flex mt={"sm"} align={"center"} justify={"space-between"}>
