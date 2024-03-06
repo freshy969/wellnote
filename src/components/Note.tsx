@@ -64,7 +64,7 @@ export function Note({ doc }: any) {
       <div
         onClick={() => {
           setNote(doc);
-          openDrawer("Note", <DrawerData />, "lg");
+          openDrawer("Note", <DrawerData />);
         }}
         style={{ cursor: "pointer", width: "100%" }}
       >

@@ -28,10 +28,10 @@ export const companyIcon = (website: any) =>{
 
 
 export function getUniqueId() {
-  let machineId = localStorage.getItem('machineId');
+  let machineId = window.localStorage.getItem('machineId');
   if (!machineId) {
     machineId = Math.random().toString(36).substring(2);
-    localStorage.setItem('machineId', machineId);
+    window.localStorage.setItem('machineId', machineId);
   }
 
   return machineId;

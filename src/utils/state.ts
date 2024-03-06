@@ -3,7 +3,7 @@ import { create } from "zustand";
 const store = {
   drawerOpen: false,
   drawerTitle: "",
-  drawerSize: "lg",
+  drawerSize: window.localStorage.getItem("drawerSize") || "lg",
   drawerContent: null,
 
   modalOpen: false,
@@ -61,10 +61,9 @@ export const useBearStore = create<BearStore>((set) => ({
       note: note,
     }));
   },
-  openDrawer: (title: string, content: any, size: any) =>
-    set((state) => ({
+  openDrawer: (title: string, content: any) =>
+    set(() => ({
       drawerOpen: true,
-      drawerSize: size ? size : state.drawerSize,
       drawerTitle: title,
       drawerContent: content,
     })),
@@ -94,6 +93,7 @@ export const useBearStore = create<BearStore>((set) => ({
   setActiveTab: (tab: any) => set(() => ({ activeTab: tab })),
   setColor: (color: any) => set(() => ({ color: color })),
   setSearch: (search: any) => set(() => ({ search: search })),
+  setDrawerSize: (size: any) => set(() => ({ drawerSize: size })),
   setDrawerFullScreen: (make: boolean) =>
     set(() => ({ drawerSize: make == true ? "100%" : "lg" })),
 }));

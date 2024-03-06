@@ -12,6 +12,7 @@ import {
   ColorSwatch,
   Popover,
   ColorPicker,
+  Select,
 } from "@mantine/core";
 import {
   IconSearch,
@@ -28,10 +29,9 @@ import mobileClasses from "./NavSearchMobile.module.css";
 import { useBearStore } from "../../utils/state";
 import { useEffect, useState } from "react";
 
-
-function Settings () {
-
+function Settings() {
   const setColor = useBearStore((state: any) => state.setColor);
+  const setDrawerSize = useBearStore((state: any) => state.setDrawerSize);
   const color = useBearStore((state: any) => state.color);
 
   return (
@@ -109,6 +109,26 @@ function Settings () {
               </Popover>
             </div>
           </Flex>
+          <Flex justify={"space-between"} mt={"md"} align={"center"}>
+            <Text size={"sm"}>Default drawer size</Text>
+            <div>
+              <Select
+                size={"xs"}
+                defaultValue={window.localStorage.getItem("drawerSize") || "lg"}
+                placeholder={"Choose size"}
+                data={[
+                  { value: "lg", label: "Normal" },
+                  { value: "100%", label: "Full screen" },
+                ]}
+                required
+                allowDeselect={false}
+                onChange={(value: any) => {
+                  setDrawerSize(value);
+                  window.localStorage.setItem("drawerSize", value);
+                }}
+              />
+            </div>
+          </Flex>
         </Tabs.Panel>
 
         <Tabs.Panel ml={"sm"} p={"lg"} pt={0} pl={0} value="database">
@@ -123,9 +143,8 @@ function Settings () {
         </Tabs.Panel>
       </Tabs>
     </>
-  )
+  );
 }
-
 
 export function NavbarSearch() {
   const setActiveTab = useBearStore((state: any) => state.setActiveTab);
@@ -136,7 +155,9 @@ export function NavbarSearch() {
 
   const [settings, setSettings] = useState(<Settings />);
 
-  useEffect(() => {setSettings(<Settings />)}, [store.color]);
+  useEffect(() => {
+    setSettings(<Settings />);
+  }, [store.color]);
 
   const links = [
     {
@@ -198,7 +219,6 @@ export function NavbarSearch() {
     </UnstyledButton>
   ));
 
-
   // useEffect(() => {
 
   //   async function makeSearch(){
@@ -215,7 +235,6 @@ export function NavbarSearch() {
 
   //   makeSearch()
 
-      
   // },[store.search]);
 
   const collectionLinks = collections.map((collection) => (
@@ -232,7 +251,6 @@ export function NavbarSearch() {
     </a>
   ));
 
-
   return (
     <nav className={classes.navbar}>
       <TextInput
@@ -244,8 +262,8 @@ export function NavbarSearch() {
             stroke={1.5}
           />
         }
-        onChange={(e)=>{
-          setSearch(e.target.value)
+        onChange={(e) => {
+          setSearch(e.target.value);
         }}
         rightSectionWidth={70}
         styles={{ section: { pointerEvents: "none" } }}
