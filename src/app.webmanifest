@@ -14,7 +14,8 @@
       "icons": [
         {
           "src": "./wellnote.svg",
-          "sizes": "48x48"
+          "sizes": "48x48",
+          "type": "image/svg"
         }
       ]
     }
