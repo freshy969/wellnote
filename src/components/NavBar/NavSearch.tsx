@@ -13,6 +13,8 @@ import {
   Popover,
   ColorPicker,
   Select,
+  Grid,
+  Button,
 } from "@mantine/core";
 import {
   IconSearch,
@@ -110,7 +112,7 @@ function Settings() {
             </div>
           </Flex>
           <Flex justify={"space-between"} mt={"md"} align={"center"}>
-            <Text size={"sm"}>Default drawer size</Text>
+            <Text size={"sm"}>Drawer size</Text>
             <div>
               <Select
                 size={"xs"}
@@ -251,6 +253,24 @@ export function NavbarSearch() {
     </a>
   ));
 
+  const xyz = [
+    { emoji: "👍", label: "Sales" },
+    { emoji: "🚚", label: "Deliveries" },
+    { emoji: "💸", label: "Discounts" },
+    { emoji: "💰", label: "Profits" },
+    { emoji: "✨", label: "Reports" },
+    { emoji: "🛒", label: "Orders" },
+  ];
+
+  const dude = xyz.map((collection) => (
+    <Button variant={"default"} size={"xs"} mr={rem(10)} mb={rem(10)}>
+      <Flex align={"center"} gap={rem(10)}>
+        <div>{collection.emoji}</div>
+        <div>{collection.label}</div>
+      </Flex>
+    </Button>
+  ));
+
   return (
     <nav className={classes.navbar}>
       <TextInput
@@ -295,6 +315,33 @@ export function NavbarSearch() {
                       relevant collection. Alternatively, you can add a note to
                       any collection by tapping the three dots on the note.
                     </Text>
+                    <Divider
+                      mt={"sm"}
+                      label={"Add or select one to edit"}
+                      labelPosition={"left"}
+                    />
+                    <div style={{ marginTop: rem(10) }}>
+                      <Flex w={"100%"} align={"center"} gap={rem(10)}>
+                        <TextInput
+                          defaultValue={"#️⃣"}
+                          size="xs"
+                          w={"30%"}
+                          placeholder="Emoji"
+                        />
+                        <TextInput size="xs" w={"100%"} placeholder="Name" />
+                        <div>
+                          <Button variant={"default"} size="xs">
+                            Add
+                          </Button>
+                        </div>
+                      </Flex>
+                    </div>
+                    <Divider
+                      mt={"sm"}
+                      label={"Existing collections"}
+                      labelPosition={"left"}
+                    />
+                    <div style={{ marginTop: rem(10) }}>{dude}</div>
                   </>,
                   "lg"
                 );
@@ -415,7 +462,7 @@ export function NavbarSearchMobile() {
             <ActionIcon
               onClick={() => {
                 openModal(
-                  "Add collection",
+                  "Manage collections",
                   <>
                     <Text size="xs">
                       Collections serve as tags or organized groups for related
@@ -423,6 +470,10 @@ export function NavbarSearchMobile() {
                       relevant collection. Alternatively, you can add a note to
                       any collection by tapping the three dots on the note.
                     </Text>
+                    <Grid mt={"xs"}>
+                      <Grid.Col span={2}>{collectionLinks}</Grid.Col>
+                      <Grid.Col span={"auto"}></Grid.Col>
+                    </Grid>
                   </>,
                   "lg"
                 );

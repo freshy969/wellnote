@@ -266,23 +266,29 @@ export default function Home() {
   );
 }
 
-const items = [
-  { title: "Wellnote", href: null },
-  { title: "All notes", href: null },
-].map((item, index) =>
-  item.href ? (
-    <Anchor c={"dimmed"} href={item.href} key={index}>
-      {item.title}
-    </Anchor>
-  ) : (
-    <Text c={"dimmed"} key={index}>
-      {item.title}
-    </Text>
-  )
-);
-
 function Demo() {
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
+  const store = useBearStore();
+
+  const activeTabs: any = {
+    notes: "All notes",
+    favourites: "Favourites",
+  };
+
+  const items = [
+    { title: "Wellnote", href: null },
+    { title: activeTabs[store.activeTab], href: null },
+  ].map((item, index) =>
+    item.href ? (
+      <Anchor c={"dimmed"} href={item.href} key={index}>
+        {item.title}
+      </Anchor>
+    ) : (
+      <Text c={"dimmed"} key={index}>
+        {item.title}
+      </Text>
+    )
+  );
 
   return (
     <Flex mt={"sm"} align={"center"} justify={"space-between"}>

@@ -1,41 +1,57 @@
 {
-    "name": "Wellnote",
-    "short_name": "Wellnote",
-    "start_url": ".",
-    "display": "standalone",
-    "background_color": "#fff",
-    "description": "Simple personal storage for notes, images, and files.",
-    "icons": [
-      {
-        "src": "./wellnote.svg",
-        "sizes": "48x48",
-        "type": "image/svg"
-      },
-      {
-        "src": "./wellnote.svg",
-        "sizes": "72x72",
-        "type": "image/svg"
-      },
-      {
-        "src": "./wellnote.svg",
-        "sizes": "96x96",
-        "type": "image/svg"
-      },
-      {
-        "src": "./wellnote.svg",
-        "sizes": "144x144",
-        "type": "image/svg"
-      },
-      {
-        "src": "./wellnote.svg",
-        "sizes": "168x168",
-        "type": "image/svg"
-      },
-      {
-        "src": "./wellnote.svg",
-        "sizes": "192x192",
-        "type": "image/svg"
-      }
-    ]
-  }
-  
+  "name": "Wellnote",
+  "short_name": "Wellnote",
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#fff",
+  "orientation": "portrait",
+  "scope": "/",
+  "shortcuts": [
+    {
+      "name": "Wellnote",
+      "description": "A lightweight and intuitive browser-based note-taking application. ",
+      "url": "/",
+      "icons": [
+        {
+          "src": "./wellnote.svg",
+          "sizes": "48x48"
+        }
+      ]
+    }
+  ],
+
+  "background_color": "#fff",
+  "description": "A lightweight and intuitive browser-based note-taking application.",
+  "icons": [
+    {
+      "src": "./wellnote.svg",
+      "sizes": "48x48",
+      "type": "image/svg"
+    },
+    {
+      "src": "./wellnote.svg",
+      "sizes": "72x72",
+      "type": "image/svg"
+    },
+    {
+      "src": "./wellnote.svg",
+      "sizes": "96x96",
+      "type": "image/svg"
+    },
+    {
+      "src": "./wellnote.svg",
+      "sizes": "144x144",
+      "type": "image/svg"
+    },
+    {
+      "src": "./wellnote.svg",
+      "sizes": "168x168",
+      "type": "image/svg"
+    },
+    {
+      "src": "./wellnote.svg",
+      "sizes": "192x192",
+      "type": "image/svg"
+    }
+  ]
+}

@@ -89,9 +89,9 @@ export default function App() {
           size={drawerSize}
           position={"right"}
           transitionProps={{
-            transition: "fade",
-            duration: 0,
-            timingFunction: "linear",
+            transition: "slide-left",
+            duration: 300,
+            exitDuration: 300
           }}
           overlayProps={{ backgroundOpacity: 0.5, blur: 4 }}
         >
