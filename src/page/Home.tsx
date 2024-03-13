@@ -217,7 +217,7 @@ export default function Home() {
               display: "flex",
               flexDirection: "column",
               justifyContent: "space-between",
-              minHeight: "100px",
+              minHeight: "150px",
               maxHeight: "200px",
               overflowY: "scroll",
             }}
