@@ -218,7 +218,7 @@ export default function Home() {
               flexDirection: "column",
               justifyContent: "space-between",
               minHeight: "150px",
-              maxHeight: "200px",
+              maxHeight: "650px",
               overflowY: "scroll",
             }}
           >
