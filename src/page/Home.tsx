@@ -278,6 +278,7 @@ function Demo() {
   const items = [
     { title: "Wellnote", href: null },
     { title: activeTabs[store.activeTab], href: null },
+    { title: store.activeTag, href: null },
   ].map((item, index) =>
     item.href ? (
       <Anchor c={"dimmed"} href={item.href} key={index}>

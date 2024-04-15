@@ -151,6 +151,8 @@ function Settings() {
 export function NavbarSearch() {
   const setActiveTab = useBearStore((state: any) => state.setActiveTab);
   const activeTab = useBearStore((state: any) => state.activeTab);
+  const setActiveTag = useBearStore((state: any) => state.setActiveTag);
+  const activeTag = useBearStore((state: any) => state.activeTag);
   const openModal = useBearStore((state: any) => state.openModal);
   const setSearch = useBearStore((state: any) => state.setSearch);
   const store = useBearStore();
@@ -242,9 +244,12 @@ export function NavbarSearch() {
   const collectionLinks = collections.map((collection) => (
     <a
       href="#"
-      onClick={(event) => event.preventDefault()}
+      onClick={() => {setActiveTag(collection.label)}}
       key={collection.label}
       className={classes.collectionLink}
+      style={
+      {...(collection.label == activeTag ? { color: "lime" } : {})}
+      }
     >
       <span style={{ marginRight: rem(9), fontSize: rem(16) }}>
         {collection.emoji}
@@ -418,7 +423,6 @@ export function NavbarSearchMobile() {
   const collectionLinks = collections.map((collection) => (
     <a
       href="#"
-      onClick={(event) => event.preventDefault()}
       key={collection.label}
       className={mobileClasses.collectionLink}
     >

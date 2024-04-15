@@ -17,6 +17,7 @@ const store = {
   noteCount: 0,
   favouriteCount: 0,
   activeTab: "notes",
+  activeTag: "",
 
   color: window.localStorage.getItem("accentColor") || "lime",
   search: "",
@@ -43,6 +44,7 @@ type BearStore = {
   noteCount: any;
   favouriteCount: any;
   activeTab: string;
+  activeTag: string;
 
   color: string;
   search: string;
@@ -91,6 +93,7 @@ export const useBearStore = create<BearStore>((set) => ({
     set(() => ({ favouriteCount: favourite }));
   },
   setActiveTab: (tab: any) => set(() => ({ activeTab: tab })),
+  setActiveTag: (tag: any) => set(() => ({ activeTag: tag })),
   setColor: (color: any) => set(() => ({ color: color })),
   setSearch: (search: any) => set(() => ({ search: search })),
   setDrawerSize: (size: any) => set(() => ({ drawerSize: size })),
