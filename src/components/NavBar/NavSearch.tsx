@@ -225,7 +225,7 @@ export function NavbarSearch() {
       onClick={() => {
         setActiveTag(collection.name);
       }}
-      style={{ ...(collection.name == activeTag ? { color: "lime" } : {}) }}
+      style={{ ...(collection.name == activeTag ? { color: store.color } : {}) }}
     >
       <Flex justify={"start"} gap={rem(10)} align={"center"}>
         <Text size="sm">{collection.emoji}</Text>
