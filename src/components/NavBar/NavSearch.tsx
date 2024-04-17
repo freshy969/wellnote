@@ -14,7 +14,7 @@ import {
   ColorPicker,
   Select,
   Grid,
-  Button,
+  Card,
 } from "@mantine/core";
 import {
   IconSearch,
@@ -30,6 +30,9 @@ import mobileClasses from "./NavSearchMobile.module.css";
 
 import { useBearStore } from "../../utils/state";
 import { useEffect, useState } from "react";
+import { CollectionModal } from "./Collection";
+import { useLiveQuery } from "dexie-react-hooks";
+import { db } from "../../utils/dexie/config";
 
 function Settings() {
   const setColor = useBearStore((state: any) => state.setColor);
@@ -190,14 +193,7 @@ export function NavbarSearch() {
     },
   ];
 
-  const collections = [
-    { emoji: "👍", label: "Sales" },
-    { emoji: "🚚", label: "Deliveries" },
-    { emoji: "💸", label: "Discounts" },
-    { emoji: "💰", label: "Profits" },
-    { emoji: "✨", label: "Reports" },
-    { emoji: "🛒", label: "Orders" },
-  ];
+  const collections = useLiveQuery(() => db.collections.toArray());
 
   const mainLinks = links.map((link) => (
     <UnstyledButton
@@ -223,57 +219,19 @@ export function NavbarSearch() {
     </UnstyledButton>
   ));
 
-  // useEffect(() => {
-
-  //   async function makeSearch(){
-  //     return await db.notes
-  //       .filter((note) => note.content.toLowerCase().includes(store.search.toLowerCase()))
-  //       .toArray()
-  //       .then((results) => {
-  //         console.log(results)
-  //       })
-  //       .catch((error) => {
-  //         console.error('Error searching database:', error);
-  //       });
-  //   }
-
-  //   makeSearch()
-
-  // },[store.search]);
-
-  const collectionLinks = collections.map((collection) => (
-    <a
-      href="#"
-      onClick={() => {setActiveTag(collection.label)}}
-      key={collection.label}
-      className={classes.collectionLink}
-      style={
-      {...(collection.label == activeTag ? { color: "lime" } : {})}
-      }
+  const collectionLinks = collections?.map((collection) => (
+    <UnstyledButton
+      className={classes.mainLink}
+      onClick={() => {
+        setActiveTag(collection.name);
+      }}
+      style={{ ...(collection.name == activeTag ? { color: "lime" } : {}) }}
     >
-      <span style={{ marginRight: rem(9), fontSize: rem(16) }}>
-        {collection.emoji}
-      </span>{" "}
-      {collection.label}
-    </a>
-  ));
-
-  const xyz = [
-    { emoji: "👍", label: "Sales" },
-    { emoji: "🚚", label: "Deliveries" },
-    { emoji: "💸", label: "Discounts" },
-    { emoji: "💰", label: "Profits" },
-    { emoji: "✨", label: "Reports" },
-    { emoji: "🛒", label: "Orders" },
-  ];
-
-  const dude = xyz.map((collection) => (
-    <Button variant={"default"} size={"xs"} mr={rem(10)} mb={rem(10)}>
-      <Flex align={"center"} gap={rem(10)}>
-        <div>{collection.emoji}</div>
-        <div>{collection.label}</div>
+      <Flex justify={"start"} gap={rem(10)} align={"center"}>
+        <Text size="sm">{collection.emoji}</Text>
+        <Text size="xs">{collection.name}</Text>
       </Flex>
-    </Button>
+    </UnstyledButton>
   ));
 
   return (
@@ -311,45 +269,7 @@ export function NavbarSearch() {
           <Tooltip label="Create collection" withArrow position="right">
             <ActionIcon
               onClick={() => {
-                openModal(
-                  "Add collection",
-                  <>
-                    <Text size="xs">
-                      Collections serve as tags or organized groups for related
-                      notes. Prior to creating a note, simply choose the
-                      relevant collection. Alternatively, you can add a note to
-                      any collection by tapping the three dots on the note.
-                    </Text>
-                    <Divider
-                      mt={"sm"}
-                      label={"Add or select one to edit"}
-                      labelPosition={"left"}
-                    />
-                    <div style={{ marginTop: rem(10) }}>
-                      <Flex w={"100%"} align={"center"} gap={rem(10)}>
-                        <TextInput
-                          defaultValue={"#️⃣"}
-                          size="xs"
-                          w={"30%"}
-                          placeholder="Emoji"
-                        />
-                        <TextInput size="xs" w={"100%"} placeholder="Name" />
-                        <div>
-                          <Button variant={"default"} size="xs">
-                            Add
-                          </Button>
-                        </div>
-                      </Flex>
-                    </div>
-                    <Divider
-                      mt={"sm"}
-                      label={"Existing collections"}
-                      labelPosition={"left"}
-                    />
-                    <div style={{ marginTop: rem(10) }}>{dude}</div>
-                  </>,
-                  "lg"
-                );
+                openModal("Add collection", <CollectionModal />, "lg");
               }}
               variant="default"
               size={18}
@@ -361,7 +281,26 @@ export function NavbarSearch() {
             </ActionIcon>
           </Tooltip>
         </Group>
-        <div className={classes.collections}>{collectionLinks}</div>
+        <Card p={"sm"} withBorder bg={"transparent"} m={"md"}>
+          {collections && collections?.length > 0 ? (
+            collectionLinks
+          ) : (
+            <UnstyledButton
+              className={classes.mainLink}
+              onClick={() => {
+                openModal("Add collection", <CollectionModal />, "lg");
+              }}
+            >
+              <Flex justify={"start"} gap={rem(10)} align={"center"}>
+                <IconPlus
+                  style={{ width: rem(12), height: rem(12) }}
+                  stroke={1.5}
+                />
+                <Text size="xs">Add new</Text>
+              </Flex>
+            </UnstyledButton>
+          )}
+        </Card>
       </div>
     </nav>
   );
@@ -421,11 +360,7 @@ export function NavbarSearchMobile() {
   ));
 
   const collectionLinks = collections.map((collection) => (
-    <a
-      href="#"
-      key={collection.label}
-      className={mobileClasses.collectionLink}
-    >
+    <a href="#" key={collection.label} className={mobileClasses.collectionLink}>
       <span style={{ marginRight: rem(9), fontSize: rem(16) }}>
         {collection.emoji}
       </span>{" "}
