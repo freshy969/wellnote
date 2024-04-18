@@ -8,6 +8,7 @@ import {
   rem,
 } from "@mantine/core";
 import {
+  IconCategory,
   IconDots,
   IconMaximize,
   IconMinimize,
@@ -17,6 +18,7 @@ import {
 import { deleteNote, updateFieldIfNotExist } from "../query/notes";
 import { useBearStore } from "../utils/state";
 import { Editor } from "../components/Editor/MiniEditor";
+import { CollectionModal } from "./NavBar/Collection";
 
 function DrawerData() {
   const setDrawerFullScreen = useBearStore(
@@ -58,6 +60,7 @@ function DrawerData() {
 export function Note({ doc }: any) {
   const openDrawer = useBearStore((state: any) => state.openDrawer);
   const setNote = useBearStore((state: any) => state.setNote);
+  const openModal = useBearStore((state: any) => state.openModal);
 
   return (
     <Flex justify={"space-between"} align={"center"}>
@@ -113,6 +116,21 @@ export function Note({ doc }: any) {
                 }
               >
                 Favourite
+              </Menu.Item>
+              <Menu.Item
+                onClick={async () => {
+                  openModal("Add collection", <CollectionModal select={true} noteId={doc.id} />, "lg");
+
+                }}
+                leftSection={
+                  <IconCategory
+                    style={{ width: rem(16), height: rem(16) }}
+                    stroke={1.5}
+                    color={"yellow"}
+                  />
+                }
+              >
+                Collection
               </Menu.Item>
               <Menu.Item
                 onClick={async () => {

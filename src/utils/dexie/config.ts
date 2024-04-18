@@ -7,8 +7,8 @@ export interface Notes {
   content: string;
   type: string;
   modifiedAt: number;
+  collectionId?: number;
 }
-
 
 export interface Collection {
   id?: number;
@@ -16,23 +16,16 @@ export interface Collection {
   emoji?: string;
 }
 
-export interface NoteCollection {
-  noteId: number;
-  collectionId: number;
-}
-
-
 export class WellnoteDexie extends Dexie {
   notes!: Table<Notes>;
   collections!: Table<Collection>;
-  noteCollections!: Table<NoteCollection>;
 
   constructor() {
     super("Wellnote");
     this.version(1).stores({
-      notes: "++id, uniqueId, favourite, content,type, modifiedAt",
+      notes:
+        "++id, uniqueId, favourite, content,type, modifiedAt, collectionId",
       collections: "++id, name, description",
-      noteCollections: "[noteId+collectionId], noteId, collectionId", // Index for many-to-many relationship
     });
   }
 }

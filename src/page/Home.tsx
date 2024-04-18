@@ -21,27 +21,18 @@ export function Bro() {
   const page = 1;
   const offset = (page - 1) * PAGE_SIZE;
   const search = useBearStore((state: any) => state.search);
-  let notes: any = [];
+  const activeTagId = useBearStore((state: any) => state.activeTagId);
 
-  if (search) {
-    notes = useLiveQuery(
-      () =>
-        db.notes
-          .filter((item) =>
-            item.content.toLowerCase().includes(search.toLowerCase())
-          )
-          .offset(offset)
-          .limit(PAGE_SIZE)
-          .reverse()
-          .toArray(),
-      [search]
-    );
-  } else {
-    notes = useLiveQuery(
-      () => db.notes.offset(offset).limit(PAGE_SIZE).reverse().toArray(),
-      [search]
-    );
-  }
+  const notes = useLiveQuery(() =>
+    db.notes
+      .filter((item) => !search || item.content.toLowerCase().includes(search.toLowerCase()))
+      .filter((item) => !activeTagId || item.collectionId === activeTagId)
+      .offset(offset)
+      .limit(PAGE_SIZE)
+      .reverse()
+      .toArray(),
+    [search, activeTagId]
+  );
 
   const setNoteCount = useBearStore((state: any) => state.setNoteCount);
   const setFavouriteCount = useBearStore(
@@ -112,13 +103,17 @@ export function Favourites() {
   const PAGE_SIZE = 12;
   const page = 1;
   const offset = (page - 1) * PAGE_SIZE;
+  const activeTagId = useBearStore((state: any) => state.activeTagId);
+
   const notes = useLiveQuery(() =>
     db.notes
-      .filter((notes) => notes.favourite === true)
+      .filter((note) => !activeTagId || note.collectionId === activeTagId)
+      .filter((note) => note.favourite === true)
       .offset(offset)
       .limit(PAGE_SIZE)
       .reverse()
-      .toArray()
+      .toArray(),
+    [activeTagId]
   );
 
   const setNoteCount = useBearStore((state: any) => state.setNoteCount);

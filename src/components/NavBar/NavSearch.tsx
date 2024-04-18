@@ -155,11 +155,12 @@ export function NavbarSearch() {
   const setActiveTab = useBearStore((state: any) => state.setActiveTab);
   const activeTab = useBearStore((state: any) => state.activeTab);
   const setActiveTag = useBearStore((state: any) => state.setActiveTag);
+  const setActiveTagId = useBearStore((state: any) => state.setActiveTagId);
   const activeTag = useBearStore((state: any) => state.activeTag);
   const openModal = useBearStore((state: any) => state.openModal);
   const setSearch = useBearStore((state: any) => state.setSearch);
   const store = useBearStore();
-
+  
   const [settings, setSettings] = useState(<Settings />);
 
   useEffect(() => {
@@ -224,8 +225,11 @@ export function NavbarSearch() {
       className={classes.mainLink}
       onClick={() => {
         setActiveTag(collection.name);
+        setActiveTagId(collection.id);
       }}
-      style={{ ...(collection.name == activeTag ? { color: store.color } : {}) }}
+      style={{
+        ...(collection.name == activeTag ? { color: store.color } : {}),
+      }}
     >
       <Flex justify={"start"} gap={rem(10)} align={"center"}>
         <Text size="sm">{collection.emoji}</Text>
@@ -269,7 +273,11 @@ export function NavbarSearch() {
           <Tooltip label="Create collection" withArrow position="right">
             <ActionIcon
               onClick={() => {
-                openModal("Add collection", <CollectionModal />, "lg");
+                openModal(
+                  "Add collection",
+                  <CollectionModal select={false} noteId={null} />,
+                  "lg"
+                );
               }}
               variant="default"
               size={18}
@@ -288,7 +296,11 @@ export function NavbarSearch() {
             <UnstyledButton
               className={classes.mainLink}
               onClick={() => {
-                openModal("Add collection", <CollectionModal />, "lg");
+                openModal(
+                  "Add collection",
+                  <CollectionModal select={false} noteId={null} />,
+                  "lg"
+                );
               }}
             >
               <Flex justify={"start"} gap={rem(10)} align={"center"}>
