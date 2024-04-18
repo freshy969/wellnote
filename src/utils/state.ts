@@ -100,6 +100,12 @@ export const useBearStore = create<BearStore>((set) => ({
   setColor: (color: any) => set(() => ({ color: color })),
   setSearch: (search: any) => set(() => ({ search: search })),
   setDrawerSize: (size: any) => set(() => ({ drawerSize: size })),
+
+  resetTag: () => 
+    set(() => ({
+      activeTag: "",
+      activeTagId: null,
+    })),
   setDrawerFullScreen: (make: boolean) =>
     set(() => ({ drawerSize: make == true ? "100%" : "lg" })),
 }));

@@ -188,6 +188,7 @@ export default function Home() {
   const setNote = useBearStore((state: any) => state.setNote);
   const setMessage = useBearStore((state: any) => state.setMessage);
   const activeTab = useBearStore<string>((state: any) => state.activeTab);
+  const resetTag = useBearStore((state: any) => state.resetTag);
   const store = useBearStore();
 
   const view: any = {
@@ -236,6 +237,7 @@ export default function Home() {
                   });
                   setMessage("");
                   setNote("");
+                  resetTag();
                 }}
                 mb={rem(8)}
                 size={"xs"}

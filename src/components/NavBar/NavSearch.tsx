@@ -158,6 +158,7 @@ export function NavbarSearch() {
   const setActiveTagId = useBearStore((state: any) => state.setActiveTagId);
   const activeTag = useBearStore((state: any) => state.activeTag);
   const openModal = useBearStore((state: any) => state.openModal);
+  const resetTag = useBearStore((state: any) => state.resetTag);
   const setSearch = useBearStore((state: any) => state.setSearch);
   const store = useBearStore();
   
@@ -224,6 +225,11 @@ export function NavbarSearch() {
     <UnstyledButton
       className={classes.mainLink}
       onClick={() => {
+        if(activeTag && activeTag == collection.name) {
+          resetTag()
+          return
+        }
+
         setActiveTag(collection.name);
         setActiveTagId(collection.id);
       }}

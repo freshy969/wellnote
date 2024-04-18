@@ -1,6 +1,6 @@
 import {
   ActionIcon,
-  Button,
+  // Button,
   Flex,
   Group,
   Menu,
@@ -10,8 +10,8 @@ import {
 import {
   IconCategory,
   IconDots,
-  IconMaximize,
-  IconMinimize,
+  // IconMaximize,
+  // IconMinimize,
   IconStar,
   IconTrash,
 } from "@tabler/icons-react";
@@ -21,15 +21,15 @@ import { Editor } from "../components/Editor/MiniEditor";
 import { CollectionModal } from "./NavBar/Collection";
 
 function DrawerData() {
-  const setDrawerFullScreen = useBearStore(
-    (state: any) => state.setDrawerFullScreen
-  );
-  const drawerSize = useBearStore((state: any) => state.drawerSize);
-  const store = useBearStore();
+  // const setDrawerFullScreen = useBearStore(
+  //   (state: any) => state.setDrawerFullScreen
+  // );
+  // const drawerSize = useBearStore((state: any) => state.drawerSize);
+  // const store = useBearStore();
 
   return (
     <>
-      <Flex align={"center"} justify={"start"}>
+      {/* <Flex align={"center"} justify={"start"}>
         <Button
           onClick={() => {
             const bro = drawerSize == "lg";
@@ -51,7 +51,7 @@ function DrawerData() {
             </Text>
           </Flex>
         </Button>
-      </Flex>
+      </Flex> */}
       <Editor read={true} />
     </>
   );
