@@ -28,7 +28,7 @@ export function FooterLinks() {
         className={classes.link}
         component="a"
         href={link.link}
-        onClick={(event) => event.preventDefault()}
+        target='_blank'
       >
         {link.label}
       </Text>

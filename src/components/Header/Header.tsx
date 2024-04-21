@@ -20,6 +20,11 @@ function Logo({ opacity }: any) {
           opacity={opacity ? opacity : 1}
           style={{ cursor: "pointer" }}
           className={classes.title}
+          onClick={() => {
+            if (window.location.pathname != "/") {
+              window.location.replace("/");
+            }
+          }}
         >
           Wellnote
         </Title>
