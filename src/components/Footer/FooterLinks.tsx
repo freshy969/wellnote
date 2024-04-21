@@ -5,30 +5,17 @@ import { Logo } from '../Header/Header';
 
 const data = [
   {
-    title: 'About',
-    links: [
-      { label: 'Features', link: '#' },
-      { label: 'Pricing', link: '#' },
-      { label: 'Support', link: '#' },
-      { label: 'Forums', link: '#' },
-    ],
-  },
-  {
     title: 'Project',
     links: [
-      { label: 'Contribute', link: '#' },
-      { label: 'Media assets', link: '#' },
-      { label: 'Changelog', link: '#' },
-      { label: 'Releases', link: '#' },
+      { label: 'Contribute', link: 'https://github.com/henshalb/wellnote' },
+      { label: 'Releases', link: 'https://github.com/henshalb/wellnote/releases' },
     ],
   },
   {
     title: 'Community',
     links: [
-      { label: 'Join Discord', link: '#' },
-      { label: 'Follow on Twitter', link: '#' },
-      { label: 'Email newsletter', link: '#' },
-      { label: 'GitHub discussions', link: '#' },
+      { label: 'Join Discord', link: 'https://discord.gg/EuUD9RgFB4' },
+      { label: 'GitHub issues', link: 'https://github.com/henshalb/wellnote/issues' },
     ],
   },
 ];
