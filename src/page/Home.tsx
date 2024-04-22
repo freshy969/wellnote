@@ -259,6 +259,11 @@ export default function Home() {
           </Card>
           <Demo />
           {view}
+          {activeTab == "links" ? (
+            <Text c={"dimmed"} mt={"sm"} size="xs">
+              Links are automatically moved to "Links" tab
+            </Text>
+          ) : null}
         </div>
       ) : (
         <>
