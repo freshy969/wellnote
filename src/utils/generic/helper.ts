@@ -36,3 +36,11 @@ export function getUniqueId() {
 
   return machineId;
 }
+
+
+export function containsLinkInParagraph(htmlString: string) {
+  var regex = /<p>https?:\/\/\S+<\/p>/;
+  return regex.test(htmlString);
+}
+
+

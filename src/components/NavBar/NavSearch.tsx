@@ -24,6 +24,7 @@ import {
   IconSettings,
   IconDatabase,
   Icon360,
+  IconLink,
 } from "@tabler/icons-react";
 import classes from "./NavSearch.module.css";
 import mobileClasses from "./NavSearchMobile.module.css";
@@ -175,6 +176,14 @@ export function NavbarSearch() {
       notifications: useBearStore((state) => state.noteCount),
       action: () => {
         setActiveTab("notes");
+      },
+    },
+    {
+      icon: IconLink,
+      label: "Links",
+      notifications: useBearStore((state) => state.linkCount),
+      action: () => {
+        setActiveTab("links");
       },
     },
     {

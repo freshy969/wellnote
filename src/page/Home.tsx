@@ -2,7 +2,11 @@ import { IconDots } from "@tabler/icons-react";
 import { Button, Flex, Menu, Text, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Card, Grid } from "@mantine/core";
-import { getUniqueId, random } from "../utils/generic/helper";
+import {
+  containsLinkInParagraph,
+  getUniqueId,
+  random,
+} from "../utils/generic/helper";
 import { useBearStore } from "../utils/state";
 import { Note } from "../components/Note";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -16,56 +20,68 @@ import {
 import { useEffect } from "react";
 import { animated, useSpring } from "@react-spring/web";
 
-export function Bro() {
+export function Bro({ type }: { type: string }) {
   const PAGE_SIZE = 12;
   const page = 1;
   const offset = (page - 1) * PAGE_SIZE;
   const search = useBearStore((state: any) => state.search);
   const activeTagId = useBearStore((state: any) => state.activeTagId);
+  const activeTab = useBearStore((state: any) => state.activeTab);
 
-  const notes = useLiveQuery(() =>
-    db.notes
-      .filter((item) => !search || item.content.toLowerCase().includes(search.toLowerCase()))
-      .filter((item) => !activeTagId || item.collectionId === activeTagId)
-      .offset(offset)
-      .limit(PAGE_SIZE)
-      .reverse()
-      .toArray(),
-    [search, activeTagId]
+  const notes = useLiveQuery(
+    () =>
+      db.notes
+        .filter((item) => !activeTagId || item.collectionId === activeTagId)
+        .filter((note) => note.type === type)
+        .filter(
+          (item) =>
+            !search || item.content.toLowerCase().includes(search.toLowerCase())
+        )
+        .offset(offset)
+        .limit(PAGE_SIZE)
+        .reverse()
+        .toArray(),
+    [search, activeTagId, activeTab]
   );
 
   const setNoteCount = useBearStore((state: any) => state.setNoteCount);
+  const setLinkCount = useBearStore((state: any) => state.setLinkCount);
   const setFavouriteCount = useBearStore(
     (state: any) => state.setFavouriteCount
   );
 
   useEffect(() => {
     async function dude() {
-      if (search) {
-        const note = await db.notes
-          .filter((item) =>
-            item.content.toLowerCase().includes(search.toLowerCase())
-          )
-          .count();
-        const favourite = await db.notes
-          .filter((item) =>
-            item.content.toLowerCase().includes(search.toLowerCase())
-          )
-          .filter((note) => note.favourite === true)
-          .count();
-        setNoteCount(note);
-        setFavouriteCount(favourite);
-      } else {
-        const note = await db.notes.count();
-        const favourite = await db.notes
-          .filter((note) => note.favourite === true)
-          .count();
-        setNoteCount(note);
-        setFavouriteCount(favourite);
-      }
+      const note = await db.notes
+        .filter((item) => !activeTagId || item.collectionId === activeTagId)
+        .filter(
+          (item) =>
+            !search || item.content.toLowerCase().includes(search.toLowerCase())
+        )
+        .filter((note) => note.type === "notes")
+        .count();
+      const links = await db.notes
+        .filter((item) => !activeTagId || item.collectionId === activeTagId)
+        .filter(
+          (item) =>
+            !search || item.content.toLowerCase().includes(search.toLowerCase())
+        )
+        .filter((note) => note.type === "links")
+        .count();
+      const favourite = await db.notes
+        .filter((item) => !activeTagId || item.collectionId === activeTagId)
+        .filter(
+          (item) =>
+            !search || item.content.toLowerCase().includes(search.toLowerCase())
+        )
+        .filter((note) => note.favourite === true)
+        .count();
+      setNoteCount(note);
+      setLinkCount(links);
+      setFavouriteCount(favourite);
     }
     dude();
-  }, [notes, search]);
+  }, [notes, search, activeTab]);
 
   const currentNotes: any = [];
 
@@ -104,48 +120,40 @@ export function Favourites() {
   const page = 1;
   const offset = (page - 1) * PAGE_SIZE;
   const activeTagId = useBearStore((state: any) => state.activeTagId);
+  const search = useBearStore((state: any) => state.search);
 
-  const notes = useLiveQuery(() =>
-    db.notes
-      .filter((note) => !activeTagId || note.collectionId === activeTagId)
-      .filter((note) => note.favourite === true)
-      .offset(offset)
-      .limit(PAGE_SIZE)
-      .reverse()
-      .toArray(),
-    [activeTagId]
+  const notes = useLiveQuery(
+    () =>
+      db.notes
+        .filter((note) => !activeTagId || note.collectionId === activeTagId)
+        .filter((note) => note.favourite === true)
+        .filter(
+          (item) =>
+            !search || item.content.toLowerCase().includes(search.toLowerCase())
+        )
+        .offset(offset)
+        .limit(PAGE_SIZE)
+        .reverse()
+        .toArray(),
+    [activeTagId, search]
   );
 
-  const setNoteCount = useBearStore((state: any) => state.setNoteCount);
-  const search = useBearStore((state: any) => state.search);
   const setFavouriteCount = useBearStore(
     (state: any) => state.setFavouriteCount
   );
 
   useEffect(() => {
     async function dude() {
-      if (search) {
-        const note = await db.notes
-          .filter((item) =>
-            item.content.toLowerCase().includes(search.toLowerCase())
-          )
-          .count();
-        const favourite = await db.notes
-          .filter((item) =>
-            item.content.toLowerCase().includes(search.toLowerCase())
-          )
-          .filter((note) => note.favourite === true)
-          .count();
-        setNoteCount(note);
-        setFavouriteCount(favourite);
-      } else {
-        const note = await db.notes.count();
-        const favourite = await db.notes
-          .filter((note) => note.favourite === true)
-          .count();
-        setNoteCount(note);
-        setFavouriteCount(favourite);
-      }
+      const favourite = await db.notes
+        .filter((note) => !activeTagId || note.collectionId === activeTagId)
+        .filter((note) => note.favourite === true)
+        .filter(
+          (item) =>
+            !search || item.content.toLowerCase().includes(search.toLowerCase())
+        )
+        .count();
+
+      setFavouriteCount(favourite);
     }
     dude();
   }, [notes, search]);
@@ -192,7 +200,8 @@ export default function Home() {
   const store = useBearStore();
 
   const view: any = {
-    notes: <Bro />,
+    notes: <Bro type="notes" />,
+    links: <Bro type="links" />,
     favourites: <Favourites />,
   }[activeTab];
 
@@ -232,7 +241,7 @@ export default function Home() {
                     uniqueId: getUniqueId(),
                     favourite: false,
                     content: message,
-                    type: "any",
+                    type: containsLinkInParagraph(message) ? "links" : "notes",
                     modifiedAt: Date.now(),
                   });
                   setMessage("");
@@ -254,7 +263,10 @@ export default function Home() {
       ) : (
         <>
           <div style={{ width: "100%" }}>
-            <Text size="xs">You are searching in all notes</Text>
+            <Text size="xs">
+              You are searching in {store.activeTab}{" "}
+              {store.activeTag ? `within "${store.activeTag}"` : null}
+            </Text>
             {view}
           </div>
         </>
@@ -269,6 +281,7 @@ function Demo() {
 
   const activeTabs: any = {
     notes: "All notes",
+    links: "Links",
     favourites: "Favourites",
   };
 

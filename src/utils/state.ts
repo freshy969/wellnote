@@ -15,6 +15,7 @@ const store = {
   message: "",
   note: "",
   noteCount: 0,
+  linkCount: 0,
   favouriteCount: 0,
   activeTab: "notes",
   activeTag: "",
@@ -43,6 +44,7 @@ type BearStore = {
   setMessage: any;
   closeDrawer: any;
   noteCount: any;
+  linkCount: any;
   favouriteCount: any;
   activeTab: string;
   activeTag: string;
@@ -90,6 +92,9 @@ export const useBearStore = create<BearStore>((set) => ({
   reset: () => set(store),
   setNoteCount: (count: any) => {
     set(() => ({ noteCount: count }));
+  },
+  setLinkCount: (count: any) => {
+    set(() => ({ linkCount: count }));
   },
   setFavouriteCount: (favourite: any) => {
     set(() => ({ favouriteCount: favourite }));
