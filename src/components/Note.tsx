@@ -1,6 +1,6 @@
 import {
   ActionIcon,
-  // Button,
+  Checkbox,
   Flex,
   Group,
   Menu,
@@ -10,8 +10,6 @@ import {
 import {
   IconCategory,
   IconDots,
-  // IconMaximize,
-  // IconMinimize,
   IconStar,
   IconTrash,
 } from "@tabler/icons-react";
@@ -19,39 +17,11 @@ import { deleteNote, updateFieldIfNotExist } from "../query/notes";
 import { useBearStore } from "../utils/state";
 import { Editor } from "../components/Editor/MiniEditor";
 import { CollectionModal } from "./NavBar/Collection";
+import { animated, useSpring } from "@react-spring/web";
 
 function DrawerData() {
-  // const setDrawerFullScreen = useBearStore(
-  //   (state: any) => state.setDrawerFullScreen
-  // );
-  // const drawerSize = useBearStore((state: any) => state.drawerSize);
-  // const store = useBearStore();
-
   return (
     <>
-      {/* <Flex align={"center"} justify={"start"}>
-        <Button
-          onClick={() => {
-            const bro = drawerSize == "lg";
-            setDrawerFullScreen(bro);
-          }}
-          radius={"sm"}
-          variant={"light"}
-          color={store.color}
-          size={"xs"}
-        >
-          <Flex gap={rem(8)} align={"center"}>
-            {drawerSize == "lg" ? (
-              <IconMaximize size={15} />
-            ) : (
-              <IconMinimize size={15} />
-            )}
-            <Text size={"xs"}>
-              {drawerSize == "lg" ? "Full screen" : "Normal"}
-            </Text>
-          </Flex>
-        </Button>
-      </Flex> */}
       <Editor read={true} />
     </>
   );
@@ -61,30 +31,54 @@ export function Note({ doc }: any) {
   const openDrawer = useBearStore((state: any) => state.openDrawer);
   const setNote = useBearStore((state: any) => state.setNote);
   const openModal = useBearStore((state: any) => state.openModal);
+  const selectable = useBearStore((state: any) => state.selectable);
+
+  const spring = useSpring({
+    from: { x: -15 },
+    to: { x: 0 },
+  });
+
+  const Component = (
+    <div
+      onClick={() => {
+        setNote(doc);
+        openDrawer("Note", <DrawerData />);
+      }}
+      style={{ cursor: "pointer", width: "100%" }}
+    >
+      <div>
+        <Text style={{ wordBreak: "break-word" }} size={"sm"} lineClamp={1}>
+          {doc.content.replace(/<[^>]*>/g, " ")}
+        </Text>
+      </div>
+      <Text c={"dimmed"} size={"xs"} lineClamp={1}>
+        Modified at{" "}
+        {new Date(doc?.modifiedAt).toLocaleDateString("en-US", {
+          day: "numeric",
+          month: "short",
+          year: "numeric",
+        })}
+      </Text>
+    </div>
+  );
 
   return (
     <Flex justify={"space-between"} align={"center"}>
-      <div
-        onClick={() => {
-          setNote(doc);
-          openDrawer("Note", <DrawerData />);
-        }}
-        style={{ cursor: "pointer", width: "100%" }}
-      >
-        <div>
-          <Text style={{ wordBreak: "break-word" }} size={"sm"} lineClamp={1}>
-            {doc.content.replace(/<[^>]*>/g, " ")}
-          </Text>
-        </div>
-        <Text c={"dimmed"} size={"xs"} lineClamp={1}>
-          Modified at{" "}
-          {new Date(doc?.modifiedAt).toLocaleDateString("en-US", {
-            day: "numeric",
-            month: "short",
-            year: "numeric",
-          })}
-        </Text>
-      </div>
+      <Flex justify={"start"} align={"center"} gap={rem(10)}>
+        <div>{selectable ? <Checkbox /> : null}</div>
+
+        {selectable ? (
+          <animated.div
+            style={{
+              ...spring,
+            }}
+          >
+            {Component}
+          </animated.div>
+        ) : (
+          Component
+        )}
+      </Flex>
 
       <div>
         <Group gap={0} justify="flex-end">
@@ -119,8 +113,11 @@ export function Note({ doc }: any) {
               </Menu.Item>
               <Menu.Item
                 onClick={async () => {
-                  openModal("Add collection", <CollectionModal select={true} noteId={doc.id} />, "lg");
-
+                  openModal(
+                    "Add collection",
+                    <CollectionModal select={true} noteId={doc.id} />,
+                    "lg"
+                  );
                 }}
                 leftSection={
                   <IconCategory

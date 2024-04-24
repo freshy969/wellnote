@@ -13,7 +13,6 @@ import { isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import "./App.css";
 
 import { Helmet } from "react-helmet";
-import { FooterLinks } from "./components/Footer/FooterLinks";
 
 export default function App() {
   
@@ -107,7 +106,7 @@ export default function App() {
             </Routes>
           </Container>
         </Router>
-        <FooterLinks />
+        {/* <FooterLinks /> */}
       </MantineProvider>
     </>
   );

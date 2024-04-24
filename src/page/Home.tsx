@@ -1,5 +1,12 @@
 import { IconDots } from "@tabler/icons-react";
-import { Button, Flex, Menu, Text, rem } from "@mantine/core";
+import {
+  Button,
+  Flex,
+  Group,
+  Menu,
+  Text,
+  rem,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Card, Grid } from "@mantine/core";
 import {
@@ -196,7 +203,7 @@ export default function Home() {
   const setNote = useBearStore((state: any) => state.setNote);
   const setMessage = useBearStore((state: any) => state.setMessage);
   const activeTab = useBearStore<string>((state: any) => state.activeTab);
-  const resetTag = useBearStore((state: any) => state.resetTag);
+  const resetTab = useBearStore((state: any) => state.resetTab);
   const store = useBearStore();
 
   const view: any = {
@@ -246,7 +253,9 @@ export default function Home() {
                   });
                   setMessage("");
                   setNote("");
-                  resetTag();
+                  containsLinkInParagraph(message)
+                    ? resetTab("links")
+                    : resetTab("notes");
                 }}
                 mb={rem(8)}
                 size={"xs"}
@@ -283,7 +292,8 @@ export default function Home() {
 function Demo() {
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const store = useBearStore();
-
+  const setSelectable = useBearStore((state: any) => state.setSelectable);
+  const selectable = useBearStore((state: any) => state.selectable);
   const activeTabs: any = {
     notes: "All notes",
     links: "Links",
@@ -318,7 +328,32 @@ function Demo() {
             <NavbarSearchMobile />
           </Menu.Dropdown>
         </Menu>
-      ) : null}
+      ) : (
+        <div>
+          <Group>
+            <Button
+              variant={"subtle"}
+              radius={"lg"}
+              color={store.color}
+              // className={classes.mainLinkMini}
+              onClick={() => {
+                setSelectable(!selectable);
+              }}
+              size="xs"
+            >
+              {selectable ? "Cancel" : "Select"}
+            </Button>
+            <Menu position={"bottom-end"} shadow="md">
+              <Menu.Target>
+                <IconDots size="20" stroke={1.5} />
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item>Delete</Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Group>
+        </div>
+      )}
     </Flex>
   );
 }

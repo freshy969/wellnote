@@ -20,6 +20,7 @@ const store = {
   activeTab: "notes",
   activeTag: "",
   activeTagId: null,
+  selectable: false,
 
   color: window.localStorage.getItem("accentColor") || "lime",
   search: "",
@@ -49,6 +50,7 @@ type BearStore = {
   activeTab: string;
   activeTag: string;
   activeTagId: any;
+  selectable: boolean;
 
   color: string;
   search: string;
@@ -99,18 +101,30 @@ export const useBearStore = create<BearStore>((set) => ({
   setFavouriteCount: (favourite: any) => {
     set(() => ({ favouriteCount: favourite }));
   },
-  setActiveTab: (tab: any) => set(() => ({ activeTab: tab })),
+  setActiveTab: (tab: any) => set(() => ({ activeTab: tab, selectable: false })),
   setActiveTag: (tag: any) => set(() => ({ activeTag: tag })),
   setActiveTagId: (tagId: any) => set(() => ({ activeTagId: tagId })),
   setColor: (color: any) => set(() => ({ color: color })),
   setSearch: (search: any) => set(() => ({ search: search })),
   setDrawerSize: (size: any) => set(() => ({ drawerSize: size })),
 
-  resetTag: () => 
+  setSelectable: (select: boolean) => set(() => ({ selectable: select })),
+
+  resetTag: () =>
     set(() => ({
+      selectable: false,
       activeTag: "",
       activeTagId: null,
     })),
+
+  resetTab: (name: string) =>
+    set(() => ({
+      selectable: false,
+      activeTab: name,
+      activeTag: "",
+      activeTagId: null,
+    })),
+
   setDrawerFullScreen: (make: boolean) =>
     set(() => ({ drawerSize: make == true ? "100%" : "lg" })),
 }));

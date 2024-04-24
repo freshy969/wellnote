@@ -15,6 +15,7 @@ import {
   Select,
   Grid,
   Card,
+  Anchor,
 } from "@mantine/core";
 import {
   IconSearch,
@@ -34,6 +35,7 @@ import { useEffect, useState } from "react";
 import { CollectionModal } from "./Collection";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "../../utils/dexie/config";
+import footerClasses from '../Footer/FooterLinks.module.css';
 
 function Settings() {
   const setColor = useBearStore((state: any) => state.setColor);
@@ -329,6 +331,22 @@ export function NavbarSearch() {
           )}
         </Card>
       </div>
+
+<div className={footerClasses.logo}>
+          {/* <Logo opacity={0.3} /> */}
+          <Text size="xs" c="dimmed" className={classes.description}>
+            Browser based minimal, fast and feature rich note taker.
+          </Text>
+        </div>
+        <Group mt={"xs"}>
+
+        <Anchor size="xs" c={"dimmed"} href="https://github.com/henshalb/wellnote" target="_blank" >
+          GitHub
+          </Anchor>
+          <Anchor size="xs" c={"dimmed"} href="https://discord.gg/EuUD9RgFB4" target="_blank" >
+          Discord
+          </Anchor>
+        </Group>
     </nav>
   );
 }
