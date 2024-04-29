@@ -1,12 +1,5 @@
 import { IconDots } from "@tabler/icons-react";
-import {
-  Button,
-  Flex,
-  Group,
-  Menu,
-  Text,
-  rem,
-} from "@mantine/core";
+import { Button, Flex, Group, Menu, Text, Title, rem } from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Card, Grid } from "@mantine/core";
 import {
@@ -18,13 +11,12 @@ import { useBearStore } from "../utils/state";
 import { Note } from "../components/Note";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Breadcrumbs, Anchor } from "@mantine/core";
-import { Editor } from "../components/Editor/MiniEditor";
 import { db } from "../utils/dexie/config";
 import {
   NavbarSearch,
   NavbarSearchMobile,
 } from "../components/NavBar/NavSearch";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
 
 export function Bro({ type }: { type: string }) {
@@ -197,16 +189,100 @@ export function Favourites() {
   );
 }
 
+function GetTime() {
+  const [time, setTime] = useState("");
+
+  useEffect(() => {
+    const updateTime = () => {
+      const now = new Date();
+      const localTime = new Date(now.getTime());
+
+      const hours = localTime.getHours() % 12 || 12;
+      const minutes = localTime.getMinutes().toString().padStart(2, "0");
+      const amPm = localTime.getHours() >= 12 ? "PM" : "AM";
+
+      setTime(`${hours}:${minutes} ${amPm}`);
+    };
+
+    updateTime();
+    const intervalId = setInterval(updateTime, 1000);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
+  return (
+    <Title
+      style={{
+        color:
+          "light-dark(var(--mantine-color-black), var(--mantine-color-white))",
+        fontSize: rem(30),
+        fontWeight: 900,
+        letterSpacing: rem(-1),
+      }}
+    >
+      {time}
+    </Title>
+  );
+}
+
+function DateDisplay() {
+  // Get current date
+  const currentDate = new Date();
+
+  // Array of month names
+  const monthNames = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
+
+  // Get day, month, and year
+  const day = currentDate.getDate();
+  const monthIndex = currentDate.getMonth();
+  const year = currentDate.getFullYear();
+
+  // Format the date
+  const formattedDate = `${day} ${monthNames[monthIndex]} ${year}`;
+
+  return (
+    <Title
+      style={{
+        color:
+          "light-dark(var(--mantine-color-black), var(--mantine-color-white))",
+        fontSize: rem(25),
+        fontWeight: 900,
+        letterSpacing: rem(-1),
+      }}
+    >
+      {formattedDate}
+    </Title>
+  );
+}
+
+import "./styles.scss";
+import { EditorContent, useEditor } from "@tiptap/react";
+import StarterKit from "@tiptap/starter-kit";
+import Placeholder from "@tiptap/extension-placeholder";
+
 export default function Home() {
   const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const message = useBearStore((state: any) => state.message);
-  const setNote = useBearStore((state: any) => state.setNote);
   const setMessage = useBearStore((state: any) => state.setMessage);
   const activeTab = useBearStore<string>((state: any) => state.activeTab);
   const resetTab = useBearStore((state: any) => state.resetTab);
   const store = useBearStore();
 
   const view: any = {
+    home: <></>,
     notes: <Bro type="notes" />,
     links: <Bro type="links" />,
     favourites: <Favourites />,
@@ -217,75 +293,105 @@ export default function Home() {
     to: { y: 0 },
   });
 
+  const editor = useEditor({
+    extensions: [
+      StarterKit as any,
+      Placeholder.configure({
+        placeholder: "Write something",
+        considerAnyAsEmpty: true,
+      }),
+    ],
+    onUpdate: (instance) => {
+      setMessage(instance.editor.getHTML());
+    },
+    autofocus: true,
+  });
+
   return (
-    <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
-      {isSmallScreen ? null : <NavbarSearch />}
-      {!store.search ? (
-        <div style={{ width: "100%" }}>
-          <Card
-            withBorder
-            py={0}
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              minHeight: "150px",
-              maxHeight: "650px",
-              overflowY: "scroll",
-            }}
-          >
-            <animated.div
-              style={{
-                ...springs,
-              }}
-            >
-              <Editor read={false} />
-            </animated.div>
-            <Flex justify={"end"}>
-              <Button
-                onClick={async () => {
-                  await db.notes.add({
-                    uniqueId: getUniqueId(),
-                    favourite: false,
-                    content: message,
-                    type: containsLinkInParagraph(message) ? "links" : "notes",
-                    modifiedAt: Date.now(),
-                  });
-                  setMessage("");
-                  setNote("");
-                  containsLinkInParagraph(message)
-                    ? resetTab("links")
-                    : resetTab("notes");
-                }}
-                mb={rem(8)}
-                size={"xs"}
-                disabled={message === "<p></p>" || message === ""}
-                variant={"default"}
-              >
-                Submit
-              </Button>
-            </Flex>
-          </Card>
-          <Demo />
-          {view}
-          {activeTab == "links" ? (
-            <Text c={"dimmed"} mt={"sm"} size="xs">
-              Links are automatically moved to "Links" tab
-            </Text>
-          ) : null}
-        </div>
-      ) : (
-        <>
+    <>
+      <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
+        {isSmallScreen ? null : <NavbarSearch />}
+        {!store.search ? (
           <div style={{ width: "100%" }}>
-            <Text size="xs">
-              You are searching in {store.activeTab}{" "}
-              {store.activeTag ? `within "${store.activeTag}"` : null}
-            </Text>
+            {activeTab != "home" ? (
+              <Card
+                withBorder
+                py={0}
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  minHeight: "150px",
+                  maxHeight: "650px",
+                  overflowY: "scroll",
+                }}
+              >
+                <animated.div
+                  style={{
+                    ...springs,
+                  }}
+                >
+                  <EditorContent editor={editor} />
+                </animated.div>
+                <Flex justify={"end"}>
+                  <Button
+                    onClick={async () => {
+                      await db.notes.add({
+                        uniqueId: getUniqueId(),
+                        favourite: false,
+                        content: message,
+                        type: containsLinkInParagraph(message)
+                          ? "links"
+                          : "notes",
+                        modifiedAt: Date.now(),
+                      });
+                      editor?.commands.clearContent();
+                      setMessage("");
+                      containsLinkInParagraph(message)
+                        ? resetTab("links")
+                        : resetTab("notes");
+                    }}
+                    mb={rem(8)}
+                    size={"xs"}
+                    disabled={message === "<p></p>" || message === ""}
+                    variant={"default"}
+                  >
+                    Submit
+                  </Button>
+                </Flex>
+              </Card>
+            ) : (
+              <animated.div
+                style={{
+                  ...springs,
+                }}
+              >
+                <GetTime />
+                <DateDisplay />
+              </animated.div>
+            )}
+
+            {activeTab != "home" ? <Demo /> : null}
             {view}
+            {activeTab == "links" ? (
+              <Text c={"dimmed"} mt={"sm"} size="xs">
+                Links are automatically moved to "Links" tab
+              </Text>
+            ) : null}
           </div>
-        </>
-      )}
-    </Flex>
+        ) : (
+          <>
+            <div style={{ width: "100%" }}>
+              <Text size="xs">
+                You are searching in {store.activeTab}{" "}
+                {store.activeTag ? `within "${store.activeTag}"` : null}
+              </Text>
+              {view}
+            </div>
+          </>
+        )}
+      </Flex>
+    </>
   );
 }
 

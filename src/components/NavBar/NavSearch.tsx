@@ -26,6 +26,7 @@ import {
   IconDatabase,
   Icon360,
   IconLink,
+  IconHome,
 } from "@tabler/icons-react";
 import classes from "./NavSearch.module.css";
 import mobileClasses from "./NavSearchMobile.module.css";
@@ -173,6 +174,14 @@ export function NavbarSearch() {
 
   const links = [
     {
+      icon: IconHome,
+      label: "Home",
+      // notifications: useBearStore((state) => state.noteCount),
+      action: () => {
+        setActiveTab("home");
+      },
+    },
+    {
       icon: IconNote,
       label: "Notes",
       notifications: useBearStore((state) => state.noteCount),
@@ -228,7 +237,7 @@ export function NavbarSearch() {
         />
         <span>{link.label}</span>
       </div>
-      {link.notifications}
+      {link.notifications ? link.notifications : null}
     </UnstyledButton>
   ));
 
@@ -267,6 +276,7 @@ export function NavbarSearch() {
           />
         }
         onChange={(e) => {
+          setActiveTab(activeTab == "home" ? "notes" : activeTab);
           setSearch(e.target.value);
         }}
         rightSectionWidth={70}
