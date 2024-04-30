@@ -80,6 +80,9 @@ export function Note({ doc }: any) {
         )}
       </Flex>
 
+        {
+          selectable ?
+          <></> :
       <div>
         <Group gap={0} justify="flex-end">
           <Menu
@@ -147,6 +150,8 @@ export function Note({ doc }: any) {
           </Menu>
         </Group>
       </div>
+        }
+
     </Flex>
   );
 }

@@ -13,7 +13,6 @@ import {
   Popover,
   ColorPicker,
   Select,
-  Grid,
   Card,
   Anchor,
 } from "@mantine/core";
@@ -36,7 +35,7 @@ import { useEffect, useState } from "react";
 import { CollectionModal } from "./Collection";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "../../utils/dexie/config";
-import footerClasses from '../Footer/FooterLinks.module.css';
+import footerClasses from "../Footer/FooterLinks.module.css";
 
 function Settings() {
   const setColor = useBearStore((state: any) => state.setColor);
@@ -165,7 +164,7 @@ export function NavbarSearch() {
   const resetTag = useBearStore((state: any) => state.resetTag);
   const setSearch = useBearStore((state: any) => state.setSearch);
   const store = useBearStore();
-  
+
   const [settings, setSettings] = useState(<Settings />);
 
   useEffect(() => {
@@ -245,9 +244,9 @@ export function NavbarSearch() {
     <UnstyledButton
       className={classes.mainLink}
       onClick={() => {
-        if(activeTag && activeTag == collection.name) {
-          resetTag()
-          return
+        if (activeTag && activeTag == collection.name) {
+          resetTag();
+          return;
         }
 
         setActiveTag(collection.name);
@@ -342,21 +341,30 @@ export function NavbarSearch() {
         </Card>
       </div>
 
-<div className={footerClasses.logo}>
-          {/* <Logo opacity={0.3} /> */}
-          <Text size="xs" c="dimmed" className={classes.description}>
-            Browser based minimal, fast and feature rich note taker.
-          </Text>
-        </div>
-        <Group mt={"xs"}>
-
-        <Anchor size="xs" c={"dimmed"} href="https://github.com/henshalb/wellnote" target="_blank" >
+      <div className={footerClasses.logo}>
+        {/* <Logo opacity={0.3} /> */}
+        <Text size="xs" c="dimmed" className={classes.description}>
+          Browser based minimal, fast and feature rich note taker.
+        </Text>
+      </div>
+      <Group mt={"xs"}>
+        <Anchor
+          size="xs"
+          c={"dimmed"}
+          href="https://github.com/henshalb/wellnote"
+          target="_blank"
+        >
           GitHub
-          </Anchor>
-          <Anchor size="xs" c={"dimmed"} href="https://discord.gg/EuUD9RgFB4" target="_blank" >
+        </Anchor>
+        <Anchor
+          size="xs"
+          c={"dimmed"}
+          href="https://discord.gg/EuUD9RgFB4"
+          target="_blank"
+        >
           Discord
-          </Anchor>
-        </Group>
+        </Anchor>
+      </Group>
     </nav>
   );
 }
@@ -364,15 +372,43 @@ export function NavbarSearch() {
 export function NavbarSearchMobile() {
   const setActiveTab = useBearStore((state: any) => state.setActiveTab);
   const activeTab = useBearStore((state: any) => state.activeTab);
+  const setActiveTag = useBearStore((state: any) => state.setActiveTag);
+  const setActiveTagId = useBearStore((state: any) => state.setActiveTagId);
+  const activeTag = useBearStore((state: any) => state.activeTag);
   const openModal = useBearStore((state: any) => state.openModal);
+  const resetTag = useBearStore((state: any) => state.resetTag);
+  const setSearch = useBearStore((state: any) => state.setSearch);
+  const store = useBearStore();
+
+  const [settings, setSettings] = useState(<Settings />);
+
+  useEffect(() => {
+    setSettings(<Settings />);
+  }, [store.color]);
 
   const links = [
+    {
+      icon: IconHome,
+      label: "Home",
+      // notifications: useBearStore((state) => state.noteCount),
+      action: () => {
+        setActiveTab("home");
+      },
+    },
     {
       icon: IconNote,
       label: "Notes",
       notifications: useBearStore((state) => state.noteCount),
       action: () => {
         setActiveTab("notes");
+      },
+    },
+    {
+      icon: IconLink,
+      label: "Links",
+      notifications: useBearStore((state) => state.linkCount),
+      action: () => {
+        setActiveTab("links");
       },
     },
     {
@@ -383,49 +419,66 @@ export function NavbarSearchMobile() {
         setActiveTab("favourites");
       },
     },
-    { icon: IconSettings, label: "Settings", notifications: null },
+    {
+      icon: IconSettings,
+      label: "Settings",
+      notifications: null,
+      action: () => {
+        openModal("Settings", settings, "lg");
+      },
+    },
   ];
 
-  const collections = [
-    { emoji: "👍", label: "Sales" },
-    { emoji: "🚚", label: "Deliveries" },
-    { emoji: "💸", label: "Discounts" },
-    { emoji: "💰", label: "Profits" },
-    { emoji: "✨", label: "Reports" },
-    { emoji: "🛒", label: "Orders" },
-  ];
+  const collections = useLiveQuery(() => db.collections.toArray());
 
   const mainLinks = links.map((link) => (
     <UnstyledButton
       onClick={link.action}
       key={link.label}
-      className={mobileClasses.mainLink}
-      {...(link.label.toLowerCase() == activeTab ? { c: "lime" } : {})}
+      className={classes.mainLink}
+      {...(link.label.toLowerCase() == activeTab
+        ? { c: store.color == "lime" ? "green" : store.color }
+        : {})}
     >
-      <div className={mobileClasses.mainLinkInner}>
+      <div className={classes.mainLinkInner}>
         <link.icon
+          {...(link.label.toLowerCase() == activeTab
+            ? { color: store.color }
+            : {})}
           size={20}
-          className={mobileClasses.mainLinkIcon}
+          className={classes.mainLinkIcon}
           stroke={1.5}
         />
         <span>{link.label}</span>
       </div>
-      {link.notifications}
+      {link.notifications ? link.notifications : null}
     </UnstyledButton>
   ));
 
-  const collectionLinks = collections.map((collection) => (
-    <a href="#" key={collection.label} className={mobileClasses.collectionLink}>
-      <span style={{ marginRight: rem(9), fontSize: rem(16) }}>
-        {collection.emoji}
-      </span>{" "}
-      {collection.label}
-    </a>
-  ));
+  const collectionLinks = collections?.map((collection) => (
+    <UnstyledButton
+      className={classes.mainLink}
+      onClick={() => {
+        if (activeTag && activeTag == collection.name) {
+          resetTag();
+          return;
+        }
 
-  return (
-    <nav className={mobileClasses.navbar}>
-      <TextInput
+        setActiveTag(collection.name);
+        setActiveTagId(collection.id);
+      }}
+      style={{
+        ...(collection.name == activeTag ? { color: store.color } : {}),
+      }}
+    >
+      <Flex justify={"start"} gap={rem(10)} align={"center"}>
+        <Text size="sm">{collection.emoji}</Text>
+        <Text size="xs">{collection.name}</Text>
+      </Flex>
+    </UnstyledButton>
+  ));
+  return <nav className={mobileClasses.navbar}>
+    <TextInput
         placeholder="Search"
         size="xs"
         leftSection={
@@ -434,19 +487,23 @@ export function NavbarSearchMobile() {
             stroke={1.5}
           />
         }
+        onChange={(e) => {
+          setActiveTab(activeTab == "home" ? "notes" : activeTab);
+          setSearch(e.target.value);
+        }}
         rightSectionWidth={70}
         styles={{ section: { pointerEvents: "none" } }}
         mb="sm"
       />
 
-      <div className={mobileClasses.section}>
-        <div className={mobileClasses.mainLinks}>{mainLinks}</div>
+      <div className={classes.section}>
+        <div className={classes.mainLinks}>{mainLinks}</div>
       </div>
 
-      <div className={mobileClasses.section}>
+      <div className={classes.section}>
         <Group
           mb={"xs"}
-          className={mobileClasses.collectionsHeader}
+          className={classes.collectionsHeader}
           justify="space-between"
         >
           <Text size="xs" fw={500} c="dimmed">
@@ -456,19 +513,8 @@ export function NavbarSearchMobile() {
             <ActionIcon
               onClick={() => {
                 openModal(
-                  "Manage collections",
-                  <>
-                    <Text size="xs">
-                      Collections serve as tags or organized groups for related
-                      notes. Prior to creating a note, simply choose the
-                      relevant collection. Alternatively, you can add a note to
-                      any collection by tapping the three dots on the note.
-                    </Text>
-                    <Grid mt={"xs"}>
-                      <Grid.Col span={2}>{collectionLinks}</Grid.Col>
-                      <Grid.Col span={"auto"}></Grid.Col>
-                    </Grid>
-                  </>,
+                  "Add collection",
+                  <CollectionModal select={false} noteId={null} />,
                   "lg"
                 );
               }}
@@ -482,8 +528,55 @@ export function NavbarSearchMobile() {
             </ActionIcon>
           </Tooltip>
         </Group>
-        <div className={mobileClasses.collections}>{collectionLinks}</div>
+        <Card p={"sm"} withBorder bg={"transparent"} m={"md"}>
+          {collections && collections?.length > 0 ? (
+            collectionLinks
+          ) : (
+            <UnstyledButton
+              className={classes.mainLink}
+              onClick={() => {
+                openModal(
+                  "Add collection",
+                  <CollectionModal select={false} noteId={null} />,
+                  "lg"
+                );
+              }}
+            >
+              <Flex justify={"start"} gap={rem(10)} align={"center"}>
+                <IconPlus
+                  style={{ width: rem(12), height: rem(12) }}
+                  stroke={1.5}
+                />
+                <Text size="xs">Add new</Text>
+              </Flex>
+            </UnstyledButton>
+          )}
+        </Card>
       </div>
-    </nav>
-  );
+
+      <div className={footerClasses.logo}>
+        {/* <Logo opacity={0.3} /> */}
+        <Text size="xs" c="dimmed" className={classes.description}>
+          Browser based minimal, fast and feature rich note taker.
+        </Text>
+      </div>
+      <Group mt={"xs"}>
+        <Anchor
+          size="xs"
+          c={"dimmed"}
+          href="https://github.com/henshalb/wellnote"
+          target="_blank"
+        >
+          GitHub
+        </Anchor>
+        <Anchor
+          size="xs"
+          c={"dimmed"}
+          href="https://discord.gg/EuUD9RgFB4"
+          target="_blank"
+        >
+          Discord
+        </Anchor>
+      </Group>
+  </nav>;
 }

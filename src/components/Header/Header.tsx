@@ -1,15 +1,10 @@
 import { Title, Container, Flex, Menu, Group, Image } from "@mantine/core";
-import {
-  IconSquareRounded,
-  IconSquareRoundedFilled,
-} from "@tabler/icons-react";
+import { IconSquareRounded } from "@tabler/icons-react";
 import { ColorSchemeToggle } from "../ColorSchemeToggle/ColorSchemeToggle";
-import { useNavigate } from "react-router-dom";
 import classes from "./Header.module.css";
-import { signOut } from "firebase/auth";
-import { auth } from "../../utils/firebase/config";
-import { useBearStore } from "../../utils/state";
 import loginIcon from "../../wellnote.svg";
+import { NavbarSearchMobile } from "../NavBar/NavSearch";
+import { useMediaQuery } from "@mantine/hooks";
 
 function Logo({ opacity }: any) {
   return (
@@ -33,9 +28,8 @@ function Logo({ opacity }: any) {
   );
 }
 
-function Header({ user }: any) {
-  const navigate = useNavigate();
-  const { reset } = useBearStore();
+function Header() {
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
   return (
     <>
       <header
@@ -52,42 +46,23 @@ function Header({ user }: any) {
           </Flex>
           <Flex align={"center"}>
             <ColorSchemeToggle />
-            <Menu
-              withArrow
-              position="bottom-end"
-              shadow="md"
-              transitionProps={{ transition: "pop" }}
-            >
-              <Menu.Target>
-                {user ? (
-                  <IconSquareRoundedFilled
-                    style={{ color: "green", cursor: "pointer" }}
-                  />
-                ) : (
+            {isSmallScreen ? (
+              <Menu
+                withArrow
+                position="bottom-end"
+                shadow="md"
+                transitionProps={{ transition: "pop" }}
+              >
+                <Menu.Target>
                   <IconSquareRounded style={{ cursor: "pointer" }} />
-                )}
-              </Menu.Target>
-              <Menu.Dropdown>
-                {!user ? (
-                  <Menu.Item
-                    onClick={() => {
-                      navigate("/join");
-                    }}
-                  >
-                    Join
-                  </Menu.Item>
-                ) : (
-                  <Menu.Item
-                    onClick={() => {
-                      signOut(auth);
-                      reset();
-                    }}
-                  >
-                    Sign out
-                  </Menu.Item>
-                )}
-              </Menu.Dropdown>
-            </Menu>
+                </Menu.Target>
+                <Menu.Dropdown>
+                  <NavbarSearchMobile />
+                </Menu.Dropdown>
+              </Menu>
+            ) : (
+              <></>
+            )}
           </Flex>
         </Container>
       </header>

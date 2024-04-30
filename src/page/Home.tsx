@@ -14,7 +14,6 @@ import { Breadcrumbs, Anchor } from "@mantine/core";
 import { db } from "../utils/dexie/config";
 import {
   NavbarSearch,
-  NavbarSearchMobile,
 } from "../components/NavBar/NavSearch";
 import { useEffect, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
@@ -396,7 +395,6 @@ export default function Home() {
 }
 
 function Demo() {
-  const isSmallScreen = useMediaQuery("(max-width: 768px)");
   const store = useBearStore();
   const setSelectable = useBearStore((state: any) => state.setSelectable);
   const selectable = useBearStore((state: any) => state.selectable);
@@ -425,16 +423,6 @@ function Demo() {
   return (
     <Flex mt={"sm"} align={"center"} justify={"space-between"}>
       <Breadcrumbs>{items}</Breadcrumbs>
-      {isSmallScreen ? (
-        <Menu position={"bottom-end"} shadow="md">
-          <Menu.Target>
-            <IconDots size="20" stroke={1.5} />
-          </Menu.Target>
-          <Menu.Dropdown>
-            <NavbarSearchMobile />
-          </Menu.Dropdown>
-        </Menu>
-      ) : (
         <div>
           <Group>
             <Button
@@ -454,12 +442,11 @@ function Demo() {
                 <IconDots size="20" stroke={1.5} />
               </Menu.Target>
               <Menu.Dropdown>
-                <Menu.Item>Delete</Menu.Item>
+                <Menu.Item disabled={!selectable}>Delete</Menu.Item>
               </Menu.Dropdown>
             </Menu>
           </Group>
         </div>
-      )}
     </Flex>
   );
 }
