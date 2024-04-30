@@ -1,5 +1,13 @@
 import { IconDots } from "@tabler/icons-react";
-import { Button, Flex, Group, Menu, Text, Title, rem } from "@mantine/core";
+import {
+  Button,
+  Flex,
+  Group,
+  Menu,
+  Text,
+  Title,
+  rem,
+} from "@mantine/core";
 import { useMediaQuery } from "@mantine/hooks";
 import { Card, Grid } from "@mantine/core";
 import {
@@ -12,11 +20,10 @@ import { Note } from "../components/Note";
 import { useLiveQuery } from "dexie-react-hooks";
 import { Breadcrumbs, Anchor } from "@mantine/core";
 import { db } from "../utils/dexie/config";
-import {
-  NavbarSearch,
-} from "../components/NavBar/NavSearch";
+import { NavbarSearch } from "../components/NavBar/NavSearch";
 import { useEffect, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
+import paper from "/src/paper.svg";
 
 export function Bro({ type }: { type: string }) {
   const PAGE_SIZE = 12;
@@ -190,6 +197,7 @@ export function Favourites() {
 
 function GetTime() {
   const [time, setTime] = useState("");
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
 
   useEffect(() => {
     const updateTime = () => {
@@ -214,7 +222,7 @@ function GetTime() {
       style={{
         color:
           "light-dark(var(--mantine-color-black), var(--mantine-color-white))",
-        fontSize: rem(30),
+        fontSize: isSmallScreen ? rem(20) : rem(30),
         fontWeight: 900,
         letterSpacing: rem(-1),
       }}
@@ -227,6 +235,8 @@ function GetTime() {
 function DateDisplay() {
   // Get current date
   const currentDate = new Date();
+  const isSmallScreen = useMediaQuery("(max-width: 768px)");
+
 
   // Array of month names
   const monthNames = [
@@ -257,7 +267,7 @@ function DateDisplay() {
       style={{
         color:
           "light-dark(var(--mantine-color-black), var(--mantine-color-white))",
-        fontSize: rem(25),
+        fontSize: isSmallScreen ? rem(20) :rem(25),
         fontWeight: 900,
         letterSpacing: rem(-1),
       }}
@@ -365,8 +375,24 @@ export default function Home() {
                   ...springs,
                 }}
               >
-                <GetTime />
-                <DateDisplay />
+                <Card
+                  h={isSmallScreen ? 180 : 300}
+                  p={0}
+                  withBorder
+                  radius={"md"}
+                >
+                  <Flex align={"center"} justify={"space-between"}>
+                    <div style={{ marginLeft: isSmallScreen ? 20 : 30 }}>
+                      <GetTime />
+                      <DateDisplay />
+                    </div>
+                    <img
+                      width={isSmallScreen ? 180 : "300"}
+                      style={{ objectFit: "fill" }}
+                      src={paper}
+                    />
+                  </Flex>
+                </Card>
               </animated.div>
             )}
 
@@ -423,30 +449,30 @@ function Demo() {
   return (
     <Flex mt={"sm"} align={"center"} justify={"space-between"}>
       <Breadcrumbs>{items}</Breadcrumbs>
-        <div>
-          <Group>
-            <Button
-              variant={"subtle"}
-              radius={"lg"}
-              color={store.color}
-              // className={classes.mainLinkMini}
-              onClick={() => {
-                setSelectable(!selectable);
-              }}
-              size="xs"
-            >
-              {selectable ? "Cancel" : "Select"}
-            </Button>
-            <Menu position={"bottom-end"} shadow="md">
-              <Menu.Target>
-                <IconDots size="20" stroke={1.5} />
-              </Menu.Target>
-              <Menu.Dropdown>
-                <Menu.Item disabled={!selectable}>Delete</Menu.Item>
-              </Menu.Dropdown>
-            </Menu>
-          </Group>
-        </div>
+      <div>
+        <Group>
+          <Button
+            variant={"subtle"}
+            radius={"lg"}
+            color={store.color}
+            // className={classes.mainLinkMini}
+            onClick={() => {
+              setSelectable(!selectable);
+            }}
+            size="xs"
+          >
+            {selectable ? "Cancel" : "Select"}
+          </Button>
+          <Menu position={"bottom-end"} shadow="md">
+            <Menu.Target>
+              <IconDots size="20" stroke={1.5} />
+            </Menu.Target>
+            <Menu.Dropdown>
+              <Menu.Item disabled={!selectable}>Delete</Menu.Item>
+            </Menu.Dropdown>
+          </Menu>
+        </Group>
+      </div>
     </Flex>
   );
 }
