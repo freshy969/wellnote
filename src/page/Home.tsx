@@ -310,7 +310,7 @@ export default function Home() {
     <>
       <Flex mt={"lg"} justify={"space-between"} gap={"xs"}>
         {isSmallScreen ? null : <NavbarSearch />}
-        {!store.search ? (
+        {!store.search || activeTab == "home" ? (
           <div style={{ width: "100%" }}>
             {activeTab != "home" ? (
               <Card
